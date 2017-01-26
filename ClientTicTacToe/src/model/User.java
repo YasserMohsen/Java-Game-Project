@@ -17,11 +17,13 @@ public class User implements Serializable{
     String name;
     String email;
     String password;
+    String repassword;
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, String repassword) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.repassword = repassword;
     }
     
     public int getId() {
@@ -30,6 +32,14 @@ public class User implements Serializable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getRepassword() {
+        return repassword;
+    }
+
+    public void setRepassword(String repassword) {
+        this.repassword = repassword;
     }
 
     public String getName() {
