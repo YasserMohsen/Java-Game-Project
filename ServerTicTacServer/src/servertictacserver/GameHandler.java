@@ -21,8 +21,6 @@ import model.User;
  */
     class GameHandler extends Thread {
 
-
-//        DataInputStream dis;
         ObjectInputStream ois;
         ObjectOutputStream ous;
         static Vector<GameHandler> clientsVector = new Vector<>();
