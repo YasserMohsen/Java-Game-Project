@@ -44,12 +44,10 @@ public class FXMLDocumentController implements Initializable {
     public void btnActionSignUp(){
         
         try {
-            user = new User(name.getText(),email.getText(),password.getText());
+            user = new User(name.getText(),email.getText(),password.getText(),rePassword.getText());
             Request request = new Request();
             request.setType(1);
             request.setObject(user);
-           
-            
             client.ous.writeObject(request);
             client.ous.flush();
         } catch (IOException ex) {
@@ -89,8 +87,12 @@ public class FXMLDocumentController implements Initializable {
                 public void run() {
                     while(true){
                     try {
-                         ois.readObject();
-//                        System.out.println("read "+user.getName());
+                       
+                         Request request =  (Request) ois.readObject();
+                         System.out.println( ((User) request.getObject()).getName());
+                         System.out.println( ((User) request.getObject()).getEmail());
+                         System.out.println( ((User) request.getObject()).getPassword());
+                         System.out.println( ((User) request.getObject()).getRepassword());
 
                     } catch (Exception ex) {
                         System.out.println("lol   ");

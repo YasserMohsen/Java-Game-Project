@@ -48,6 +48,7 @@ import model.User;
                             System.out.println(""+((User)request.getObject()).getName());
                             System.out.println(""+((User)request.getObject()).getEmail());
                             System.out.println(""+((User)request.getObject()).getPassword());
+                            System.out.println(""+((User)request.getObject()).getRepassword());
                             break;
                         default:
                             System.out.println("defualt");
@@ -80,7 +81,7 @@ import model.User;
         }
         void sendMessageToAll(Request msg) throws IOException {
             for (GameHandler ch : clientsVector) {
-                ch.ous.writeObject(new Request(5));
+                ch.ous.writeObject(msg);         
             }
         }
     }
