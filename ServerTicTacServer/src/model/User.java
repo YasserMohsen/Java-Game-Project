@@ -11,20 +11,18 @@ import java.io.Serializable;
  *
  * @author kazafy
  */
-public class User implements Serializable {
+public class User implements Serializable{
+    private static final long serialVersionUID = 2L;
     private int id ;
     String name;
     String email;
     String password;
 
-    public User() {
-        name="kdkfk";
-        email="d";
-        id= 1;
-        password="lllll";
-                
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
-
     
     public int getId() {
         return id;

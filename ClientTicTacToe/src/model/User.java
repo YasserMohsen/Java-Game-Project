@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author kazafy
  */
 public class User implements Serializable{
+    private static final long serialVersionUID = 2L;
     private int id ;
     String name;
     String email;

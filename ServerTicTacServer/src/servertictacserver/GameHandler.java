@@ -55,8 +55,9 @@ import model.User;
                     
                     if(request == null)
                     {
+                        
                         clientsVector.remove(this);
-                        System.out.println(" this :"+clientsVector.size());
+                        System.out.println("null this :"+clientsVector.size());
                         ous.close();
                         ois.close();
                         break;
@@ -69,10 +70,10 @@ import model.User;
                         System.out.println(" this :"+clientsVector.size());
                         ous.close();
                         ois.close();
-                        
+                        ex.printStackTrace();
                         break;
                     } catch (IOException ex1) {
-                        Logger.getLogger(GameHandler.class.getName()).log(Level.SEVERE, null, ex1);
+                        ex1.printStackTrace();
                     }
                 }
             }
