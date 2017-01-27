@@ -62,8 +62,9 @@ import model.User;
                                 }
                                 request.setObject(l);
                                 this.ous.writeObject(request);
-//                                Request addUser
-//                                brodCast();
+                                request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
+                                request.setObject(user);
+                                brodCast(request);
                             } 
                             else{
                                 // error in registration  send to client error message
@@ -127,9 +128,9 @@ import model.User;
                 }
             }
         }
-        void sendMessageToAll(Request msg) throws IOException {
+        void brodCast(Request request) throws IOException {
             for (GameHandler ch : clientsVector) {
-                ch.ous.writeObject(msg);         
+                ch.ous.writeObject(request);         
             }
         }
     }
