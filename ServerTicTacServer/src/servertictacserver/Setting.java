@@ -11,6 +11,10 @@ package servertictacserver;
  */
 public class Setting {
 
-    public static final int REG = 1;
+    public static final int REG = 1001;
+    public static final int REG_OK = 2001;
+    public static final int REG_NO = 2002;
+
+    public static final int AVAILABLE = 3001;
 
 }

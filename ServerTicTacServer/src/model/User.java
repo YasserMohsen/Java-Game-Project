@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class User implements Serializable{
     private static final long serialVersionUID = 2L;
     private int id ;
+    private int status;
     String name;
     String email;
     String password;
@@ -65,8 +66,16 @@ public class User implements Serializable{
     public void setRepassword(String repassword) {
         this.repassword = repassword;
     }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
     
-    
+   
     
     
 }

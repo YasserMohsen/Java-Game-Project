@@ -13,13 +13,14 @@ import model.User;
  */
 public class UserController {
     
-    public boolean regestration( User user){
+    public static boolean register( User user){        
+        
         return true;
     }
-    public boolean login(User user){
+    public static boolean login(User user){
         return true;
     }
-    public boolean logout(User user){
+    public static boolean logout(User user){
         return true;
     }
 }
