@@ -43,7 +43,6 @@ import model.User;
                 Request request;
                 try {
                     request = (Request) ois.readObject();
-                    System.out.println("req"+request);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                     switch(request.getType()){
@@ -71,6 +70,31 @@ import model.User;
                                 this.ous.writeObject(request);
                             }
                             break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+                        case Setting.LOGIN:
+                            user = (User)request.getObject();
+                            if(UserController.login(user)){ 
+                                // if login ok send list off available players to client
+                                user.setStatus(Setting.AVAILABLE);
+                                request.setType(Setting.LOGIN_OK);                                
+                                List l = new ArrayList<User>();                                
+//                                l.add(user);
+//                                l.add(new User("kemo", "email", "123", "123"));
+                                for (GameHandler gameHandler : clientsVector){
+                                    if(gameHandler.user.getStatus()== Setting.AVAILABLE)
+                                        l.add(gameHandler.user);
+                                }
+                                request.setObject(l);
+                                this.ous.writeObject(request);
+//                                Request addUser
+//                                brodCast();
+                            } 
+                            else{
+                                // error in registration  send to client error message
+                                this.ous.writeObject(request);
+                            }
+                            break;
+                            
 //////////////////////////////////////////////////////////////////////////////////////////////////
                         default:
                             System.out.println("defualt");
