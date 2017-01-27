@@ -64,19 +64,18 @@ public class Client {
                     try {
                        
                         Request request =  (Request) ois.readObject();
+                        System.out.println("req type "+request.getType());
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                          switch(request.getType()){
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_OK: 
-                                List l = (ArrayList) request.getObject();
-                                for (Object user : l) {
-                                    System.out.println(((User)user).getName());
-                                }
                                 
                                 Platform.runLater(new Runnable(){
                                     public void run(){
                                         try {
+                                            List l = (ArrayList) request.getObject();
+                                            MainController.availableUsers.addAll(l);
                                             ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,7 +99,17 @@ public class Client {
                             case Setting.ADD_PLAYER_TO_AVAILABLE_LIST: 
                                     User user = (User)request.getObject();
                                     System.out.println(".run()"+request);
-                                    MainController.availableUsers.add(user);
+                                Platform.runLater(new Runnable(){
+                                    public void run(){
+                                        try {
+                                        MainController.availableUsers.add(user);
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+
+                                    }
+                                });
+
                                     break;
                          }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
