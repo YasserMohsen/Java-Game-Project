@@ -5,13 +5,14 @@
  */
 package servertictacserver;
 
+import control.UserController;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Request;
 import model.User;
 
@@ -23,6 +24,8 @@ import model.User;
 
         ObjectInputStream ois;
         ObjectOutputStream ous;
+        User user = null;
+        
         static Vector<GameHandler> clientsVector = new Vector<>();
         public GameHandler(Socket cs) {
             try {
@@ -41,16 +44,37 @@ import model.User;
                 try {
                     request = (Request) ois.readObject();
                     System.out.println("req"+request);
+//////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// switch ////////////////////////////////////////////////
                     switch(request.getType()){
+//////////////////////////////////////////////////////////////////////////////////////////////////
                         case Setting.REG:
-                            System.out.println(""+((User)request.getObject()).getName());
-                            System.out.println(""+((User)request.getObject()).getEmail());
-                            System.out.println(""+((User)request.getObject()).getPassword());
-                            System.out.println(""+((User)request.getObject()).getRepassword());
+                            user = (User)request.getObject();
+                            if(UserController.register(user)){ 
+                                // if register ok send list off available players to client
+                                user.setStatus(Setting.AVAILABLE);
+                                request.setType(Setting.REG_OK);                                
+                                List l = new ArrayList<User>();                                
+//                                l.add(user);
+//                                l.add(new User("kemo", "email", "123", "123"));
+                                for (GameHandler gameHandler : clientsVector){
+                                    if(gameHandler.user.getStatus()== Setting.AVAILABLE)
+                                        l.add(gameHandler.user);
+                                }
+                                request.setObject(l);
+                                this.ous.writeObject(request);
+                            } 
+                            else{
+                                // error in registration  send to client error message
+                                this.ous.writeObject(request);
+                            }
                             break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
                         default:
                             System.out.println("defualt");
                     }
+/////////////////////////////////// end switch ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
                     
                     if(request == null)
                     {
@@ -62,7 +86,7 @@ import model.User;
                         break;
                     
                     }
-                    sendMessageToAll(request);      
+//                    sendMessageToAll(request);      
                 } catch (Exception ex) {
                     try {
                         clientsVector.remove(this);
