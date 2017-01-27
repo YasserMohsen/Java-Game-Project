@@ -29,8 +29,9 @@ public class ClientTicTacToe extends Application {
         this.stage = stage;
         Scene scene = new Scene(root);
         
-        stage.setScene(scene);
-        stage.show();
+        this.stage.setScene(scene);
+        this.stage.hide();
+        this.stage.show();
         
     }
 
@@ -48,11 +49,11 @@ public class ClientTicTacToe extends Application {
         if (scene == null) {
             scene = new Scene(page, 700, 450);
 //            scene.getStylesheets().add(ClientTicTacToe.class.getResource("demo.css").toExternalForm());
-//            stage.setScene(scene);
+            stage.setScene(scene);
         } else {
             stage.getScene().setRoot(page);
         }
-//        stage.sizeToScene();
+        stage.sizeToScene();
         return page;
     }
         
