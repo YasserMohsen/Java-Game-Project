@@ -89,6 +89,7 @@ import model.User;
                                 this.ous.writeObject(request);
 //                                Request addUser
 //                                brodCast();
+
                             } 
                             else{
                                 // error in registration  send to client error message
