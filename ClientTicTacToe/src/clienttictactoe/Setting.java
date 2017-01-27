@@ -13,6 +13,7 @@ public class Setting {
     public static final int REG = 1001;
     public static final int REG_OK = 2001;
     public static final int REG_NO = 2002;
+    public static final int LOGIN = 1002;
     public static final int LOGIN_OK = 2003;
     public static final int LOGIN_NO = 2004;
     

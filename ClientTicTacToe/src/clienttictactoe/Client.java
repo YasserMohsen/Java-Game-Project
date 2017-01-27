@@ -12,6 +12,9 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import model.Request;
 import model.User;
 
@@ -68,18 +71,47 @@ public class Client {
                             case Setting.REG_OK: 
                                 List l = (ArrayList) request.getObject();
                                 for (Object user : l) {
-                                    System.out.println(((User)user).getName());
+                                    System.out.println(((User)user).getEmail());
                                 }
-
-                                ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
                                 
+                                Platform.runLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+
+                                    }
+                                });
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_NO:
                                     break;
+                                
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_OK:
-                                    break;
+                                l = (ArrayList) request.getObject();
+                                for (Object user : l) {
+                                    System.out.println(((User)user).getEmail());
+                                }
+                                
+                                Platform.runLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+
+                                    }
+                                });
+                                
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
                                     break;

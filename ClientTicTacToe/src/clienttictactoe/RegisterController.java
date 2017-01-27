@@ -7,6 +7,8 @@ package clienttictactoe;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,14 +26,21 @@ public class RegisterController implements Initializable {
     @FXML
     private TextField name,email,rePassword,password;
     
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-    }
     
     @FXML
     public void btnActionSignUp(){
         user = new User(name.getText(),email.getText(),password.getText(),rePassword.getText());
         Client.sendRequest(user , Setting.REG);
+    
+    }
+    
+    @FXML
+    public void btnActionLoginIn(){
+        try {
+            ClientTicTacToe.replaceSceneContent("login.fxml");
+        } catch (Exception ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     
     }
     

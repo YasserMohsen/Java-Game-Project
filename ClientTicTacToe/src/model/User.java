@@ -19,12 +19,25 @@ public class User implements Serializable{
     String email;
     String password;
     String repassword;
+    
+    /*
+    *constructor for regestration;
+    */
 
     public User(String name, String email, String password, String repassword) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.repassword = repassword;
+    }
+    
+    
+    /*
+    *constructor for login;
+    */
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
     
     public int getId() {
