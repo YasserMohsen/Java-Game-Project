@@ -74,10 +74,8 @@ public class Client {
                                     System.out.println(((User)user).getEmail());
                                 }
                                 
-                                Platform.runLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
+                                Platform.runLater(new Runnable(){
+                                    public void run(){
                                         try {
                                             ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
                                         } catch (Exception ex) {
@@ -115,6 +113,12 @@ public class Client {
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
                                     break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.ADD_PLAYER_TO_AVAILABLE_LIST: 
+                                    User user = (User)request.getObject();
+                                    System.out.println(".run()"+request);
+                                    MainController.availableUsers.add(user);
+                                    break;
                          }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,9 +126,10 @@ public class Client {
                          
 
                     } catch (Exception ex) {
-                        System.out.println("lol   ");
+                        System.out.println("lol");
+                        ex.printStackTrace();
                         try {
-
+                            
                             ois.close();
                             mySocket.close();
                             break;
