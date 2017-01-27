@@ -12,6 +12,9 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import model.Request;
 import model.User;
 
@@ -70,8 +73,18 @@ public class Client {
                                 for (Object user : l) {
                                     System.out.println(((User)user).getName());
                                 }
+                                
+                                Platform.runLater(new Runnable(){
+                                    public void run(){
+                                        try {
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
-                                ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
+                                    }
+                                });
+
                                 
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +96,12 @@ public class Client {
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
                                     break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.ADD_PLAYER_TO_AVAILABLE_LIST: 
+                                    User user = (User)request.getObject();
+                                    System.out.println(".run()"+request);
+                                    MainController.availableUsers.add(user);
+                                    break;
                          }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,9 +109,10 @@ public class Client {
                          
 
                     } catch (Exception ex) {
-                        System.out.println("lol   ");
+                        System.out.println("lol");
+                        ex.printStackTrace();
                         try {
-
+                            
                             ois.close();
                             mySocket.close();
                             break;

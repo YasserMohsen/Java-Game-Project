@@ -7,7 +7,12 @@ package clienttictactoe;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
+import model.User;
 
 /**
  * FXML Controller class
@@ -16,12 +21,19 @@ import javafx.fxml.Initializable;
  */
 public class MainController implements Initializable {
 
+    @FXML
+    ListView<User> lv_availableUsers;
+    
+    public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
+    
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        lv_availableUsers.setItems(availableUsers);
     }    
     
 }
