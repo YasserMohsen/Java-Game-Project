@@ -70,6 +70,10 @@ public class Client {
                          switch(request.getType()){
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_OK: 
+                                List l = (ArrayList) request.getObject();
+                                for (Object user : l) {
+                                    System.out.println(((User)user).getEmail());
+                                }
                                 
                                 Platform.runLater(new Runnable(){
                                     public void run(){
@@ -83,15 +87,32 @@ public class Client {
 
                                     }
                                 });
-
-                                
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_NO:
                                     break;
+                                
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_OK:
-                                    break;
+                                l = (ArrayList) request.getObject();
+                                for (Object user : l) {
+                                    System.out.println(((User)user).getEmail());
+                                }
+                                
+                                Platform.runLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+
+                                    }
+                                });
+                                
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
                                     break;
@@ -111,6 +132,7 @@ public class Client {
                                 });
 
                                     break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
                          }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
