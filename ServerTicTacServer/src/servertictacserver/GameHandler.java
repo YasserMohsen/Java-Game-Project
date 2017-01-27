@@ -63,13 +63,14 @@ import model.User;
                                 }
                                 request.setObject(l);
                                 this.ous.writeObject(request);
+                                
                                 request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
                                 request.setObject(user);
                                 brodCast(request);
                             } 
                             else{
                                 // error in registration  send to client error message
-                                this.ous.writeObject(request);
+//                                this.ous.writeObject(request);
                             }
                             break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
