@@ -18,7 +18,7 @@ import model.User;
 
 /**
  *
- * @author kazafy
+ * @author habib
  */
     class GameHandler extends Thread {
 
@@ -81,13 +81,11 @@ import model.User;
                                 request.setType(Setting.LOGIN_OK);                                
                                 List l = new ArrayList<User>();                                
                                 for (GameHandler gameHandler : clientsVector){
-                                    if(gameHandler.user.getStatus()== Setting.AVAILABLE)
-                                        l.add(gameHandler.user);
-                                    System.out.println(""+gameHandler.user.getEmail());
-                                    
+                                    if(gameHandler.user.getStatus()== Setting.AVAILABLE && gameHandler.user != user)
+                                        l.add(gameHandler.user);                                    
                                 }
-                                System.out.println(""+l.toString());
                                 request.setObject(l);
+                                System.out.println(""+request.getObject());
                                 this.ous.writeObject(request);
                                 this.ous.flush();
                                 this.ous.reset();
@@ -136,6 +134,7 @@ import model.User;
         }
         void brodCast(Request request) throws IOException {
             for (GameHandler ch : clientsVector) {
+                if(ch.user != request.getObject())
                 ch.ous.writeObject(request);         
             }
         }
