@@ -62,6 +62,8 @@ import model.User;
                                 }
                                 request.setObject(l);
                                 this.ous.writeObject(request);
+                                this.ous.flush();
+                                this.ous.reset();
                                 
                                 request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
                                 request.setObject(user);
@@ -132,7 +134,8 @@ import model.User;
         }
         void brodCast(Request request) throws IOException {
             for (GameHandler ch : clientsVector) {
-                ch.ous.writeObject(request);         
+                ch.ous.writeObject(request);
+                System.out.println("brodCast :"+request);
             }
         }
     }

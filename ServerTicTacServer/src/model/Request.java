@@ -20,6 +20,9 @@ public class Request implements Serializable{
         this.type = type;
     }
 
+    public Request() {
+    }
+
     
     
     public int getType() {
