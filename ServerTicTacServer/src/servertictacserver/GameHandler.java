@@ -18,7 +18,7 @@ import model.User;
 
 /**
  *
- * @author habib
+ * @author kazafy
  */
     class GameHandler extends Thread {
 

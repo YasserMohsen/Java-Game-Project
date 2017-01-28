@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author habib
+ * @author kazafy
  */
 public class Request implements Serializable{
     private static final long serialVersionUID = 1L;
