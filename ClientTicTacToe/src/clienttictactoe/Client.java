@@ -70,11 +70,6 @@ public class Client {
                          switch(request.getType()){
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_OK: 
-                                List l = (ArrayList) request.getObject();
-                                for (Object user : l) {
-                                    System.out.println(((User)user).getEmail());
-                                }
-                                
                                 Platform.runLater(new Runnable(){
                                     public void run(){
                                         try {
@@ -94,16 +89,13 @@ public class Client {
                                 
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_OK:
-                                l = (ArrayList) request.getObject();
-                                for (Object user : l) {
-                                    System.out.println(((User)user).getEmail());
-                                }
-                                
                                 Platform.runLater(new Runnable() {
-
                                     @Override
                                     public void run() {
                                         try {
+                                            List l = (ArrayList) request.getObject();
+                                            System.out.println("L:"+l.get(0));
+                                            MainController.availableUsers.addAll(l);
                                             ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -118,8 +110,7 @@ public class Client {
                                     break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.ADD_PLAYER_TO_AVAILABLE_LIST: 
-                                    User user = (User)request.getObject();
-                                    System.out.println(".run()"+request);
+                                User user = (User)request.getObject();
                                 Platform.runLater(new Runnable(){
                                     public void run(){
                                         try {

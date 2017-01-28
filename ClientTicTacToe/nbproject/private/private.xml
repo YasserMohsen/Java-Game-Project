@@ -5,10 +5,10 @@
         <group>
             <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/model/User.java</file>
             <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
+            <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/clienttictactoe/LoginController.java</file>
             <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/clienttictactoe/main.fxml</file>
             <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/clienttictactoe/register.fxml</file>
             <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
-            <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/clienttictactoe/Setting.java</file>
             <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
             <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/model/Request.java</file>
             <file>file:/home/kazafy/NetBeansProjects/ClientTicTacToe/src/clienttictactoe/Client.java</file>

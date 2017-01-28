@@ -54,24 +54,23 @@ import model.User;
                                 user.setStatus(Setting.AVAILABLE);
                                 request.setType(Setting.REG_OK);                                
                                 List l = new ArrayList<User>();                                
-//                                l.add(user);
-//                                l.add(new User("kemo", "email", "123", "123"));
                                 for (GameHandler gameHandler : clientsVector){
                                     if(gameHandler.user.getStatus()== Setting.AVAILABLE)
                                         l.add(gameHandler.user);
+                                    System.out.println(""+gameHandler.user.getName());
                                 }
                                 request.setObject(l);
                                 this.ous.writeObject(request);
                                 this.ous.flush();
                                 this.ous.reset();
-                                
+
                                 request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
                                 request.setObject(user);
                                 brodCast(request);
                             } 
                             else{
                                 // error in registration  send to client error message
-//                                this.ous.writeObject(request);
+//                                
                             }
                             break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,17 +80,22 @@ import model.User;
                                 // if login ok send list off available players to client
                                 user.setStatus(Setting.AVAILABLE);
                                 request.setType(Setting.LOGIN_OK);                                
-                                List l = new ArrayList<User>();                                
-//                                l.add(user);
-//                                l.add(new User("kemo", "email", "123", "123"));
+                                List <User> l = new ArrayList<>();                                
                                 for (GameHandler gameHandler : clientsVector){
                                     if(gameHandler.user.getStatus()== Setting.AVAILABLE)
                                         l.add(gameHandler.user);
+                                    System.out.println(""+gameHandler.user.getEmail());
+                                    
                                 }
+                                System.out.println(""+l.size());
                                 request.setObject(l);
+                                System.out.println(""+l.size());
                                 this.ous.writeObject(request);
-//                                Request addUser
-//                                brodCast();
+                                this.ous.flush();
+                                this.ous.reset();
+                                request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
+                                request.setObject(user);
+                                brodCast(request);
 
                             } 
                             else{

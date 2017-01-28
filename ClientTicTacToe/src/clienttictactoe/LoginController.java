@@ -29,6 +29,8 @@ public class LoginController implements Initializable {
     public void loginBt(){
         
         user = new User(email.getText(), password.getText());
+        user.setName("lol");
+        user.setRepassword("123");
         Client.sendRequest(user, Setting.LOGIN);
         
     }
