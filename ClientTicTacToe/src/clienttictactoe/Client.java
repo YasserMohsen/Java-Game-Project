@@ -94,7 +94,7 @@ public class Client {
                                     public void run() {
                                         try {
                                             List l = (ArrayList) request.getObject();
-                                            System.out.println(""+request.getObject());
+                                            
                                             MainController.availableUsers.addAll(l);
                                             ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
                                         } catch (Exception ex) {

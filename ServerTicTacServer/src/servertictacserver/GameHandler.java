@@ -63,6 +63,7 @@ import model.User;
                                 this.ous.writeObject(request);
                                 this.ous.flush();
                                 this.ous.reset();
+
                                 request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
                                 request.setObject(user);
                                 brodCast(request);
@@ -79,13 +80,15 @@ import model.User;
                                 // if login ok send list off available players to client
                                 user.setStatus(Setting.AVAILABLE);
                                 request.setType(Setting.LOGIN_OK);                                
-                                List l = new ArrayList<User>();                                
+                                List <User> l = new ArrayList<>();                                
                                 for (GameHandler gameHandler : clientsVector){
                                     if(gameHandler.user.getStatus()== Setting.AVAILABLE && gameHandler.user != user)
                                         l.add(gameHandler.user);                                    
                                 }
+
                                 request.setObject(l);
                                 System.out.println(""+request.getObject());
+                                
                                 this.ous.writeObject(request);
                                 this.ous.flush();
                                 this.ous.reset();
@@ -134,6 +137,7 @@ import model.User;
         }
         void brodCast(Request request) throws IOException {
             for (GameHandler ch : clientsVector) {
+                System.out.println("brodCast :"+request);
                 if(ch.user != request.getObject())
                 ch.ous.writeObject(request);         
             }
