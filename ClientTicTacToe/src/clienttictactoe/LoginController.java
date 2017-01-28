@@ -28,9 +28,8 @@ public class LoginController implements Initializable {
     @FXML
     public void loginBt(){
         
-        user = new User(email.getText(), password.getText());
-        user.setName("lol");
-        user.setRepassword("123");
+
+        user = new User(email.getText(), password.getText(),"","");
         Client.sendRequest(user, Setting.LOGIN);
         
     }
