@@ -48,8 +48,10 @@ import model.User;
                     switch(request.getType()){
 //////////////////////////////////////////////////////////////////////////////////////////////////
                         case Setting.REG:
+                            
                             user = (User)request.getObject();
-                            if(UserController.register(user)){ 
+                            
+                            if(UserController.register(user) == 0){ 
                                 // if register ok send list off available players to client
                                 user.setStatus(Setting.AVAILABLE);
                                 request.setType(Setting.REG_OK);                                
@@ -68,9 +70,14 @@ import model.User;
                                 request.setObject(user);
                                 brodCast(request);
                             } 
-                            else{
+                            else if(UserController.register(user) == 1){
                                 // error in registration  send to client error message
-//                                
+                                request.setType(Setting.REG_NO);
+                                request.setObject("email already exist");
+                                this.ous.writeObject(request);
+                                this.ous.flush();
+                                this.ous.reset();
+                                
                             }
                             break;
 //////////////////////////////////////////////////////////////////////////////////////////////////

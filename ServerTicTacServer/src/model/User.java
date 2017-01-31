@@ -18,13 +18,13 @@ public class User implements Serializable{
     String name;
     String email;
     String password;
-    String repassword;
+    int score;
 
-    public User(String name, String email, String password, String repassword) {
+    public User(String name, String email, String password, int score) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.repassword = repassword;
+        this.score = score;
     }
     
     public int getId() {
@@ -59,12 +59,12 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public String getRepassword() {
-        return repassword;
+    public int getScore() {
+        return score;
     }
 
-    public void setRepassword(String repassword) {
-        this.repassword = repassword;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public int getStatus() {

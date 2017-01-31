@@ -85,6 +85,24 @@ public class Client {
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_NO:
+                                String myError = (String) request.getObject();
+                                System.out.println(myError);
+//                                Platform.runLater(new Runnable(){
+//                                    public void run(){
+//                                        try {
+//                                            String myError = (String) request.getObject();
+////                                            RegisterController.error.setVisible(true);
+////                                            RegisterController.errorText.setText(myError);
+////                                            RegisterController.errorText.setVisible(true);
+////                                            List l = (ArrayList) request.getObject();
+////                                            MainController.availableUsers.addAll(l);
+////                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
+//                                        } catch (Exception ex) {
+//                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//                                        }
+//
+//                                    }
+//                                });
                                     break;
                                 
 //////////////////////////////////////////////////////////////////////////////////////////////////

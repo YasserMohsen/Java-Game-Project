@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.User;
 
@@ -25,13 +26,14 @@ public class RegisterController implements Initializable {
     
     @FXML
     private TextField name,email,rePassword,password;
+    @FXML
+    public Label error, errorText;
     
     
     @FXML
     public void btnActionSignUp(){
         user = new User(name.getText(),email.getText(),password.getText(),rePassword.getText());
         Client.sendRequest(user , Setting.REG);
-    
     }
     
     @FXML
