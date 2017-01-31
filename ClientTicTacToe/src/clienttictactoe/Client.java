@@ -35,8 +35,15 @@ public class Client {
         
         try {
             Request request = new Request();
+            if (type==Setting.LOGIN) {
+                System.out.println(""+user.getEmail());
+                request.setClientID(user.getEmail());   
+            }
+            System.out.println(""+request.getClientID());
             request.setType(type);
             request.setObject(user);
+            
+        System.out.println("user ::"+user.getName());
             ous.writeObject(request);
             ous.flush();
         } catch (IOException ex) {
@@ -122,7 +129,11 @@ public class Client {
                                     }
                                 });
 
-                                    break;
+                            break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.SEND_INVITATION_FOR_PLAYING:
+                                System.out.println("SEND_INVITATION_FOR_PLAYING Client");
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                          }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////

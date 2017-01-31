@@ -15,8 +15,8 @@ public class User implements Serializable{
     private static final long serialVersionUID = 2L;
     private int id ;
     private int status;
-    String name;
     String email;
+    String name;
     String password;
     String repassword;
     
@@ -38,6 +38,8 @@ public class User implements Serializable{
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+        this.name = "";
+        this.repassword = "";
     }
     
     public int getId() {
