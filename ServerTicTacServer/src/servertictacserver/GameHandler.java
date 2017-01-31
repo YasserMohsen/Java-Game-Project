@@ -17,8 +17,8 @@ import model.Request;
 import model.User;
 
 /**
- *
- * @author habib
+ * @author kazafy
+
  */
     class GameHandler extends Thread {
 
@@ -65,7 +65,6 @@ import model.User;
                                 this.ous.writeObject(request);
                                 this.ous.flush();
                                 this.ous.reset();
-
                                 request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
                                 request.setObject(user);
                                 brodCast(request);
@@ -85,6 +84,7 @@ import model.User;
                             user = (User)request.getObject();
                             if(UserController.login(user)){ 
                                 // if login ok send list off available players to client
+                                request.setClientID(user.getEmail());
                                 user.setStatus(Setting.AVAILABLE);
                                 request.setType(Setting.LOGIN_OK);                                
                                 List <User> l = new ArrayList<>();                                
@@ -109,6 +109,24 @@ import model.User;
                                 this.ous.writeObject(request);
                             }
                             break;
+                            
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
+                            System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");
+                            request.setType(Setting.SEND_INVITATION_FOR_PLAYING);
+                            System.out.println(""+request.getClientID());
+                            User user = (User)request.getObject();
+                            System.out.println(""+user.getEmail());
+                            for (GameHandler ch : clientsVector) {
+                                if(ch.user == request.getObject())
+                                {
+                                    System.out.println(""+ch.user.getEmail());
+                                    ch.ous.writeObject(request);
+                                }         
+                            }
+                            
+                            break;
+                            
                             
 //////////////////////////////////////////////////////////////////////////////////////////////////
                         default:
@@ -144,7 +162,6 @@ import model.User;
         }
         void brodCast(Request request) throws IOException {
             for (GameHandler ch : clientsVector) {
-                System.out.println("brodCast :"+request);
                 if(ch.user != request.getObject())
                 ch.ous.writeObject(request);         
             }

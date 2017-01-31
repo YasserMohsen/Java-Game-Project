@@ -35,8 +35,15 @@ public class Client {
         
         try {
             Request request = new Request();
+            if (type==Setting.LOGIN) {
+                System.out.println(""+user.getEmail());
+                request.setClientID(user.getEmail());   
+            }
+            System.out.println(""+request.getClientID());
             request.setType(type);
             request.setObject(user);
+            
+        System.out.println("user ::"+user.getName());
             ous.writeObject(request);
             ous.flush();
         } catch (IOException ex) {
@@ -65,6 +72,7 @@ public class Client {
                        
                         Request request =  (Request) ois.readObject();
                         System.out.println("req type "+request.getType());
+                        ClientTicTacToe.registerController.name.setText("wooow");
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                          switch(request.getType()){
@@ -140,7 +148,11 @@ public class Client {
                                     }
                                 });
 
-                                    break;
+                            break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.SEND_INVITATION_FOR_PLAYING:
+                                System.out.println("SEND_INVITATION_FOR_PLAYING Client");
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                          }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////

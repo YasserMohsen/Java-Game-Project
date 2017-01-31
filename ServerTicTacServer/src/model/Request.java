@@ -15,6 +15,7 @@ public class Request implements Serializable{
     private static final long serialVersionUID = 1L;
     private int type;
     private Object object;
+    private static String clientID;
 
     public Request(int type) {
         this.type = type;
@@ -23,7 +24,13 @@ public class Request implements Serializable{
     public Request() {
     }
 
+    public void setClientID(String clientID) {
+        Request.clientID = clientID;
+    }
     
+    public String getClientID() {
+        return clientID;
+    }
     
     public int getType() {
         return type;
@@ -40,8 +47,6 @@ public class Request implements Serializable{
     public void setObject(Object object) {
         this.object = object;
     }
-
-    
     
     
 }
