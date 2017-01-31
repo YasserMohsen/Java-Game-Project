@@ -8,15 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-<<<<<<< HEAD
-    <jar href="ServerTicTacServer.jar" size="7950" download="eager" />
-=======
-<<<<<<< HEAD
-    <jar href="ServerTicTacServer.jar" size="8058" download="eager" />
-=======
-    <jar href="ServerTicTacServer.jar" size="7992" download="eager" />
->>>>>>> d39c8d11f2c3214102bb5d0ed1afe799af9d9460
->>>>>>> ec5c510f0e108994e8ff6b9efba800137838fb4f
+    <jar href="ServerTicTacServer.jar" size="8359" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="ServerTicTacServer" >
     <param name="requiredFXVersion" value="8.0+"/>
