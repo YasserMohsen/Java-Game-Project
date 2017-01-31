@@ -22,7 +22,7 @@ public class LoginController implements Initializable {
     private User user;
     
     @FXML
-    private TextField email,password;
+    TextField email,password;
     
     
     @FXML

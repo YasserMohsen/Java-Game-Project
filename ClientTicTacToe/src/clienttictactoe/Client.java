@@ -72,6 +72,7 @@ public class Client {
                        
                         Request request =  (Request) ois.readObject();
                         System.out.println("req type "+request.getType());
+                        ClientTicTacToe.registerController.name.setText("wooow");
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                          switch(request.getType()){

@@ -24,7 +24,7 @@ public class RegisterController implements Initializable {
     User user ;
     
     @FXML
-    private TextField name,email,rePassword,password;
+    TextField name,email,rePassword,password;
     
     
     @FXML
@@ -49,7 +49,12 @@ public class RegisterController implements Initializable {
     }    
     
     
+    public void changeText(){
+        
+        name.setText(" ggooo ");
+        System.out.println("clienttictactoe.RegisterController.changeText()");
     
-
+    }
+    
     
 }
