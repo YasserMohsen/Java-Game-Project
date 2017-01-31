@@ -1,4 +1,27 @@
+<<<<<<< HEAD
+/ServerTicTacServer/dist/
 /ClientTicTacToe/dist/
+<<<<<<< HEAD
 /ServerTicTacServer/dist/
 /TicTac/build/
 /TicTac/dist/
+=======
+/ServerTicTacServer/build/
+/ClientTicTacToe/build/
+/ServerTicTacServer/nbproject/
+/ClientTicTacToe/nbproject/
+/ServerTicTacServer/build.xml/
+/ClientTicTacToe/build.xml/
+/ServerTicTacServer/manifest.mf/
+/ClientTicTacToe/manifest.mf/
+
+
+
+
+
+
+=======
+/ClientTicTacToe/dist/
+/ServerTicTacServer/dist/
+>>>>>>> 7e2f1816f5cc0b646a47d1601511ac51419612bf
+>>>>>>> af3364961b903d040ee154306e1da37e24f798f4
