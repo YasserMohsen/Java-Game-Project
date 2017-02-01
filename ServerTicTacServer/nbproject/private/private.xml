@@ -5,6 +5,8 @@
         <group>
             <file>file:/home/terminator/tictactoe/ServerTicTacServer/src/servertictacserver/Setting.java</file>
             <file>file:/home/terminator/tictactoe/ServerTicTacServer/src/servertictacserver/GameHandler.java</file>
+            <file>file:/home/terminator/tictactoe/ServerTicTacServer/src/servertictacserver/ServerTicTacServer.java</file>
+            <file>file:/home/terminator/tictactoe/ServerTicTacServer/src/servertictacserver/Server.java</file>
             <file>file:/home/terminator/tictactoe/ServerTicTacServer/src/model/Request.java</file>
         </group>
     </open-files>

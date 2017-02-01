@@ -43,9 +43,10 @@ public class ClientTicTacToe extends Application {
         launch(args);
     }
     
-    public static Parent replaceSceneContent(String fxml) throws Exception {
+    public static Parent replaceSceneContent(String fxml , String windowTitle) throws Exception {
         Parent page = FXMLLoader.load(ClientTicTacToe.class.getResource(fxml));
         Scene scene = stage.getScene();
+        stage.setTitle(windowTitle);
         if (scene == null) {
             scene = new Scene(page, 700, 450);
 //            scene.getStylesheets().add(ClientTicTacToe.class.getResource("demo.css").toExternalForm());

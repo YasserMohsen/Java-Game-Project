@@ -18,7 +18,6 @@ import model.User;
 
 /**
  * @author kazafy
-
  */
     class GameHandler extends Thread {
 
@@ -49,7 +48,7 @@ import model.User;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                         case Setting.REG:
                             user = (User)request.getObject();
-                            if(UserController.register(user)){ 
+                            if(UserController.register(user)){
                                 // if register ok send list off available players to client
                                 user.setStatus(Setting.AVAILABLE);
                                 request.setType(Setting.REG_OK);                                
@@ -87,7 +86,7 @@ import model.User;
                                 }
 
                                 request.setObject(l);
-                                System.out.println(""+request.getObject());
+                                System.out.println(""+request.getClientID());
                                 
                                 this.ous.writeObject(request);
                                 this.ous.flush();
@@ -102,23 +101,38 @@ import model.User;
                                 this.ous.writeObject(request);
                             }
                             break;
-                            
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
+                            
                             System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");
                             request.setType(Setting.SEND_INVITATION_FOR_PLAYING);
-                            System.out.println(""+request.getClientID());
                             User user = (User)request.getObject();
-                            System.out.println(""+user.getEmail());
                             for (GameHandler ch : clientsVector) {
-                                if(ch.user == request.getObject())
+                                if(ch.user.getEmail().equals(user.getEmail()))
                                 {
-                                    System.out.println(""+ch.user.getEmail());
+                                    //user.setEmail(request.getClientID());
+                                    System.out.print("hi from if ");
+                                    System.out.println(""+request.getClientID());
                                     ch.ous.writeObject(request);
                                 }         
                             }
-                            
                             break;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.ACCEPT_INVITATION:
+                            
+                            System.out.println("ACCEPT_INVITATION");
+                            user = (User)request.getObject();
+                            for (GameHandler ch : clientsVector) {
+                                if(ch.user.getEmail().equals(user.getEmail()))
+                                {
+                                    request.setType(Setting.ACCEPT_INVITATION);
+                                    System.out.print("hi from if ");
+                                    System.out.println(""+request.getClientID());
+                                    ch.ous.writeObject(request);
+                                }         
+                            }
+                            break;
+                            
                             
                             
 //////////////////////////////////////////////////////////////////////////////////////////////////
