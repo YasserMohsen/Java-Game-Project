@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class Request implements Serializable{
     private static final long serialVersionUID = 1L;
-    private static String clientID;
+    private String clientID;
     private int type;
     private Object object;
 
@@ -21,7 +21,7 @@ public class Request implements Serializable{
     }
 
     public void setClientID(String clientID) {
-        Request.clientID = clientID;
+        this.clientID = clientID;
     }
     
     public String getClientID() {

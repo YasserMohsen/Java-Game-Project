@@ -56,8 +56,6 @@ public class MainController implements Initializable {
     @FXML
     private void selectUser(){
        remotePlayer =  lv_availableUsers.getSelectionModel().getSelectedItem();
-       remotePlayer.setId(2);
-       
        Client.sendRequest(remotePlayer, Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
     }
     
@@ -113,7 +111,7 @@ public class MainController implements Initializable {
 //                            System.out.println(" plyer number "+((playDisable)?" 1 ":" 2 ") +" win");
 //                        }                        
                         
-//                        playDisable = true;                        
+                        playDisable = true;                        
                     }                    
                 });
             }

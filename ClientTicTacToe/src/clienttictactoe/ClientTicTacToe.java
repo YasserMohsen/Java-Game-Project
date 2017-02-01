@@ -29,7 +29,7 @@ public class ClientTicTacToe extends Application {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource("register.fxml"));      
         Parent root = loader.load();
         registerController  = (RegisterController)loader.getController();
-        registerController.email.setText("lol");
+        //registerController.email.setText("lol");
 
         this.stage = stage;
         Scene scene = new Scene(root);
@@ -48,12 +48,14 @@ public class ClientTicTacToe extends Application {
         launch(args);
     }
     
-    public static Parent replaceSceneContent(String fxml) throws Exception {
+    public static Parent replaceSceneContent(String fxml , String windowTitle) throws Exception {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource(fxml));      
         Parent page = loader.load();
+        
          mainController = (MainController)loader.getController();
         
         Scene scene = stage.getScene();
+        stage.setTitle(windowTitle);
         if (scene == null) {
             scene = new Scene(page, 700, 450);
 //            scene.getStylesheets().add(ClientTicTacToe.class.getResource("demo.css").toExternalForm());

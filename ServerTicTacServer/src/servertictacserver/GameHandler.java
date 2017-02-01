@@ -5,7 +5,6 @@
  */
 package servertictacserver;
 
-import java.util.concurrent.ThreadLocalRandom;
 import control.UserController;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,13 +13,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import javafx.scene.control.Button;
 import model.Request;
 import model.User;
 
 /**
  * @author kazafy
- *
  */
 class GameHandler extends Thread {
 
@@ -51,35 +48,34 @@ class GameHandler extends Thread {
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                 switch (request.getType()) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.REG:
-                        user = (User) request.getObject();
-                        if (UserController.register(user)) {
-
-                            // if register ok send list off available players to client
-                            user.setStatus(Setting.AVAILABLE);
-                            user.setId(ThreadLocalRandom.current().nextInt(1, 1000 + 1));
-                            user.setId(2);
-                            System.out.println("user ::" + user.getName());
-                            System.out.println("user id ::" + user.getId());
-                            request.setType(Setting.REG_OK);
-                            List l = new ArrayList<User>();
-                            for (GameHandler gameHandler : clientsVector) {
-                                if (gameHandler.user.getStatus() == Setting.AVAILABLE) {
-                                    l.add(gameHandler.user);
+                    case Setting.REG:                            
+                            user = (User)request.getObject();
+                            user.setId(UserController.register(user));
+                            if(user.getId() != 0){
+                                // if register ok send list off available players to client
+                                user.setStatus(Setting.AVAILABLE);
+                                request.setType(Setting.REG_OK);                                
+                                List l = new ArrayList<User>();                                
+                                for (GameHandler gameHandler : clientsVector){
+                                    if(gameHandler.user.getStatus()== Setting.AVAILABLE)
+                                        l.add(gameHandler.user);
                                 }
-                                System.out.println("" + gameHandler.user.getName());
+                                request.setObject(l);
+                                this.ous.writeObject(request);
+                                this.ous.flush();
+                                this.ous.reset();
+                                request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
+                                request.setObject(user);
+                                brodCast(request);
+                            } 
+                            else{
+                                // error in registration  send to client error message
+                                request.setType(Setting.REG_NO);
+                                request.setObject("email already exist");
+                                this.ous.writeObject(request);
+                                this.ous.flush();
+                                this.ous.reset();
                             }
-                            request.setObject(l);
-                            this.ous.writeObject(request);
-                            this.ous.flush();
-                            this.ous.reset();
-                            request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
-                            request.setObject(user);
-                            brodCast(request);
-                        } else {
-                            // error in registration  send to client error message
-//                                
-                        }
                         break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                     case Setting.LOGIN:
@@ -113,20 +109,7 @@ class GameHandler extends Thread {
                         break;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
-                        System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");
-                        request.setType(Setting.SEND_INVITATION_FOR_PLAYING);
-                        System.out.println("" + request.getClientID());
-                        User user = (User) request.getObject();
-                        System.out.println("" + user.getEmail());
-                        for (GameHandler ch : clientsVector) {
-                            if (ch.user.getId() == ((User) request.getObject()).getId()) {
-                                System.out.println("" + ch.user.getEmail());
-                                ch.ous.writeObject(request);
-                            }
-                        }
 
-                        break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
                     case Setting.MOVE:
@@ -170,6 +153,7 @@ class GameHandler extends Thread {
                             
                             brodCast(request);
                             
+                            
                             this.ous.flush();
                             this.ous.reset();
                             
@@ -182,7 +166,6 @@ class GameHandler extends Thread {
                             
                             request.setType(Setting.MOVEBACK);
                             request.setObject(xo);
-                            System.out.println("lose");
 
                             for (GameHandler ch : clientsVector) {
                                    if (ch.user.getId() == receiverPlayer.getId()) {
@@ -193,7 +176,75 @@ class GameHandler extends Thread {
                             }
                         }
 
-                        break;
+                            break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//                        case Setting.LOGIN:
+//                            user = (User)request.getObject();
+//                            System.out.println("Login case gameHandler");
+//                            if(UserController.login(user)){ 
+//                                // if login ok send list off available players to client
+//                                request.setClientID(user.getEmail());
+//                                user.setStatus(Setting.AVAILABLE);
+//                                request.setType(Setting.LOGIN_OK);                                
+//                                List <User> l = new ArrayList<>();                                
+//                                for (GameHandler gameHandler : clientsVector){
+//                                    if(gameHandler.user.getStatus()== Setting.AVAILABLE && gameHandler.user != user)
+//                                        l.add(gameHandler.user);                                    
+//                                }
+//
+//                                request.setObject(l);
+//                                System.out.println(""+request.getClientID());
+//                                
+//                                this.ous.writeObject(request);
+//                                this.ous.flush();
+//                                this.ous.reset();
+//                                request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
+//                                request.setObject(user);
+//                                brodCast(request);
+//
+//                            } 
+//                            else{
+//                                // error in registration  send to client error message
+//                                request.setType(Setting.LOGIN_NO);
+//                                request.setObject("check again plz");
+//                                this.ous.writeObject(request);
+//                                this.ous.flush();
+//                                this.ous.reset();
+//                            }
+//                            break;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
+                            
+                            System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");
+                            request.setType(Setting.SEND_INVITATION_FOR_PLAYING);
+                            User user = (User)request.getObject();
+                            for (GameHandler ch : clientsVector) {
+                                if(ch.user.getEmail().equals(user.getEmail()))
+                                {
+                                    //user.setEmail(request.getClientID());
+                                    System.out.print("hi from if ");
+                                    System.out.println(""+request.getClientID());
+                                    ch.ous.writeObject(request);
+                                }         
+                            }
+                            break;
+                            
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.ACCEPT_INVITATION:
+                            
+                            System.out.println("ACCEPT_INVITATION");
+                            user = (User)request.getObject();
+                            for (GameHandler ch : clientsVector) {
+                                if(ch.user.getEmail().equals(user.getEmail()))
+                                {
+                                    request.setType(Setting.ACCEPT_INVITATION);
+                                    System.out.print("hi from if ");
+                                    System.out.println(""+request.getClientID());
+                                    ch.ous.writeObject(request);
+                                }         
+                            }
+                            break;
+                            
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
                     default:

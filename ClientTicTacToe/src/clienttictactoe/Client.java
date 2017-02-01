@@ -12,9 +12,12 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import model.Request;
 import model.User;
 
@@ -24,26 +27,34 @@ import model.User;
  */
 public class Client {
 
+
     static Socket mySocket;
     static ObjectOutputStream ous;
     static ObjectInputStream ois;
     static PrintStream ps;
+    static Request request = new Request();
 
     public static void sendRequest(User user, int type) {
 
         try {
-            Request request = new Request();
+            ous.flush();
+            ous.reset();
+
             if (type == Setting.LOGIN) {
                 System.out.println("" + user.getEmail());
                 request.setClientID(user.getEmail());
             }
             System.out.println("" + request.getClientID());
+               
+            
+            System.out.println("before sent"+request.getClientID());
             request.setType(type);
+            System.out.println("before sent"+request.getType());
+            request.getType();
             request.setObject(user);
 
             System.out.println("user ::" + user.getName());
             ous.writeObject(request);
-            ous.flush();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -92,7 +103,7 @@ public class Client {
                                             List l = (ArrayList) request.getObject();
 
                                             MainController.availableUsers.addAll(l);
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML,"Chat Menu");
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                                         }
@@ -102,8 +113,18 @@ public class Client {
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_NO:
-                                break;
 
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String myError = (String) request.getObject();
+                                        ClientTicTacToe.registerController.error.setVisible(true);
+                                        ClientTicTacToe.registerController.errorText.setVisible(true);
+                                        ClientTicTacToe.registerController.errorText.setText(myError);
+                                        System.out.println(myError);    
+                                    }
+                                });
+                                    break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_OK:
                                 Platform.runLater(new Runnable() {
@@ -113,7 +134,7 @@ public class Client {
                                             List l = (ArrayList) request.getObject();
 
                                             MainController.availableUsers.addAll(l);
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, request.getClientID());
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                                         }
@@ -124,7 +145,9 @@ public class Client {
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
-                                break;
+                                String myError = (String) request.getObject();
+                                System.out.println(myError);
+                                    break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.ADD_PLAYER_TO_AVAILABLE_LIST:
                                 User user = (User) request.getObject();
@@ -143,6 +166,63 @@ public class Client {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.SEND_INVITATION_FOR_PLAYING:
                                 System.out.println("SEND_INVITATION_FOR_PLAYING Client");
+                                System.out.println("playing "+request.getClientID());
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {   
+                                        
+                                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                        alert.setTitle("Invitation Request");
+                                        alert.setContentText("اسطى "+request.getClientID() +" عايز يلعب معاك");
+                                        Optional<ButtonType> result = alert.showAndWait();
+                                        
+                                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                                            String swapEmail;
+                                            User user = (User)request.getObject(); 
+                                            System.out.println("playing "+user.getEmail());
+                                            swapEmail = request.getClientID();
+                                            request.setClientID(user.getEmail());
+                                            user.setEmail(swapEmail);
+                                            request.setObject(user);
+                                            Client.sendRequest(user, Setting.ACCEPT_INVITATION);
+                                            
+                                        }
+                                        else{
+                                            //////////////logic here///////////////////////
+                                        }
+                                    }
+                                });
+                                break;
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                case Setting.ACCEPT_INVITATION:
+                                System.out.println("ACCEPT_INVITATION Client");
+                                System.out.println("playing "+request.getClientID());
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {   
+                                        
+                                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                        alert.setTitle("Invitation Request");
+                                        alert.setContentText("البرنس "+request.getClientID() +" وافق انه يلعب معاك");
+                                        Optional<ButtonType> result = alert.showAndWait();
+                                        
+                                        if (result.isPresent() && result.get() == ButtonType.OK) {
+//                                            String swapEmail;
+//                                            User user = (User)request.getObject(); 
+//                                            System.out.println("playing "+user.getEmail());
+//                                            swapEmail = request.getClientID();
+//                                            request.setClientID(user.getEmail());
+//                                            user.setEmail(swapEmail);
+//                                            request.setObject(user);
+//                                            Client.sendRequest(user, Setting.ACCEPT_INVITATION);
+//                                            
+                                        }
+                                        else{
+                                            //////////////logic here///////////////////////
+                                        }
+                                    }
+                                });
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
