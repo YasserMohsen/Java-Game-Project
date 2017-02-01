@@ -31,6 +31,7 @@ public class MainController implements Initializable {
     @FXML
     private void selectUser(){
        User user =  lv_availableUsers.getSelectionModel().getSelectedItem();
+        System.out.println("user ::"+user.getName());
        Client.sendRequest(user, Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
     }
     /**

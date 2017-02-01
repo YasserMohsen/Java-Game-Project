@@ -47,8 +47,10 @@ import model.User;
                     switch(request.getType()){
 //////////////////////////////////////////////////////////////////////////////////////////////////
                         case Setting.REG:
+                            
                             user = (User)request.getObject();
-                            if(UserController.register(user)){
+                            user.setId(UserController.register(user));
+                            if(user.getId() != 0){
                                 // if register ok send list off available players to client
                                 user.setStatus(Setting.AVAILABLE);
                                 request.setType(Setting.REG_OK);                                
@@ -56,7 +58,6 @@ import model.User;
                                 for (GameHandler gameHandler : clientsVector){
                                     if(gameHandler.user.getStatus()== Setting.AVAILABLE)
                                         l.add(gameHandler.user);
-                                    System.out.println(""+gameHandler.user.getName());
                                 }
                                 request.setObject(l);
                                 this.ous.writeObject(request);
@@ -68,12 +69,18 @@ import model.User;
                             } 
                             else{
                                 // error in registration  send to client error message
-//                                
+                                request.setType(Setting.REG_NO);
+                                request.setObject("email already exist");
+                                this.ous.writeObject(request);
+                                this.ous.flush();
+                                this.ous.reset();
+                                
                             }
                             break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                         case Setting.LOGIN:
                             user = (User)request.getObject();
+                            System.out.println("Login case gameHandler");
                             if(UserController.login(user)){ 
                                 // if login ok send list off available players to client
                                 request.setClientID(user.getEmail());
@@ -98,7 +105,11 @@ import model.User;
                             } 
                             else{
                                 // error in registration  send to client error message
+                                request.setType(Setting.LOGIN_NO);
+                                request.setObject("check again plz");
                                 this.ous.writeObject(request);
+                                this.ous.flush();
+                                this.ous.reset();
                             }
                             break;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

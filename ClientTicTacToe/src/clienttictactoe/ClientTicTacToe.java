@@ -7,9 +7,9 @@ package clienttictactoe;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 /**
@@ -22,10 +22,16 @@ public class ClientTicTacToe extends Application {
     public static final String LOGIN_XML="login.fxml";
     public static final String MAIN_XML="main.fxml";
     
+    public static RegisterController registerController;
+    
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("register.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource("register.fxml"));      
+        Parent root = loader.load();
+        registerController  = (RegisterController)loader.getController();
+        //registerController.email.setText("lol");
+
         this.stage = stage;
         Scene scene = new Scene(root);
         
@@ -44,7 +50,11 @@ public class ClientTicTacToe extends Application {
     }
     
     public static Parent replaceSceneContent(String fxml , String windowTitle) throws Exception {
-        Parent page = FXMLLoader.load(ClientTicTacToe.class.getResource(fxml));
+        FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource(fxml));      
+        Parent page = loader.load();
+        //MainController controller = (MainController)loader.getController();
+        //controller.email.setText("lol");
+   
         Scene scene = stage.getScene();
         stage.setTitle(windowTitle);
         if (scene == null) {
@@ -55,6 +65,8 @@ public class ClientTicTacToe extends Application {
             stage.getScene().setRoot(page);
         }
         stage.sizeToScene();
+        
+
         return page;
     }
         

@@ -50,6 +50,8 @@ public class Client {
             System.out.println("before sent"+request.getType());
             request.getType();
             request.setObject(user);
+            
+        System.out.println("user ::"+user.getName());
             ous.writeObject(request);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -63,7 +65,8 @@ public class Client {
         try {
                     mySocket = new Socket("127.0.0.1", 5005);
                     ois = new ObjectInputStream(mySocket.getInputStream());
-                    ous = new ObjectOutputStream(mySocket.getOutputStream());                
+                    ous = new ObjectOutputStream(mySocket.getOutputStream()); 
+                    
                 } 
             catch (IOException ex) {
                     ex.printStackTrace();
@@ -77,10 +80,13 @@ public class Client {
                        
                         Request request =  (Request) ois.readObject();
                         
-                        System.out.println("after recieve"+request.getClientID());
+
+                        System.out.println("req type "+request.getType());
+                        
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
-                         switch(request.getType()){
+                        switch(request.getType()){
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_OK: 
                                 Platform.runLater(new Runnable(){
@@ -88,7 +94,7 @@ public class Client {
                                         try {
                                             List l = (ArrayList) request.getObject();
                                             MainController.availableUsers.addAll(l);
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML,"windowTitle");
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML,"Chat Menu");
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                                         }
@@ -98,6 +104,16 @@ public class Client {
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_NO:
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String myError = (String) request.getObject();
+                                        ClientTicTacToe.registerController.error.setVisible(true);
+                                        ClientTicTacToe.registerController.errorText.setVisible(true);
+                                        ClientTicTacToe.registerController.errorText.setText(myError);
+                                        System.out.println(myError);    
+                                    }
+                                });
                                     break;
                                 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,6 +136,8 @@ public class Client {
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
+                                String myError = (String) request.getObject();
+                                System.out.println(myError);
                                     break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.ADD_PLAYER_TO_AVAILABLE_LIST: 

@@ -22,11 +22,13 @@ public class LoginController implements Initializable {
     private User user;
     
     @FXML
-    private TextField email,password;
+    TextField email,password;
     
     
     @FXML
     public void loginBt(){
+        
+
         user = new User(email.getText(), password.getText());
         Client.sendRequest(user, Setting.LOGIN);
         
