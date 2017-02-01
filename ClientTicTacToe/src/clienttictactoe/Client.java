@@ -58,7 +58,8 @@ public class Client {
         try {
                     mySocket = new Socket("127.0.0.1", 5005);
                     ois = new ObjectInputStream(mySocket.getInputStream());
-                    ous = new ObjectOutputStream(mySocket.getOutputStream());                
+                    ous = new ObjectOutputStream(mySocket.getOutputStream()); 
+                    
                 } 
             catch (IOException ex) {
                     ex.printStackTrace();
@@ -72,10 +73,11 @@ public class Client {
                        
                         Request request =  (Request) ois.readObject();
                         System.out.println("req type "+request.getType());
-                        ClientTicTacToe.registerController.name.setText("wooow");
+                        
+                        
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
-                         switch(request.getType()){
+                        switch(request.getType()){
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_OK: 
                                 Platform.runLater(new Runnable(){
@@ -93,24 +95,16 @@ public class Client {
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_NO:
-                                String myError = (String) request.getObject();
-                                System.out.println(myError);
-//                                Platform.runLater(new Runnable(){
-//                                    public void run(){
-//                                        try {
-//                                            String myError = (String) request.getObject();
-////                                            RegisterController.error.setVisible(true);
-////                                            RegisterController.errorText.setText(myError);
-////                                            RegisterController.errorText.setVisible(true);
-////                                            List l = (ArrayList) request.getObject();
-////                                            MainController.availableUsers.addAll(l);
-////                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
-//                                        } catch (Exception ex) {
-//                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-//                                        }
-//
-//                                    }
-//                                });
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String myError = (String) request.getObject();
+                                        ClientTicTacToe.registerController.error.setVisible(true);
+                                        ClientTicTacToe.registerController.errorText.setVisible(true);
+                                        ClientTicTacToe.registerController.errorText.setText(myError);
+                                        System.out.println(myError);    
+                                    }
+                                });
                                     break;
                                 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,6 +127,8 @@ public class Client {
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
+                                String myError = (String) request.getObject();
+                                System.out.println(myError);
                                     break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.ADD_PLAYER_TO_AVAILABLE_LIST: 

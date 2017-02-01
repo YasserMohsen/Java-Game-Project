@@ -29,7 +29,7 @@ public class LoginController implements Initializable {
     public void loginBt(){
         
 
-        user = new User("",email.getText(), password.getText(),"");
+        user = new User(email.getText(), password.getText());
         Client.sendRequest(user, Setting.LOGIN);
         
     }

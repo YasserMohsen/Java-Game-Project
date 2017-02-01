@@ -18,17 +18,16 @@ public class User implements Serializable{
     String email;
     String name;
     String password;
-    String repassword;
+    int score;
     
     /*
     *constructor for regestration;
     */
 
-    public User(String name, String email, String password, String repassword) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.repassword = repassword;
     }
     
     
@@ -39,7 +38,7 @@ public class User implements Serializable{
         this.email = email;
         this.password = password;
         this.name = "";
-        this.repassword = "";
+        this.score = 0;
     }
     
     public int getId() {
@@ -50,12 +49,12 @@ public class User implements Serializable{
         this.id = id;
     }
 
-    public String getRepassword() {
-        return repassword;
+    public int getScore() {
+        return score;
     }
 
-    public void setRepassword(String repassword) {
-        this.repassword = repassword;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public String getName() {

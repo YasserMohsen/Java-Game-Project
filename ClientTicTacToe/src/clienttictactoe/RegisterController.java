@@ -26,12 +26,13 @@ public class RegisterController implements Initializable {
     
     @FXML
     public Label error, errorText;
-    TextField name,email,rePassword,password;
+    @FXML
+    public TextField name,email,password;
     
     
     @FXML
     public void btnActionSignUp(){
-        user = new User(name.getText(),email.getText(),password.getText(),rePassword.getText());
+        user = new User(name.getText(),email.getText(),password.getText());
         Client.sendRequest(user , Setting.REG);
     }
     

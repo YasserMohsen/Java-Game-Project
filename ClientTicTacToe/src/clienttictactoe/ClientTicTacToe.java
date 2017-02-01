@@ -30,7 +30,7 @@ public class ClientTicTacToe extends Application {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource("register.fxml"));      
         Parent root = loader.load();
         registerController  = (RegisterController)loader.getController();
-        registerController.email.setText("lol");
+        //registerController.email.setText("lol");
 
         this.stage = stage;
         Scene scene = new Scene(root);
@@ -52,8 +52,8 @@ public class ClientTicTacToe extends Application {
     public static Parent replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource(fxml));      
         Parent page = loader.load();
-        LoginController controller = (LoginController)loader.getController();
-        controller.email.setText("lol");
+        //MainController controller = (MainController)loader.getController();
+        //controller.email.setText("lol");
     
         Scene scene = stage.getScene();
         if (scene == null) {

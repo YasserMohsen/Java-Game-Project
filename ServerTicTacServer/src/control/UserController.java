@@ -7,6 +7,7 @@ package control;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -33,7 +34,7 @@ public class UserController {
             con.close();
             return 0;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
             int error = ex.getErrorCode();
             if (error == 1062){
                 //email already exist
@@ -49,12 +50,24 @@ public class UserController {
     public static boolean login(User user){
         try {
             Connection con = DBConnection.openConnection();
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM user WHERE email=? AND password=?");
-            return true;
+            System.out.println("Connected for login");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM user WHERE email=? AND password=?;");
+            stmt.setString(1, user.getEmail());
+            stmt.setString(2, user.getPassword());
+            ResultSet rs = stmt.executeQuery();
+            //con.close();
+            if (rs.next()){
+                return true;
+            }
+            else{
+                return false;
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            int error = ex.getErrorCode();
+            System.out.println("error in login code number :" + error);
+            return false;
         }
-        return false;
+        
     }
     public static boolean logout(User user){
         return true;

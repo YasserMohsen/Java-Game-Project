@@ -36,14 +36,14 @@
             <Label text="Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <Label text="Re-Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
      
-            <TextField fx:id="name"  GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <TextField fx:id="name" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <TextField fx:id="email" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             <PasswordField fx:id="password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <PasswordField fx:id="rePassword" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
             <Label fx:id="error" text="Error" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
             <Label fx:id="errorText" prefHeight="16.0" prefWidth="226.0" text="" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" onAction="#btnActionSignUp" text="Sign Up " GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-            <Button mnemonicParsing="false"  onAction="#btnActionLoginIn"  text="Sign In" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Button mnemonicParsing="false" onAction="#btnActionSignUp" text="Sign Up " GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#btnActionLoginIn" text="Sign In" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </center>    
