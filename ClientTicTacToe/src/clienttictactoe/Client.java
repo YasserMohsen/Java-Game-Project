@@ -23,65 +23,74 @@ import model.User;
  * @author kazafy
  */
 public class Client {
-    
 
-        static Socket mySocket;
-        static ObjectOutputStream ous;
-        static ObjectInputStream ois;
-        static PrintStream ps;
-        
-        
-        public static void sendRequest(User user , int type){
-        
+    static Socket mySocket;
+    static ObjectOutputStream ous;
+    static ObjectInputStream ois;
+    static PrintStream ps;
+
+    public static void sendRequest(User user, int type) {
+
         try {
             Request request = new Request();
-            if (type==Setting.LOGIN) {
-                System.out.println(""+user.getEmail());
-                request.setClientID(user.getEmail());   
+            if (type == Setting.LOGIN) {
+                System.out.println("" + user.getEmail());
+                request.setClientID(user.getEmail());
             }
-            System.out.println(""+request.getClientID());
+            System.out.println("" + request.getClientID());
             request.setType(type);
             request.setObject(user);
-            
-        System.out.println("user ::"+user.getName());
+
+            System.out.println("user ::" + user.getName());
             ous.writeObject(request);
             ous.flush();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
-        
-        }
 
-        public Client() {
+    }
+
+    public static void sendRequest(Request request) {
 
         try {
-                    mySocket = new Socket("127.0.0.1", 5005);
-                    ois = new ObjectInputStream(mySocket.getInputStream());
-                    ous = new ObjectOutputStream(mySocket.getOutputStream());                
-                } 
-            catch (IOException ex) {
-                    ex.printStackTrace();
-            }                
-            new Thread(new Runnable() {
+            ous.writeObject(request);
+            ous.flush();
+            ous.reset();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-                @Override
-                public void run() {
-                    while(true){
+////////////////////////////////////////////////////////////////////////////////        
+    public Client() {
+
+        try {
+            mySocket = new Socket("127.0.0.1", 5005);
+            ois = new ObjectInputStream(mySocket.getInputStream());
+            ous = new ObjectOutputStream(mySocket.getOutputStream());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                while (true) {
                     try {
-                       
-                        Request request =  (Request) ois.readObject();
-                        System.out.println("req type "+request.getType());
+
+                        Request request = (Request) ois.readObject();
+                        System.out.println("req type " + request.getType());
                         ClientTicTacToe.registerController.name.setText("wooow");
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
-                         switch(request.getType()){
+                        switch (request.getType()) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.REG_OK: 
-                                Platform.runLater(new Runnable(){
-                                    public void run(){
+                            case Setting.REG_OK:
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
                                         try {
                                             List l = (ArrayList) request.getObject();
+
                                             MainController.availableUsers.addAll(l);
                                             ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
                                         } catch (Exception ex) {
@@ -93,8 +102,8 @@ public class Client {
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_NO:
-                                    break;
-                                
+                                break;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_OK:
                                 Platform.runLater(new Runnable() {
@@ -102,7 +111,7 @@ public class Client {
                                     public void run() {
                                         try {
                                             List l = (ArrayList) request.getObject();
-                                            
+
                                             MainController.availableUsers.addAll(l);
                                             ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML);
                                         } catch (Exception ex) {
@@ -111,18 +120,18 @@ public class Client {
 
                                     }
                                 });
-                                
+
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
-                                    break;
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.ADD_PLAYER_TO_AVAILABLE_LIST: 
-                                User user = (User)request.getObject();
-                                Platform.runLater(new Runnable(){
-                                    public void run(){
+                            case Setting.ADD_PLAYER_TO_AVAILABLE_LIST:
+                                User user = (User) request.getObject();
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
                                         try {
-                                        MainController.availableUsers.add(user);
+                                            MainController.availableUsers.add(user);
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                                         }
@@ -130,23 +139,53 @@ public class Client {
                                     }
                                 });
 
-                            break;
+                                break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.SEND_INVITATION_FOR_PLAYING:
                                 System.out.println("SEND_INVITATION_FOR_PLAYING Client");
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                         }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.MOVEBACK:
+                                System.out.println(".MOVEBACK()");
+                                ArrayList xo = (ArrayList) request.getObject();
+                                System.out.println(".MOVEBACK()" + xo.size());
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.updateCell(xo);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.WINNER:
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.showDialog(Setting.WIN_MSG);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+                        }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                         
-                         
 
                     } catch (Exception ex) {
                         System.out.println("lol");
                         ex.printStackTrace();
                         try {
-                            
+
                             ois.close();
                             mySocket.close();
                             break;
@@ -154,14 +193,11 @@ public class Client {
                             ex.printStackTrace();
                         }
 
-
                     }
 
                 }
             }
         }).start();
 
-        
     }
-  }
-
+}

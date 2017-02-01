@@ -6,14 +6,20 @@
 package clienttictactoe;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
+import model.Request;
 import model.User;
 
 /**
@@ -24,21 +30,96 @@ import model.User;
 public class MainController implements Initializable {
 
     @FXML
-    ListView<User> lv_availableUsers;
+    private ListView<User> lv_availableUsers;
     
+    @FXML
+    private BorderPane bp_GameBoard ;
+
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
+    
+    private boolean playDisable = false ;
+    private Button [][]buttons = new Button[3][3];
+    /// init array of empty play board
+//    private int [][] xo = {{-1,-1,-1},{-1,-1,-1},{-1,-1,-1}};
+    private final ArrayList<Integer> xo =new ArrayList<>();
+    
+    private int counter = 0;
+    private boolean isFinish=false;
+    
+    private int playerChar_X_OR_O=1;
+
+    User player ;
+    User remotePlayer ;
+    
+
     
     @FXML
     private void selectUser(){
-       User user =  lv_availableUsers.getSelectionModel().getSelectedItem();
-        System.out.println("user ::"+user.getName());
-       Client.sendRequest(user, Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+       remotePlayer =  lv_availableUsers.getSelectionModel().getSelectedItem();
+       remotePlayer.setId(2);
+       
+       Client.sendRequest(remotePlayer, Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
     }
+    
+    
+    
+    
+
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
+        
+        GridPane gridPane = new GridPane();
+        
+        for (int i = 0; i < 9; i++) {
+                xo.add(-1);
+                buttons[i/3][i%3] = new Button("");
+                gridPane.add(buttons[i/3][i%3], i%3, i/3);
+                buttons[i/3][i%3].setUserData(i);
+                buttons[i/3][i%3].setOnAction((ActionEvent event) -> {
+                    if(isFinish)
+                        return;
+                    
+                    int position = Integer.parseInt(((Button)event.getSource()).getUserData().toString());                            
+                    ///  click in an empty position 
+                    if(xo.get(position) == -1){
+//                    if(xo[position/3][position%3] == -1){
+                        counter++;                        
+                        if(!playDisable){
+//                            ((Button)event.getSource()).setText("X");
+//                            xo[position/3][position%3] = playerChar_X_OR_O;
+                            xo.set(position, playerChar_X_OR_O);
+                            
+///////////////////////////////////////// prepare move request ///////////////////////////////// 
+                            Request request = new Request();
+                            request.setType(Setting.MOVE);
+                            player = new User(1,1, "k");
+                            System.out.println("xxxxxx"+xo.get(0));
+                            System.out.println("xxxxxx"+xo.get(1));
+                            System.out.println("xxxxxx"+xo.get(2));
+                            Object [] objects = {player , remotePlayer , xo};
+                            request.setObject(objects);
+                            Client.sendRequest(request);
+                            
+///////////////////////////////////////////////////////////////////////////////////////////////////
+                        }    
+//                        if (checkWins()){
+//                            isFinish=true;
+//                            System.out.println(" plyer number "+((playDisable)?" 1 ":" 2 ") +" win");
+//                        }                        
+                        
+//                        playDisable = true;                        
+                    }                    
+                });
+            }
+        
+        bp_GameBoard.setCenter(gridPane);
+        
         // TODO
         lv_availableUsers.setItems(availableUsers);
         
@@ -61,5 +142,24 @@ public class MainController implements Initializable {
             }
         });
     }    
+    
+
+    public void updateCell(ArrayList<Integer> xo){
+        playDisable = false;
+        for (int i = 0; i < 9; i++) {
+            System.out.println("i :"+xo.get(i));
+            if(xo.get(i)== 1){
+                buttons[i/3][i%3].setText("x");
+            }
+            else if (xo.get(i) == 0){
+                buttons[i/3][i%3].setText("o");            
+            }
+        }
+    }
+    
+    public void showDialog(String message){
+        
+        System.out.println("show d "+message);
+    }
     
 }

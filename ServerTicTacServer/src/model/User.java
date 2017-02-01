@@ -19,12 +19,31 @@ public class User implements Serializable{
     String email;
     String password;
     String repassword;
+    int score;
 
+    public User(int id, int status, String name, String email, String password, String repassword, int score) {
+        this.id = id;
+        this.status = status;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.repassword = repassword;
+        this.score = score;
+    }
+    
     public User(String name, String email, String password, String repassword) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.repassword = repassword;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
     
     public int getId() {

@@ -23,4 +23,7 @@ public class UserController {
     public static boolean logout(User user){
         return true;
     }
+    public static boolean saveScore(User user){
+        return true;
+    }
 }
