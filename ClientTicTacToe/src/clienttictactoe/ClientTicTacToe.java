@@ -9,7 +9,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 /**
@@ -23,7 +22,7 @@ public class ClientTicTacToe extends Application {
     public static final String MAIN_XML="main.fxml";
     
     public static RegisterController registerController;
-    
+    public static MainController mainController;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -52,9 +51,9 @@ public class ClientTicTacToe extends Application {
     public static Parent replaceSceneContent(String fxml , String windowTitle) throws Exception {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource(fxml));      
         Parent page = loader.load();
-        //MainController controller = (MainController)loader.getController();
-        //controller.email.setText("lol");
-   
+        
+         mainController = (MainController)loader.getController();
+        
         Scene scene = stage.getScene();
         stage.setTitle(windowTitle);
         if (scene == null) {

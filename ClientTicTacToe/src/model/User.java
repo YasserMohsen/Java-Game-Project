@@ -24,6 +24,12 @@ public class User implements Serializable{
     *constructor for regestration;
     */
 
+    public User(int id, int status, String name) {
+        this.id = id;
+        this.status = status;
+        this.name = name;
+    }
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
