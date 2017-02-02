@@ -145,7 +145,24 @@ public class Client {
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_NO:
                                 String myError = (String) request.getObject();
-                                System.out.println(myError);
+                             Platform.runLater(new Runnable(){
+                                    public void run(){
+                                        try {
+                                        String myError = (String)request.getObject();
+                                        
+                                    //    System.out.print("myError: "+myError);
+                                    ClientTicTacToe.loginController.errorsalma.setText(myError);
+                                    ClientTicTacToe.loginController.errorsalma.setVisible(true);
+                                     
+                                       //ClientTicTacToe.get();
+                                    //   System.out.print(ClientTicTacToe.loginController.errorsalma.setText(myError));
+                                        }
+                                        catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    }});
+                               
+                                   
                                     break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.ADD_PLAYER_TO_AVAILABLE_LIST:

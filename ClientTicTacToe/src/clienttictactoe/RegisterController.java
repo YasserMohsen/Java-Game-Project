@@ -29,7 +29,8 @@ public class RegisterController implements Initializable {
     @FXML
     public TextField name,email,password;
     
-    
+    @FXML
+    public Label errorsalma;
     @FXML
     public void btnActionSignUp(){
         user = new User(name.getText(),email.getText(),password.getText());
