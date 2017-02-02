@@ -14,11 +14,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
 import model.Request;
 import model.User;
 
@@ -46,17 +44,24 @@ public class MainController implements Initializable {
     private int counter = 0;
     private boolean isFinish=false;
     
-    private int playerChar_X_OR_O=1;
+     int playerChar_X_OR_O;
 
-    User player ;
-    User remotePlayer ;
+    private User player ;
+    private User remotePlayer ;
     
 
     
     @FXML
     private void selectUser(){
-       remotePlayer =  lv_availableUsers.getSelectionModel().getSelectedItem();
-       Client.sendRequest(remotePlayer, Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+        
+        remotePlayer =  lv_availableUsers.getSelectionModel().getSelectedItem();
+        Request request = new Request();
+        request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+        Object [] objects = {player , remotePlayer };
+        request.setObject(objects);
+        Client.sendRequest(request);
+
+        playerChar_X_OR_O = 1;
     }
     
     
@@ -89,21 +94,19 @@ public class MainController implements Initializable {
 //                    if(xo[position/3][position%3] == -1){
                         counter++;                        
                         if(!playDisable){
-//                            ((Button)event.getSource()).setText("X");
 //                            xo[position/3][position%3] = playerChar_X_OR_O;
                             xo.set(position, playerChar_X_OR_O);
                             
 ///////////////////////////////////////// prepare move request ///////////////////////////////// 
                             Request request = new Request();
                             request.setType(Setting.MOVE);
-                            player = new User(1,1, "k");
-                            System.out.println("xxxxxx"+xo.get(0));
-                            System.out.println("xxxxxx"+xo.get(1));
-                            System.out.println("xxxxxx"+xo.get(2));
                             Object [] objects = {player , remotePlayer , xo};
+                            System.out.println(" id r :"+player.getId());
+                            System.out.println(" id n :"+remotePlayer.toString());
                             request.setObject(objects);
                             Client.sendRequest(request);
-                            
+                            ((Button)event.getSource()).setText((playerChar_X_OR_O ==0)?"O":"X");
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
                         }    
 //                        if (checkWins()){
@@ -121,24 +124,24 @@ public class MainController implements Initializable {
         // TODO
         lv_availableUsers.setItems(availableUsers);
         
-        ////////////////set which property will be render in List View/////////////////////////////////
-        lv_availableUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
-            @Override
-            public ListCell<User> call(ListView<User> lv) {
-                return new ListCell<User>() {
-                    @Override
-                    public void updateItem(User user, boolean empty) {
-                        super.updateItem(user, empty);
-                        if (user == null) {
-                            setText(null);
-                        } else {
-                            // assume MyDataType.getSomeProperty() returns a string
-                            setText(user.getEmail());
-                        }
-                    }
-                };
-            }
-        });
+//        ////////////////set which property will be render in List View/////////////////////////////////
+//        lv_availableUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+//            @Override
+//            public ListCell<User> call(ListView<User> lv) {
+//                return new ListCell<User>() {
+//                    @Override
+//                    public void updateItem(User user, boolean empty) {
+//                        super.updateItem(user, empty);
+//                        if (user == null) {
+//                            setText(null);
+//                        } else {
+//                            // assume MyDataType.getSomeProperty() returns a string
+//                            setText(user.getEmail());
+//                        }
+//                    }
+//                };
+//            }
+//        });
     }    
     
 
@@ -158,6 +161,18 @@ public class MainController implements Initializable {
     public void showDialog(String message){
         
         System.out.println("show d "+message);
+    }
+
+    public void setPlayer(User player) {
+        this.player = player;
+    }
+    
+    public void setRemotePlayer(User player) {
+        this.remotePlayer = player;
+    }
+    
+    public void setPlayerId(int id) {
+        this.player.setId(id);
     }
     
 }

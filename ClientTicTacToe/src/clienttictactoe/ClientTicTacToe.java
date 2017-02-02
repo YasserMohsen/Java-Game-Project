@@ -44,13 +44,14 @@ public class ClientTicTacToe extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new Client();
+
         launch(args);
     }
     
     public static Parent replaceSceneContent(String fxml , String windowTitle) throws Exception {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource(fxml));      
         Parent page = loader.load();
+
         if(fxml=="login.fxml")
         {
             loginController = (LoginController)loader.getController();
@@ -58,9 +59,10 @@ public class ClientTicTacToe extends Application {
         else{
         MainController controller = (MainController)loader.getController();
         }
+
         
         Scene scene = stage.getScene();
-        stage.setTitle(windowTitle);
+        stage.setTitle(registerController.user.getName());
         if (scene == null) {
             scene = new Scene(page, 700, 450);
 //            scene.getStylesheets().add(ClientTicTacToe.class.getResource("demo.css").toExternalForm());
