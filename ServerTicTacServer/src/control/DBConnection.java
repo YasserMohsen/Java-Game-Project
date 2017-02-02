@@ -20,7 +20,7 @@ public class DBConnection {
         Connection con = null;
         try {
             DriverManager.registerDriver(new Driver());
-            con = DriverManager.getConnection("jdbc:mysql://160.153.129.233:3306/TicTacTeo","muhammad-dolnii", "0191709765");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac?useSSL=true","kazafy", "");
             
         } catch (SQLException ex) {
             System.out.println("Go to hell!");

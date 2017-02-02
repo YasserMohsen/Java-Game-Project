@@ -33,7 +33,7 @@ public class Client {
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
-
+    Thread thread;
     public static void sendRequest(User user, int type) {
 
         try {
@@ -82,7 +82,7 @@ public class Client {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -96,13 +96,21 @@ public class Client {
                         switch (request.getType()) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.REG_OK:
+                                Object[] objects = (Object[]) request.getObject();
+                                List<User> availablePlayerList = (ArrayList) objects[0];
+                                
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         try {
-                                            List l = (ArrayList) request.getObject();
-
-                                            MainController.availableUsers.addAll(l);
+                                            MainController.availableUsers.addAll(availablePlayerList);
+                                            for (User user : availablePlayerList) {
+                                                System.out.println(" u id :"+user.getId());
+                                                System.out.println(" u na:"+user.getName());
+                                                System.out.println(" u em:"+user.getEmail());
+                                            }
+                                            
                                             ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML,"Chat Menu");
+                                            ClientTicTacToe.mainController.setPlayer((User)objects[1]);
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                                         }
@@ -165,26 +173,24 @@ public class Client {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.SEND_INVITATION_FOR_PLAYING:
                                 System.out.println("SEND_INVITATION_FOR_PLAYING Client");
-                                System.out.println("playing "+request.getClientID());
+                                objects = (Object[]) request.getObject();
+                                User remotePlayer = (User) objects[0];
+                                ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {   
                                         
                                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                         alert.setTitle("Invitation Request");
-                                        alert.setContentText("اسطى "+request.getClientID() +" عايز يلعب معاك");
+                                        alert.setContentText("اسطى "+remotePlayer.getName() +" عايز يلعب معاك");
                                         Optional<ButtonType> result = alert.showAndWait();
                                         
                                         if (result.isPresent() && result.get() == ButtonType.OK) {
-                                            String swapEmail;
-                                            User user = (User)request.getObject(); 
-                                            System.out.println("playing "+user.getEmail());
-                                            swapEmail = request.getClientID();
-                                            request.setClientID(user.getEmail());
-                                            user.setEmail(swapEmail);
-                                            request.setObject(user);
-                                            Client.sendRequest(user, Setting.ACCEPT_INVITATION);
-                                            
+                                            System.out.println("playing "+remotePlayer.getName());
+                                            request.setObject(objects);
+                                            request.setType(Setting.ACCEPT_INVITATION);
+                                            Client.sendRequest(request);                                            
+                                            ClientTicTacToe.mainController.playerChar_X_OR_O = 0;
                                         }
                                         else{
                                             //////////////logic here///////////////////////
@@ -196,14 +202,16 @@ public class Client {
                                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                 case Setting.ACCEPT_INVITATION:
                                 System.out.println("ACCEPT_INVITATION Client");
-                                System.out.println("playing "+request.getClientID());
+                                objects = (Object[]) request.getObject();
+                                remotePlayer = (User) objects[1];                                
+                                ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);                                
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {   
                                         
                                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                         alert.setTitle("Invitation Request");
-                                        alert.setContentText("البرنس "+request.getClientID() +" وافق انه يلعب معاك");
+                                        alert.setContentText("البرنس "+remotePlayer.getName() +" وافق انه يلعب معاك");
                                         Optional<ButtonType> result = alert.showAndWait();
                                         
                                         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -276,7 +284,7 @@ public class Client {
 
                 }
             }
-        }).start();
+        });
 
     }
 }

@@ -44,7 +44,7 @@ public class ClientTicTacToe extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new Client();
+
         launch(args);
     }
     
@@ -52,10 +52,10 @@ public class ClientTicTacToe extends Application {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource(fxml));      
         Parent page = loader.load();
         
-         mainController = (MainController)loader.getController();
+        mainController = (MainController)loader.getController();
         
         Scene scene = stage.getScene();
-        stage.setTitle(windowTitle);
+        stage.setTitle(registerController.user.getName());
         if (scene == null) {
             scene = new Scene(page, 700, 450);
 //            scene.getStylesheets().add(ClientTicTacToe.class.getResource("demo.css").toExternalForm());
