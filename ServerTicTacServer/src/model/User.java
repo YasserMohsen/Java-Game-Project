@@ -18,12 +18,31 @@ public class User implements Serializable{
     String name;
     String email;
     String password;
-    int score;
+  
+    private int score;
+
+    public User(int id, int status, String name, String email, String password, int score) {
+        this.id = id;
+        this.status = status;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.score = score;
+    }
+    
 
     public User(String name, String email, String password, int score) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
         this.score = score;
     }
     
@@ -59,14 +78,6 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -75,7 +86,7 @@ public class User implements Serializable{
         this.status = status;
     }
     
-   
+    
     
     
 }

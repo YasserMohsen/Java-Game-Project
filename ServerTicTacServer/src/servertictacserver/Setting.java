@@ -20,4 +20,11 @@ public class Setting {
     public static final int AVAILABLE = 3001;
     public static final int SELECT_PLAYER_FROM_AVAILABLE_LIST = 2006;
     public static final int SEND_INVITATION_FOR_PLAYING = 2007;
+
+    public static final int WINNER = 2011;
+    public static final int LOSER = 2009;
+    public static final int MOVE = 2016;
+    public static final int MOVEBACK = 2010;
+
+    public static final int ACCEPT_INVITATION = 2008;
 }

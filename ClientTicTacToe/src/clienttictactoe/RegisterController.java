@@ -39,7 +39,7 @@ public class RegisterController implements Initializable {
     @FXML
     public void btnActionLoginIn(){
         try {
-            ClientTicTacToe.replaceSceneContent("login.fxml");
+            ClientTicTacToe.replaceSceneContent("login.fxml","login");
         } catch (Exception ex) {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }

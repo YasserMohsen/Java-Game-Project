@@ -20,34 +20,39 @@ import model.User;
  */
 public class UserController {
     
-    public static int register( User user){
+    public static User register( User user){
+        int id = 0;
         try {
             Connection con = DBConnection.openConnection();
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO user (name,email,password,score) VALUES(?,?,?,0);");
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO user (name,email,password,score) VALUES(?,?,?,0);", Statement.RETURN_GENERATED_KEYS);
 
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
             stmt.executeUpdate();
-
-
+            
+            ResultSet rs = stmt.getGeneratedKeys();
+            if(rs.next())
+            {
+                id =rs.getInt(1);
+                user.setId(id);
+//              user.setId(rs.getInt(1));
+//              user.setScore(rs.getInt(5));
+            }
             con.close();
-            return 0;
         } catch (SQLException ex) {
             //ex.printStackTrace();
             int error = ex.getErrorCode();
-            if (error == 1062){
-                //email already exist
-                return 1;
-            }
-            else{
-                return 10;
-            }
+            user.setId(id);
+            
         }
+        return user;
         
         
     }
-    public static boolean login(User user){
+    public static User login(User user){
+        int id = 0;
+        String name = "";
         try {
             Connection con = DBConnection.openConnection();
             System.out.println("Connected for login");
@@ -57,19 +62,26 @@ public class UserController {
             ResultSet rs = stmt.executeQuery();
             //con.close();
             if (rs.next()){
-                return true;
+                id =rs.getInt(1);
+                user.setId(id);
+                name = rs.getString(2);
+                user.setName(name);
+                return user;
             }
             else{
-                return false;
+                return user;
             }
         } catch (SQLException ex) {
             int error = ex.getErrorCode();
             System.out.println("error in login code number :" + error);
-            return false;
+            return user;
         }
         
     }
     public static boolean logout(User user){
+        return true;
+    }
+    public static boolean saveScore(User user){
         return true;
     }
 }
