@@ -27,4 +27,6 @@ public class Setting {
     public static final int MOVEBACK = 2010;
 
     public static final int ACCEPT_INVITATION = 2008;
+    public static final int REFUSE_INVITATION = 2012;
+    
 }

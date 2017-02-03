@@ -27,13 +27,13 @@ import model.User;
  */
 public class Client {
 
-
     static Socket mySocket;
     static ObjectOutputStream ous;
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
     Thread thread;
+
     public static void sendRequest(User user, int type) {
 
         try {
@@ -45,11 +45,10 @@ public class Client {
                 request.setClientID(user.getEmail());
             }
             System.out.println("" + request.getClientID());
-               
-            
-            System.out.println("before sent"+request.getClientID());
+
+            System.out.println("before sent" + request.getClientID());
             request.setType(type);
-            System.out.println("before sent"+request.getType());
+            System.out.println("before sent" + request.getType());
             request.getType();
             request.setObject(user);
 
@@ -98,19 +97,19 @@ public class Client {
                             case Setting.REG_OK:
                                 Object[] objects = (Object[]) request.getObject();
                                 List<User> availablePlayerList = (ArrayList) objects[0];
-                                
+
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         try {
                                             MainController.availableUsers.addAll(availablePlayerList);
                                             for (User user : availablePlayerList) {
-                                                System.out.println(" u id :"+user.getId());
-                                                System.out.println(" u na:"+user.getName());
-                                                System.out.println(" u em:"+user.getEmail());
+                                                System.out.println(" u id :" + user.getId());
+                                                System.out.println(" u na:" + user.getName());
+                                                System.out.println(" u em:" + user.getEmail());
                                             }
-                                            
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML,"Chat Menu");
-                                            ClientTicTacToe.mainController.setPlayer((User)objects[1]);
+
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
+                                            ClientTicTacToe.mainController.setPlayer((User) objects[1]);
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                                         }
@@ -128,10 +127,10 @@ public class Client {
                                         ClientTicTacToe.registerController.error.setVisible(true);
                                         ClientTicTacToe.registerController.errorText.setVisible(true);
                                         ClientTicTacToe.registerController.errorText.setText(myError);
-                                        System.out.println(myError);    
+                                        System.out.println(myError);
                                     }
                                 });
-                                    break;
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOGIN_OK:
                                 Platform.runLater(new Runnable() {
@@ -154,7 +153,7 @@ public class Client {
                             case Setting.LOGIN_NO:
                                 String myError = (String) request.getObject();
                                 System.out.println(myError);
-                                    break;
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.ADD_PLAYER_TO_AVAILABLE_LIST:
                                 User user = (User) request.getObject();
@@ -175,59 +174,63 @@ public class Client {
                                 System.out.println("SEND_INVITATION_FOR_PLAYING Client");
                                 objects = (Object[]) request.getObject();
                                 User remotePlayer = (User) objects[0];
-                                ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                 Platform.runLater(new Runnable() {
                                     @Override
-                                    public void run() {   
-                                        
+                                    public void run() {
+                                        ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
+                                        ClientTicTacToe.mainController.setDisable_Enable_MainView(true);
+
                                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                         alert.setTitle("Invitation Request");
-                                        alert.setContentText("اسطى "+remotePlayer.getName() +" عايز يلعب معاك");
+                                        alert.setContentText("اسطى " + remotePlayer.getName() + " عايز يلعب معاك");
                                         Optional<ButtonType> result = alert.showAndWait();
-                                        
+
                                         if (result.isPresent() && result.get() == ButtonType.OK) {
-                                            System.out.println("playing "+remotePlayer.getName());
                                             request.setObject(objects);
                                             request.setType(Setting.ACCEPT_INVITATION);
-                                            Client.sendRequest(request);                                            
+                                            Client.sendRequest(request);
                                             ClientTicTacToe.mainController.playerChar_X_OR_O = 0;
-                                        }
-                                        else{
+                                            ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                        } else {
                                             //////////////logic here///////////////////////
+                                            request.setObject(objects);
+                                            request.setType(Setting.REFUSE_INVITATION);
+                                            Client.sendRequest(request);
+                                            ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+
                                         }
                                     }
                                 });
                                 break;
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                case Setting.ACCEPT_INVITATION:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.ACCEPT_INVITATION:
                                 System.out.println("ACCEPT_INVITATION Client");
                                 objects = (Object[]) request.getObject();
-                                remotePlayer = (User) objects[1];                                
-                                ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);                                
+                                remotePlayer = (User) objects[1];
                                 Platform.runLater(new Runnable() {
                                     @Override
-                                    public void run() {   
-                                        
-                                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                        alert.setTitle("Invitation Request");
-                                        alert.setContentText("البرنس "+remotePlayer.getName() +" وافق انه يلعب معاك");
-                                        Optional<ButtonType> result = alert.showAndWait();
-                                        
-                                        if (result.isPresent() && result.get() == ButtonType.OK) {
-//                                            String swapEmail;
-//                                            User user = (User)request.getObject(); 
-//                                            System.out.println("playing "+user.getEmail());
-//                                            swapEmail = request.getClientID();
-//                                            request.setClientID(user.getEmail());
-//                                            user.setEmail(swapEmail);
-//                                            request.setObject(user);
-//                                            Client.sendRequest(user, Setting.ACCEPT_INVITATION);
-//                                            
-                                        }
-                                        else{
-                                            //////////////logic here///////////////////////
-                                        }
+                                    public void run() {
+
+                                        ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
+                                        ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+
+                                    }
+                                });
+                                break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.REFUSE_INVITATION:
+                                System.out.println("REFUSE_INVITATION Client");
+                                objects = (Object[]) request.getObject();
+                                remotePlayer = (User) objects[1];
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String refuseMessage= "معلش يابرنس "+remotePlayer.getName()+" فكسلك :( ";
+                                        ClientTicTacToe.mainController.showDialog(refuseMessage);
+                                        ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+
                                     }
                                 });
                                 break;
@@ -235,8 +238,7 @@ public class Client {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.MOVEBACK:
                                 System.out.println(".MOVEBACK()");
-                                ArrayList xo = (ArrayList) request.getObject();
-                                System.out.println(".MOVEBACK()" + xo.size());
+                                int[] xo = (int[]) request.getObject();
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         try {
@@ -260,7 +262,19 @@ public class Client {
                                         }
                                     }
                                 });
-
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.LOSER:
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.showDialog(Setting.LOSE_MSG);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 

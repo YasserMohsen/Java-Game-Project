@@ -59,7 +59,7 @@ class GameHandler extends Thread {
                                 request.setType(Setting.REG_OK);                                
                                 List availablePlayerList = new ArrayList<User>();                                
                                 for (GameHandler gameHandler : clientsVector){
-                                    if(gameHandler.user != null)
+                                    if(gameHandler.user != null && gameHandler.user.getId()!=user.getId())
                                         availablePlayerList.add(gameHandler.user);
                                 }
                                 Object [] objects = {availablePlayerList,user};
@@ -126,11 +126,12 @@ class GameHandler extends Thread {
                         User receiverPlayer = (User) objects[1];
                         System.out.println("s id "+senderPlayer.getId());
                         System.out.println("r id "+receiverPlayer.getId());
-                        ArrayList<Integer> xo = (ArrayList<Integer>) objects[2];
-                        this.ous.flush();
-                        this.ous.reset();
+                        int []xo =  (int[]) objects[2];
+
                         
-                        System.out.println("xo " + xo.size());
+                        System.out.println("xo " + xo.length);
+
+                        
                         if (checkWins(xo)) {
 
                             for (GameHandler ch : clientsVector) {
@@ -167,7 +168,8 @@ class GameHandler extends Thread {
                             request.setObject(receiverPlayer);
                             request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
                             brodCast(request);
-
+                            this.ous.flush();
+                            this.ous.reset();
                             senderPlayer.setStatus(Setting.AVAILABLE);
                         } else {
                             
@@ -185,41 +187,7 @@ class GameHandler extends Thread {
 
                             break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//                        case Setting.LOGIN:
-//                            user = (User)request.getObject();
-//                            System.out.println("Login case gameHandler");
-//                            if(UserController.login(user)){ 
-//                                // if login ok send list off available players to client
-//                                request.setClientID(user.getEmail());
-//                                user.setStatus(Setting.AVAILABLE);
-//                                request.setType(Setting.LOGIN_OK);                                
-//                                List <User> availablePlayerList = new ArrayList<>();                                
-//                                for (GameHandler gameHandler : clientsVector){
-//                                    if(gameHandler.user.getStatus()== Setting.AVAILABLE && gameHandler.user != user)
-//                                        availablePlayerList.add(gameHandler.user);                                    
-//                                }
-//
-//                                request.setObject(availablePlayerList);
-//                                System.out.println(""+request.getClientID());
-//                                
-//                                this.ous.writeObject(request);
-//                                this.ous.flush();
-//                                this.ous.reset();
-//                                request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
-//                                request.setObject(user);
-//                                brodCast(request);
-//
-//                            } 
-//                            else{
-//                                // error in registration  send to client error message
-//                                request.setType(Setting.LOGIN_NO);
-//                                request.setObject("check again plz");
-//                                this.ous.writeObject(request);
-//                                this.ous.flush();
-//                                this.ous.reset();
-//                            }
-//                            break;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                         case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
                             
                             System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");
@@ -253,7 +221,25 @@ class GameHandler extends Thread {
                                 if(ch.user.getId() == receiverPlayer.getId())
                                 {
                                     request.setType(Setting.ACCEPT_INVITATION);
-                                    System.out.println("hi from if ACCEPT ");
+                                    ch.ous.writeObject(request);
+                                }         
+                            }
+                            break;
+                            
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.REFUSE_INVITATION:
+                            
+                            System.out.println("REFUSE_INVITATION");
+                            objects = (Object[]) request.getObject();
+                            senderPlayer = (User) objects[1];
+                            receiverPlayer = (User) objects[0];
+                            
+                            for (GameHandler ch : clientsVector) {
+                                if(ch.user.getId() == receiverPlayer.getId())
+                                {
+                                    request.setType(Setting.REFUSE_INVITATION);
                                     ch.ous.writeObject(request);
                                 }         
                             }
@@ -300,15 +286,17 @@ class GameHandler extends Thread {
         }
     }
 
-    private boolean checkWins(ArrayList<Integer> x) {
-        return (   x.get(0) == x.get(1) && x.get(0) == x.get(2)&& x.get(0) != -1
-                || x.get(0) == x.get(3) && x.get(0) == x.get(6)&& x.get(0) != -1
-                || x.get(0) == x.get(4) && x.get(0) == x.get(8)&& x.get(0) != -1
-                || x.get(6) == x.get(7) && x.get(6) == x.get(8)&& x.get(6) != -1
-                || x.get(6) == x.get(4) && x.get(6) == x.get(2)&& x.get(6) != -1
-                || x.get(2) == x.get(5) && x.get(2) == x.get(8)&& x.get(2) != -1
-                || x.get(1) == x.get(4) && x.get(1) == x.get(7)&& x.get(1) != -1
-                || x.get(3) == x.get(4) && x.get(3) == x.get(5)&& x.get(3) != -1);
+    private boolean checkWins(int [] x) {
+        
+        return (   (x[0] == x[1] && x[0] == x[2] && x[0] != -1)
+                || (x[0] == x[3] && x[0] == x[6] && x[0] != -1)
+                || (x[0] == x[4] && x[0] == x[8] && x[0] != -1)
+                || (x[6] == x[7] && x[6] == x[8] && x[6] != -1)
+                || (x[6] == x[4] && x[6] == x[2] && x[6] != -1)
+                || (x[2] == x[5] && x[2] == x[8] && x[2] != -1)
+                || (x[1] == x[4] && x[1] == x[7] && x[1] != -1)
+                || (x[3] == x[4] && x[3] == x[5] && x[3] != -1)
+                );
     }
 
 }

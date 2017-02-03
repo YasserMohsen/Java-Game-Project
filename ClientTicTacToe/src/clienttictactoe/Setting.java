@@ -29,5 +29,6 @@ public class Setting {
     public static final String LOSE_MSG = "7azz sa3eed el marra el kadema :(";
 
     public static final int ACCEPT_INVITATION = 2008;
+    public static final int REFUSE_INVITATION = 2012;
     
 }
