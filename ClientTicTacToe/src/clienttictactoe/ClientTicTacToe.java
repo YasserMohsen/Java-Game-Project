@@ -52,17 +52,20 @@ public class ClientTicTacToe extends Application {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource(fxml));      
         Parent page = loader.load();
 
+        Scene scene = stage.getScene();
+
         if(fxml=="login.fxml")
         {
             loginController = (LoginController)loader.getController();
+            //stage.setTitle(loginController.user.getName());
         }
         else{
-        MainController controller = (MainController)loader.getController();
+            mainController = (MainController)loader.getController();
+
+            //stage.setTitle(registerController.user.getName());
         }
 
         
-        Scene scene = stage.getScene();
-        stage.setTitle(registerController.user.getName());
         if (scene == null) {
             scene = new Scene(page, 700, 450);
 //            scene.getStylesheets().add(ClientTicTacToe.class.getResource("demo.css").toExternalForm());

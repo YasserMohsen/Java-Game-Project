@@ -44,19 +44,23 @@ class GameHandler extends Thread {
             Request request;
             try {
                 request = (Request) ois.readObject();
+                System.out.println("my type is : "+ request.getType());
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                 switch (request.getType()) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
                     case Setting.REG:                            
-                            user = (User)request.getObject();
-                            user = UserController.register(user);
+                    case Setting.LOGIN:
+                        
+                            user = (User) request.getObject();
+                            user = (request.getType()==Setting.LOGIN)?UserController.login(user):UserController.register(user);
                             if(user.getId() != 0){
-                                // if register ok send list off available players to client
+                                // if register ok send list off available players to client                                
                                 this.ous.flush();
                                 this.ous.reset();
                                 user.setStatus(Setting.AVAILABLE);
-                                request.setType(Setting.REG_OK);                                
+                                request.setType(Setting.REG_OK);  
+                                
                                 List availablePlayerList = new ArrayList<User>();                                
                                 for (GameHandler gameHandler : clientsVector){
                                     if(gameHandler.user != null && gameHandler.user.getId()!=user.getId())
@@ -72,51 +76,58 @@ class GameHandler extends Thread {
                                 brodCast(request);
                             } 
                             else{
+                                
                                 // error in registration  send to client error message
-                                request.setType(Setting.REG_NO);
+                                if(request.getType()== Setting.REG){
+                                request.setType(Setting.REG_NO);                                    
                                 request.setObject("email already exist");
+                                }
+                                else if(request.getType()== Setting.LOGIN){
+                                request.setType(Setting.LOGIN_NO);
+                                request.setObject("incorrect username or passsword");
+                                
+                                }
                                 this.ous.writeObject(request);
                                 this.ous.flush();
                                 this.ous.reset();
                             }
                         break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.LOGIN:
-                        user = (User) request.getObject();
-                        user = UserController.login(user);
-                        if (user.getId() != 0) {
-                            // if login ok send list off available players to client
-                            request.setClientID(user.getEmail());
-                            user.setStatus(Setting.AVAILABLE);
-                            request.setType(Setting.LOGIN_OK);
-                            List<User> l = new ArrayList<>();
-                            for (GameHandler gameHandler : clientsVector) {
-                                if (gameHandler.user.getStatus() == Setting.AVAILABLE) {
-                                    l.add(gameHandler.user);
-                                }
-                            }
-
-                            request.setObject(l);
-                            System.out.println("" + request.getObject());
-
-                            this.ous.writeObject(request);
-                            this.ous.flush();
-                            this.ous.reset();
-                            request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
-                            request.setObject(user);
-                            brodCast(request);
-
-                        } else {
-                            // error in registration  send to client error message
-                            request.setType(Setting.LOGIN_NO);
-                                request.setObject("incorrect username or passsword");
-
-                            this.ous.writeObject(request);
-                            this.ous.flush();
-                            this.ous.reset();
-                        }
-                        break;
-
+//                    case Setting.LOGIN:
+//                        user = (User) request.getObject();
+//                        user = UserController.login(user);
+//                        if (user.getId() != 0) {
+//                            // if login ok send list off available players to client
+//                            user.setStatus(Setting.AVAILABLE);
+//                            request.setType(Setting.LOGIN_OK);
+//                            List<User> l = new ArrayList<>();
+//                            for (GameHandler gameHandler : clientsVector) {
+//                                if (gameHandler.user.getStatus() == Setting.AVAILABLE) {
+//                                    l.add(gameHandler.user);
+//                                }
+//                            }
+//
+//                            request.setObject(l);
+//                            System.out.println("" + request.getObject());
+//
+//                            this.ous.writeObject(request);
+//                            this.ous.flush();
+//                            this.ous.reset();
+//                            request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
+//                            request.setObject(user);
+//                            brodCast(request);
+//
+//                        } else {
+//                            // error in registration  send to client error message
+//                                request.setType(Setting.LOGIN_NO);
+//                                request.setObject("incorrect username or passsword");
+//
+//                            this.ous.writeObject(request);
+//                            this.ous.flush();
+//                            this.ous.reset();
+//                        }
+//                        break;
+//
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

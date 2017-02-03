@@ -159,9 +159,9 @@ public class Client {
                                         String myError = (String)request.getObject();
                                         
                                     //    System.out.print("myError: "+myError);
-                                    ClientTicTacToe.loginController.errorsalma.setText(myError);
-                                    ClientTicTacToe.loginController.errorsalma.setVisible(true);
-                                     
+                                        ClientTicTacToe.loginController.errorsalma.setText(myError);
+                                        ClientTicTacToe.loginController.errorsalma.setVisible(true);
+
                                        //ClientTicTacToe.get();
                                     //   System.out.print(ClientTicTacToe.loginController.errorsalma.setText(myError));
                                         }

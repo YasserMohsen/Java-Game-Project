@@ -19,7 +19,7 @@ import model.User;
  */
 public class LoginController implements Initializable {
     
-    private User user;
+    User user;
     
     @FXML
     TextField email,password;
@@ -29,10 +29,12 @@ public class LoginController implements Initializable {
     @FXML
     public void loginBt(){
         
+        Client c = new Client();
 
         user = new User(email.getText(), password.getText());
         Client.sendRequest(user, Setting.LOGIN);
-        
+
+        c.thread.start();        
     }
     
     @Override
