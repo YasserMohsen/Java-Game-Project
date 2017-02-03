@@ -256,7 +256,6 @@ public class Client {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.MOVEBACK:
-                                System.out.println(".MOVEBACK()");
                                 int[] xo = (int[]) request.getObject();
                                 Platform.runLater(new Runnable() {
                                     public void run() {
@@ -285,9 +284,11 @@ public class Client {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.LOSER:
+                                xo = (int[]) request.getObject();
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         try {
+                                            ClientTicTacToe.mainController.updateCell(xo);
                                             ClientTicTacToe.mainController.showDialog(Setting.LOSE_MSG);
                                         } catch (Exception e) {
                                             e.printStackTrace();

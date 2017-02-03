@@ -152,7 +152,7 @@ class GameHandler extends Thread {
 
                                     if (ch.user.getId() == receiverPlayer.getId()) {
                                         request.setType(Setting.LOSER);
-
+                                        request.setObject(xo);
                                         ch.ous.writeObject(request);
                                         ch.ous.flush();
                                         ch.ous.reset();
