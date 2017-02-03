@@ -81,7 +81,17 @@ public class UserController {
     public static boolean logout(User user){
         return true;
     }
-    public static boolean saveScore(User user){
-        return true;
-    }
+   public static void saveScore(User user){
+        try {
+            Connection con = DBConnection.openConnection();
+            PreparedStatement stmt = con.prepareStatement("update user set score=? where id=?");
+            stmt.setInt(1, user.getScore());
+            stmt.setInt(2, user.getId());
+            stmt.executeUpdate();
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   }
 }

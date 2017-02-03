@@ -29,6 +29,11 @@
                   <Label text="password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <PasswordField fx:id="password" prefHeight="81.0" prefWidth="440.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Button onAction="#loginBt" mnemonicParsing="false" prefHeight="66.0" prefWidth="78.0" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <center>
+                        <Label fx:id="errorsalma" text="salma" visible="false" prefHeight="34.0" prefWidth="76.0" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
                </children>
             </GridPane>
          </center>

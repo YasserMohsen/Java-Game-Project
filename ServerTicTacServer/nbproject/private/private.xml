@@ -3,7 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ServerTicTacServer/src/servertictacserver/GameHandler.java</file>
+=======
+            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ServerTicTacServer/src/servertictacserver/ServerTicTacServer.java</file>
+            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ServerTicTacServer/src/servertictacserver/FXMLDocument.fxml</file>
+            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ServerTicTacServer/src/servertictacserver/Setting.java</file>
+            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ServerTicTacServer/src/servertictacserver/GameHandler.java</file>
+            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ServerTicTacServer/src/servertictacserver/FXMLDocumentController.java</file>
+            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ServerTicTacServer/src/servertictacserver/Server.java</file>
+>>>>>>> 4f79530e20dfc7c83fc7235331c461e3bbe9dbc6
         </group>
     </open-files>
 </project-private>

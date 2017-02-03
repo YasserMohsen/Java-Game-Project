@@ -7,8 +7,6 @@ package control;
 
 import com.mysql.jdbc.Driver;
 import java.sql.* ;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,7 +18,9 @@ public class DBConnection {
         Connection con = null;
         try {
             DriverManager.registerDriver(new Driver());
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac?useSSL=true","kazafy", "");
+
+            con = DriverManager.getConnection("jdbc:mysql://160.153.129.233:3306/TicTac","kazafy", "");
+
             
         } catch (SQLException ex) {
             System.out.println("Go to hell!");
