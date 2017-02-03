@@ -109,7 +109,8 @@ class GameHandler extends Thread {
                         } else {
                             // error in registration  send to client error message
                             request.setType(Setting.LOGIN_NO);
-                            request.setObject("check again plz");
+                                request.setObject("incorrect username or passsword");
+
                             this.ous.writeObject(request);
                             this.ous.flush();
                             this.ous.reset();
