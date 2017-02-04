@@ -158,6 +158,9 @@ public class MainController implements Initializable {
         bp_GameBoard.setDisable(bool);
     }
 
+    public void setDisable_Enable_ListView(boolean bool) {
+        lv_availableUsers.setDisable(bool);
+    }
     public void setPlayer(User player) {
         this.player = player;
     }
@@ -168,6 +171,17 @@ public class MainController implements Initializable {
 
     public void setPlayerId(int id) {
         this.player.setId(id);
+    }
+    
+    public User getPlayer(){
+        return player;
+    }
+
+    void resetArray() {
+        for (int i = 0; i < xo.length; i++) {
+            xo[i]=-1;
+        }
+        
     }
 
 }

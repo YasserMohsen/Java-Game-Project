@@ -102,12 +102,6 @@ public class Client {
                                     public void run() {
                                         try {
                                             MainController.availableUsers.addAll(availablePlayerList);
-                                            for (User user : availablePlayerList) {
-                                                System.out.println(" u id :" + user.getId());
-                                                System.out.println(" u na:" + user.getName());
-                                                System.out.println(" u em:" + user.getEmail());
-                                            }
-
                                             ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
                                             ClientTicTacToe.mainController.setPlayer((User) objects[1]);
                                         } catch (Exception ex) {
@@ -210,6 +204,8 @@ public class Client {
                                             Client.sendRequest(request);
                                             ClientTicTacToe.mainController.playerChar_X_OR_O = 0;
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                            ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
+
                                         } else {
                                             //////////////logic here///////////////////////
                                             request.setObject(objects);
@@ -233,6 +229,7 @@ public class Client {
 
                                         ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                        ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
 
                                     }
                                 });
@@ -275,6 +272,9 @@ public class Client {
                                     public void run() {
                                         try {
                                             ClientTicTacToe.mainController.showDialog(Setting.WIN_MSG);
+                                            ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                            ClientTicTacToe.mainController.resetArray();
+                                            
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -289,7 +289,10 @@ public class Client {
                                     public void run() {
                                         try {
                                             ClientTicTacToe.mainController.updateCell(xo);
-                                            ClientTicTacToe.mainController.showDialog(Setting.LOSE_MSG);
+                                            ClientTicTacToe.mainController.showDialog(Setting.LOSE_MSG);  
+                                            ClientTicTacToe.mainController.resetArray();
+                                            
+                                            ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
