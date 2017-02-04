@@ -5,10 +5,6 @@
  */
 package clienttictactoe;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.Parameter;
-import com.restfb.types.FacebookType;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -25,10 +21,9 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import model.FacebookApi;
 import model.Request;
 import model.User;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  * FXML Controller class
@@ -205,31 +200,8 @@ public class MainController implements Initializable {
             if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
                 res = 1;
             } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
-                ////////////////////connect facebook/////////////////////////////////////////////////////
-                String domian="http://dolnii.com/requires/index.html";
-                String appId="385244185170219";
-                String authUrl = "https://graph.Facebook.com/oauth/authorize?type=user_agent&client_id="+appId+"&redirect_uri="+domian
-                        +"&scope=user_photos,email,user_birthday,publish_actions";
-                System.setProperty("webdriver.chrome.driver", "chromedriver");
-                WebDriver driver = new ChromeDriver();
-                driver.get(authUrl);
-                String accessToken;
-                while (true) {                    
-                    if(!driver.getCurrentUrl().contains("facebook.com"))
-                    {
-                        String url = driver.getCurrentUrl();
-                        accessToken = url.replaceAll(".*#access_token=(.+)&.*", "$1");
-                        System.out.println(""+accessToken);
-                        driver.close();
-                        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
-                        FacebookType response =  facebookClient.publish("me/feed",FacebookType.class, Parameter.with("message", ""+this.getPlayer().getName()+" won in sedoko game"));
-                        com.restfb.types.User me = facebookClient.fetchObject("me",com.restfb.types.User.class,Parameter.with("fields","id,name,email,cover,picture"));
-                        break;
-                        
-                    }
-                }
- ////////////////////////////////////////////end facebook/////////////////////////////////////////////////////               
-
+                FacebookApi facebookApi = new FacebookApi();
+                facebookApi.publishToTimeLine(""+this.getPlayer().getName()+" Enta Kespet ya m3lm");
                 res = 2;
             }
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);

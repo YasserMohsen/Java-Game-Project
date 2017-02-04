@@ -255,7 +255,6 @@ public class Client extends Thread{
                                     public void run() {
                                         try {
                                             int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
-                                            
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
