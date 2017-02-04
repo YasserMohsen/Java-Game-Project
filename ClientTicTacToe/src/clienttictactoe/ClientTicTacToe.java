@@ -61,8 +61,7 @@ public class ClientTicTacToe extends Application {
         }
         else{
             mainController = (MainController)loader.getController();
-
-            //stage.setTitle(registerController.user.getName());
+//            stage.setTitle(mainController.getPlayer().getName());
         }
 
         

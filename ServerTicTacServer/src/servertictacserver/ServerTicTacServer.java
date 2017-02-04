@@ -84,6 +84,13 @@ public class ServerTicTacServer extends Application {
                     try {
                         s.serverSocket.close();
                         s.stop();
+                        for (GameHandler ch : GameHandler.clientsVector) {
+                            ch.ois.close();
+                            ch.ous.close();
+                            ch.stop();
+                        }
+                        GameHandler.clientsVector.clear();
+  
                         flag = 0;
                     } catch (IOException ex) {
                         System.out.println("close server exception");
