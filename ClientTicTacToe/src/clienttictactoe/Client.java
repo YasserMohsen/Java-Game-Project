@@ -25,21 +25,21 @@ import model.User;
  *
  * @author kazafy
  */
-public class Client {
+public class Client extends Thread{
 
     static Socket mySocket;
     static ObjectOutputStream ous;
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
-    Thread thread;
 
     public static void sendRequest(User user, int type) {
 
         try {
-            ous.flush();
-            ous.reset();
-
+            if (ous != null){
+                ous.flush();
+                ous.reset();    
+            }
             if (type == Setting.LOGIN) {
                 System.out.println("" + user.getEmail());
                 request.setClientID(user.getEmail());
@@ -72,19 +72,74 @@ public class Client {
     }
 
 ////////////////////////////////////////////////////////////////////////////////        
-    public Client() {
+    //construct the client with creating a socket to send the first request which is login or register
+    //if it succeded, start the thread of the coming requests
+    //else, close the socket 
+    public Client(User u, int t) {
 
         try {
             mySocket = new Socket("127.0.0.1", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        thread = new Thread(new Runnable() {
+            this.sendRequest(u, t);
+            Request request = (Request) ois.readObject();
+            if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK){
+                Object[] objects = (Object[]) request.getObject();
+                List<User> availablePlayerList = (ArrayList) objects[0];
 
-            @Override
-            public void run() {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        try {
+                            MainController.availableUsers.addAll(availablePlayerList);
+                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
+                            ClientTicTacToe.mainController.setPlayer((User) objects[1]);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+                });
+                start();
+            }
+            else if (request.getType() == Setting.REG_NO || request.getType() == Setting.LOGIN_NO){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String myError = (String) request.getObject();
+                        if (request.getType() == Setting.REG_NO){
+                            ClientTicTacToe.registerController.error.setVisible(true);
+                            ClientTicTacToe.registerController.errorText.setVisible(true);
+                            ClientTicTacToe.registerController.errorText.setText(myError);
+                        }
+                        else{
+                            ClientTicTacToe.loginController.errorsalma.setText(myError);
+                            ClientTicTacToe.loginController.errorsalma.setVisible(true);    
+                        }
+                        System.out.println(myError);
+                    }
+                });
+                this.ois.close();
+                this.ous.close();
+                this.mySocket.close();
+            }
+        }catch (IOException ex) {
+            System.out.println("my IOException");
+            if (ClientTicTacToe.registerController != null){
+                ClientTicTacToe.registerController.errorText.setVisible(true);
+                ClientTicTacToe.registerController.errorText.setText("Server DOWN! :( come back later");    
+            }
+            if (ClientTicTacToe.loginController != null){
+                ClientTicTacToe.loginController.errorsalma.setVisible(true);
+                ClientTicTacToe.loginController.errorsalma.setText("Server DOWN! :( come back later");
+            }
+            //ex.printStackTrace();
+        }catch (ClassNotFoundException ex) {
+            System.out.println("my ClassNotFoundException");
+        }
+    }
+
+    @Override
+    public void run() {
                 while (true) {
                     try {
 
@@ -93,86 +148,6 @@ public class Client {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                         switch (request.getType()) {
-//////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.REG_OK:
-                                Object[] objects = (Object[]) request.getObject();
-                                List<User> availablePlayerList = (ArrayList) objects[0];
-
-                                Platform.runLater(new Runnable() {
-                                    public void run() {
-                                        try {
-                                            MainController.availableUsers.addAll(availablePlayerList);
-                                            for (User user : availablePlayerList) {
-                                                System.out.println(" u id :" + user.getId());
-                                                System.out.println(" u na:" + user.getName());
-                                                System.out.println(" u em:" + user.getEmail());
-                                            }
-
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
-                                            ClientTicTacToe.mainController.setPlayer((User) objects[1]);
-                                        } catch (Exception ex) {
-                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-
-                                    }
-                                });
-                                break;
-//////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.REG_NO:
-
-                                Platform.runLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String myError = (String) request.getObject();
-                                        ClientTicTacToe.registerController.error.setVisible(true);
-                                        ClientTicTacToe.registerController.errorText.setVisible(true);
-                                        ClientTicTacToe.registerController.errorText.setText(myError);
-                                        System.out.println(myError);
-                                    }
-                                });
-                                break;
-//////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.LOGIN_OK:
-                                Platform.runLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            List l = (ArrayList) request.getObject();
-
-                                            MainController.availableUsers.addAll(l);
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, request.getClientID());
-                                        } catch (Exception ex) {
-                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-
-                                    }
-                                });
-
-                                break;
-//////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.LOGIN_NO:
-                                String myError = (String) request.getObject();
-
-                             Platform.runLater(new Runnable(){
-                                    public void run(){
-                                        try {
-                                        String myError = (String)request.getObject();
-                                        
-                                    //    System.out.print("myError: "+myError);
-                                        ClientTicTacToe.loginController.errorsalma.setText(myError);
-                                        ClientTicTacToe.loginController.errorsalma.setVisible(true);
-
-                                       //ClientTicTacToe.get();
-                                    //   System.out.print(ClientTicTacToe.loginController.errorsalma.setText(myError));
-                                        }
-                                        catch (Exception ex) {
-                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                    }});
-                               
-                                   
-                                    break;
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.ADD_PLAYER_TO_AVAILABLE_LIST:
                                 User user = (User) request.getObject();
@@ -191,7 +166,7 @@ public class Client {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.SEND_INVITATION_FOR_PLAYING:
                                 System.out.println("SEND_INVITATION_FOR_PLAYING Client");
-                                objects = (Object[]) request.getObject();
+                                Object[] objects = (Object[]) request.getObject();
                                 User remotePlayer = (User) objects[0];
                                 Platform.runLater(new Runnable() {
                                     @Override
@@ -210,6 +185,8 @@ public class Client {
                                             Client.sendRequest(request);
                                             ClientTicTacToe.mainController.playerChar_X_OR_O = 0;
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                            ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
+
                                         } else {
                                             //////////////logic here///////////////////////
                                             request.setObject(objects);
@@ -233,6 +210,7 @@ public class Client {
 
                                         ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                        ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
 
                                     }
                                 });
@@ -274,7 +252,8 @@ public class Client {
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         try {
-                                            ClientTicTacToe.mainController.showDialog(Setting.WIN_MSG);
+                                            int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
+                                            
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -289,7 +268,10 @@ public class Client {
                                     public void run() {
                                         try {
                                             ClientTicTacToe.mainController.updateCell(xo);
-                                            ClientTicTacToe.mainController.showDialog(Setting.LOSE_MSG);
+                                            ClientTicTacToe.mainController.showWinDialog(Setting.LOSE_MSG);  
+                                            ClientTicTacToe.mainController.resetGame();
+                                            
+                                            ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -297,7 +279,25 @@ public class Client {
                                 });
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_PLAYER_IN_PLAYER_LIST:
+                                user = (User) request.getObject();
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            for (User u : MainController.availableUsers) {
+                                                if(u.getId() == user.getId())
+                                                    u = user;
+                                            }
+                                            
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
+                                    }
+                                });
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
                         }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,7 +306,7 @@ public class Client {
                         System.out.println("lol");
                         ex.printStackTrace();
                         try {
-
+                            
                             ois.close();
                             mySocket.close();
                             break;
@@ -318,7 +318,7 @@ public class Client {
 
                 }
             }
-        });
+        
 
-    }
+    
 }

@@ -7,6 +7,7 @@ package clienttictactoe;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -75,9 +78,11 @@ public class MainController implements Initializable {
             gridPane.add(buttons[i / 3][i % 3], i % 3, i / 3);
             buttons[i / 3][i % 3].setUserData(i);
             buttons[i / 3][i % 3].setOnAction((ActionEvent event) -> {
-                if (isFinish) {
+
+                if (remotePlayer == null) {
+                    showDialog("please select player first");
                     return;
-                }
+                    }
 
                 int position = Integer.parseInt(((Button) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
@@ -158,6 +163,9 @@ public class MainController implements Initializable {
         bp_GameBoard.setDisable(bool);
     }
 
+    public void setDisable_Enable_ListView(boolean bool) {
+        lv_availableUsers.setDisable(bool);
+    }
     public void setPlayer(User player) {
         this.player = player;
     }
@@ -169,5 +177,36 @@ public class MainController implements Initializable {
     public void setPlayerId(int id) {
         this.player.setId(id);
     }
+    
+    public User getPlayer(){
+        return player;
+    }
+
+    void resetGame() {
+        for (int i = 0; i < xo.length; i++) {
+            xo[i]=-1;
+            buttons[i / 3][i % 3].setText("");
+            
+        }
+        
+    }
+
+    int showWinDialog(String m) {
+            int res = 0;
+                
+            Alert alert= ConfirmDialog.createCustomDialog("",m,"");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ConfirmDialog.buttonTypeOne) {                
+                res = 1;
+            } else if (result.isPresent() && result.get() == ConfirmDialog.buttonTypeTwo)  {
+                res = 2;
+            }
+            ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
+            ClientTicTacToe.mainController.resetGame();
+            remotePlayer= null;
+            return res;
+    }
+    
+    
 
 }
