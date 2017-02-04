@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Request;
 import model.User;
 
@@ -26,13 +28,67 @@ class GameHandler extends Thread {
     User user = null;
 
     static Vector<GameHandler> clientsVector = new Vector<>();
-
+    //construct the gamehandler by checking the coming request (login or register)
+    //check with database
+    //if it succeded, add the client to the available list and start the thread to handle the coming requests
+    //else, send the error message and close the socket
     public GameHandler(Socket cs) {
         try {
             ous = new ObjectOutputStream(cs.getOutputStream());
             ois = new ObjectInputStream(cs.getInputStream());
-            clientsVector.add(this);
-            start();
+            try {
+                Request request = (Request) ois.readObject();
+                if (request.getType() == Setting.REG || request.getType() == Setting.LOGIN){
+                    user = (User) request.getObject();
+                    user = (request.getType()==Setting.LOGIN)?UserController.login(user):UserController.register(user);
+                    if(user.getId() != 0){
+                        clientsVector.add(this);
+                        // if register or login is ok send list off available players to client                                
+                        this.ous.flush();
+                        this.ous.reset();
+                        user.setStatus(Setting.AVAILABLE);
+                        request.setType(Setting.REG_OK);  
+
+                        List availablePlayerList = new ArrayList<User>();                                
+                        for (GameHandler gameHandler : clientsVector){
+                            if(gameHandler.user != null && gameHandler.user.getId()!=user.getId())
+                                availablePlayerList.add(gameHandler.user);
+                        }
+                        Object [] objects = {availablePlayerList,user};
+                        request.setObject(objects);
+                        this.ous.writeObject(request);
+                        this.ous.flush();
+                        this.ous.reset();
+                        request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
+                        request.setObject(user);
+                        brodCast(request);
+                        start();
+                    } 
+                    else{
+
+                        // error in registration or login >> send to client error message
+                        if(request.getType()== Setting.REG){
+                        request.setType(Setting.REG_NO);                                    
+                        request.setObject("email already exist");
+                        }
+                        else if(request.getType()== Setting.LOGIN){
+                        request.setType(Setting.LOGIN_NO);
+                        request.setObject("incorrect username or passsword");
+
+                        }
+                        this.ous.writeObject(request);
+                        this.ous.flush();
+                        this.ous.reset();
+                        ous.close();
+                        ois.close();
+                        cs.close();
+                    }
+                }
+            } catch (ClassNotFoundException ex) {
+                System.out.println("construct gamehandler exception");
+                //Logger.getLogger(GameHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -49,89 +105,6 @@ class GameHandler extends Thread {
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                 switch (request.getType()) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.REG:                            
-                    case Setting.LOGIN:
-                        
-                            user = (User) request.getObject();
-                            user = (request.getType()==Setting.LOGIN)?UserController.login(user):UserController.register(user);
-                            if(user.getId() != 0){
-                                // if register ok send list off available players to client                                
-                                this.ous.flush();
-                                this.ous.reset();
-                                user.setStatus(Setting.AVAILABLE);
-                                request.setType(Setting.REG_OK);  
-                                
-                                List availablePlayerList = new ArrayList<User>();                                
-                                for (GameHandler gameHandler : clientsVector){
-                                    if(gameHandler.user != null && gameHandler.user.getId()!=user.getId())
-                                        availablePlayerList.add(gameHandler.user);
-                                }
-                                Object [] objects = {availablePlayerList,user};
-                                request.setObject(objects);
-                                this.ous.writeObject(request);
-                                this.ous.flush();
-                                this.ous.reset();
-                                request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
-                                request.setObject(user);
-                                brodCast(request);
-                            } 
-                            else{
-                                
-                                // error in registration  send to client error message
-                                if(request.getType()== Setting.REG){
-                                request.setType(Setting.REG_NO);                                    
-                                request.setObject("email already exist");
-                                }
-                                else if(request.getType()== Setting.LOGIN){
-                                request.setType(Setting.LOGIN_NO);
-                                request.setObject("incorrect username or passsword");
-                                
-                                }
-                                this.ous.writeObject(request);
-                                this.ous.flush();
-                                this.ous.reset();
-                            }
-                        break;
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//                    case Setting.LOGIN:
-//                        user = (User) request.getObject();
-//                        user = UserController.login(user);
-//                        if (user.getId() != 0) {
-//                            // if login ok send list off available players to client
-//                            user.setStatus(Setting.AVAILABLE);
-//                            request.setType(Setting.LOGIN_OK);
-//                            List<User> l = new ArrayList<>();
-//                            for (GameHandler gameHandler : clientsVector) {
-//                                if (gameHandler.user.getStatus() == Setting.AVAILABLE) {
-//                                    l.add(gameHandler.user);
-//                                }
-//                            }
-//
-//                            request.setObject(l);
-//                            System.out.println("" + request.getObject());
-//
-//                            this.ous.writeObject(request);
-//                            this.ous.flush();
-//                            this.ous.reset();
-//                            request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
-//                            request.setObject(user);
-//                            brodCast(request);
-//
-//                        } else {
-//                            // error in registration  send to client error message
-//                                request.setType(Setting.LOGIN_NO);
-//                                request.setObject("incorrect username or passsword");
-//
-//                            this.ous.writeObject(request);
-//                            this.ous.flush();
-//                            this.ous.reset();
-//                        }
-//                        break;
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
                     case Setting.MOVE:
                         Object[] objects = (Object[]) request.getObject();
                         User senderPlayer = (User) objects[0];
@@ -281,9 +254,10 @@ class GameHandler extends Thread {
                     System.out.println(" this :" + clientsVector.size());
                     ous.close();
                     ois.close();
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
                     break;
                 } catch (IOException ex1) {
+                    System.out.println("try to close failed");
                     ex1.printStackTrace();
                 }
             }

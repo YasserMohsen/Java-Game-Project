@@ -28,13 +28,9 @@ public class LoginController implements Initializable {
     public Label errorsalma;
     @FXML
     public void loginBt(){
-        
-        Client c = new Client();
-
         user = new User(email.getText(), password.getText());
-        Client.sendRequest(user, Setting.LOGIN);
-
-        c.thread.start();        
+        //create a new client and send the first request (login) in its constructor
+        Client c = new Client(user , Setting.LOGIN);       
     }
     
     @Override

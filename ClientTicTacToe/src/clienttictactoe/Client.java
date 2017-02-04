@@ -25,21 +25,21 @@ import model.User;
  *
  * @author kazafy
  */
-public class Client {
+public class Client extends Thread{
 
     static Socket mySocket;
     static ObjectOutputStream ous;
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
-    Thread thread;
 
     public static void sendRequest(User user, int type) {
 
         try {
-            ous.flush();
-            ous.reset();
-
+            if (ous != null){
+                ous.flush();
+                ous.reset();    
+            }
             if (type == Setting.LOGIN) {
                 System.out.println("" + user.getEmail());
                 request.setClientID(user.getEmail());
@@ -72,19 +72,80 @@ public class Client {
     }
 
 ////////////////////////////////////////////////////////////////////////////////        
-    public Client() {
+    //construct the client with creating a socket to send the first request which is login or register
+    //if it succeded, start the thread of the coming requests
+    //else, close the socket 
+    public Client(User u, int t) {
 
         try {
             mySocket = new Socket("127.0.0.1", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        thread = new Thread(new Runnable() {
+            this.sendRequest(u, t);
+            Request request = (Request) ois.readObject();
+            if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK){
+                Object[] objects = (Object[]) request.getObject();
+                List<User> availablePlayerList = (ArrayList) objects[0];
 
-            @Override
-            public void run() {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        try {
+                            MainController.availableUsers.addAll(availablePlayerList);
+                            for (User user : availablePlayerList) {
+                                System.out.println(" u id :" + user.getId());
+                                System.out.println(" u na:" + user.getName());
+                                System.out.println(" u em:" + user.getEmail());
+                            }
+
+                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
+                            ClientTicTacToe.mainController.setPlayer((User) objects[1]);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+                });
+                start();
+            }
+            else if (request.getType() == Setting.REG_NO || request.getType() == Setting.LOGIN_NO){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String myError = (String) request.getObject();
+                        if (request.getType() == Setting.REG_NO){
+                            ClientTicTacToe.registerController.error.setVisible(true);
+                            ClientTicTacToe.registerController.errorText.setVisible(true);
+                            ClientTicTacToe.registerController.errorText.setText(myError);
+                        }
+                        else{
+                            ClientTicTacToe.loginController.errorsalma.setText(myError);
+                            ClientTicTacToe.loginController.errorsalma.setVisible(true);    
+                        }
+                        System.out.println(myError);
+                    }
+                });
+                this.ois.close();
+                this.ous.close();
+                this.mySocket.close();
+            }
+        }catch (IOException ex) {
+            System.out.println("my IOException");
+            if (ClientTicTacToe.registerController != null){
+                ClientTicTacToe.registerController.errorText.setVisible(true);
+                ClientTicTacToe.registerController.errorText.setText("Server DOWN! :( come back later");    
+            }
+            if (ClientTicTacToe.loginController != null){
+                ClientTicTacToe.loginController.errorsalma.setVisible(true);
+                ClientTicTacToe.loginController.errorsalma.setText("Server DOWN! :( come back later");
+            }
+            //ex.printStackTrace();
+        }catch (ClassNotFoundException ex) {
+            System.out.println("my ClassNotFoundException");
+        }
+    }
+
+    @Override
+    public void run() {
                 while (true) {
                     try {
 
@@ -306,7 +367,7 @@ public class Client {
                         System.out.println("lol");
                         ex.printStackTrace();
                         try {
-
+                            
                             ois.close();
                             mySocket.close();
                             break;
@@ -318,7 +379,7 @@ public class Client {
 
                 }
             }
-        });
+        
 
-    }
+    
 }
