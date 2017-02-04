@@ -33,4 +33,5 @@ public class Setting {
 
     public static final int UPDATE_PLAYER_IN_PLAYER_LIST = 2013;
     
+    
 }

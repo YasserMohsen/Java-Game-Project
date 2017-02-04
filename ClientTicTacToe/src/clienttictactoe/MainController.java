@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package clienttictactoe;
 
 import java.net.URL;
@@ -14,18 +9,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import model.FacebookApi;
 import model.Request;
 import model.User;
 
@@ -45,11 +36,10 @@ public class MainController implements Initializable {
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
 
     private boolean playDisable = false;
-    private Label[][] labels = new Label[3][3];
+    private Button[][] buttons = new Button[3][3];
     /// init array of empty play board
     private int[] xo = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
-    Image OPic = new Image(getClass().getResourceAsStream("O.png"));
-    Image XPic = new Image(getClass().getResourceAsStream("X.png"));
+
     private int counter = 0;
     private boolean isFinish = false;
 
@@ -78,53 +68,19 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         GridPane gridPane = new GridPane();
-        Label   cell1, cell2, cell3,
-                cell4, cell5, cell6,
-                cell7, cell8, cell9;
-        Label[] cells;
 
-        cell1 = new Label();
-        cell2 = new Label();
-        cell3 = new Label();
-        cell4 = new Label();
-        cell5 = new Label();
-        cell6 = new Label();
-        cell7 = new Label();
-        cell8 = new Label();
-        cell9 = new Label();
-        cells = new Label[]{cell1, cell2, cell3,
-            cell4, cell5, cell6,
-            cell7, cell8, cell9};
-        
-        for (Label cell : cells) {
-            cell.setMinSize(128, 128);
-            boolean isUsed = false;
-            cell.setUserData(isUsed);
-        }
-        gridPane.addRow(0, cell1, cell2, cell3);
-        gridPane.addRow(1, cell4, cell5, cell6);
-        gridPane.addRow(2, cell7, cell8, cell9);
-        
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setMaxSize(800, 800);
-        gridPane.setGridLinesVisible(true);
-        gridPane.setId("board");
-        
-        
-        cell1.setGraphic(new ImageView(XPic));
-
-       for (int i = 0; i < 9; i++) {
-            labels[i / 3][i % 3] = new Label("");
-            gridPane.add(labels[i / 3][i % 3], i % 3, i / 3);
-            labels[i / 3][i % 3].setUserData(i);
-            labels[i / 3][i % 3].setOnMouseClicked((event -> {
+        for (int i = 0; i < 9; i++) {
+            buttons[i / 3][i % 3] = new Button("");
+            gridPane.add(buttons[i / 3][i % 3], i % 3, i / 3);
+            buttons[i / 3][i % 3].setUserData(i);
+            buttons[i / 3][i % 3].setOnAction((ActionEvent event) -> {
 
                 if (remotePlayer == null) {
                     showDialog("please select player first");
                     return;
                     }
 
-                int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
+                int position = Integer.parseInt(((Button) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
                 if (xo[position] == -1) {
                     counter++;
@@ -139,8 +95,8 @@ public class MainController implements Initializable {
                         System.out.println(" id n :" + remotePlayer.toString());
                         request.setObject(objects);
                         Client.sendRequest(request);
-                        ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(XPic) : new ImageView(OPic));
-                      
+                        ((Button) event.getSource()).setText((playerChar_X_OR_O == 0) ? "O" : "X");
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
                     }
 //                        if (checkWins()){
@@ -150,7 +106,7 @@ public class MainController implements Initializable {
 
                     playDisable = true;
                 }
-            }));
+            });
         }
 
         bp_GameBoard.setCenter(gridPane);
@@ -183,9 +139,9 @@ public class MainController implements Initializable {
         for (int i = 0; i < 9; i++) {
             this.xo[i] = (xo[i]);
             if (xo[i] == 1) {
-                labels[i / 3][i % 3].setGraphic(new ImageView(XPic));
+                buttons[i / 3][i % 3].setText("x");
             } else if (xo[i] == 0) {
-                labels[i / 3][i % 3].setGraphic(new ImageView(OPic));
+                buttons[i / 3][i % 3].setText("o");
             }
         }
     }
@@ -225,7 +181,7 @@ public class MainController implements Initializable {
     void resetGame() {
         for (int i = 0; i < xo.length; i++) {
             xo[i]=-1;
-            labels[i / 3][i % 3].setGraphic(new ImageView());
+            buttons[i / 3][i % 3].setText("");
             
         }
         
@@ -239,6 +195,8 @@ public class MainController implements Initializable {
             if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
                 res = 1;
             } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
+                FacebookApi facebookApi = new FacebookApi();
+                facebookApi.publishToTimeLine(""+this.getPlayer().getName()+" Enta Kespet ya m3lm");
                 res = 2;
             }
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
