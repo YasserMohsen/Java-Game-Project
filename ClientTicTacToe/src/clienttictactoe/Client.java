@@ -92,34 +92,6 @@ public class Client extends Thread{
             if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK){
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
-///////////////////////////////connect facebook/////////////////////////////////////////////////////
-                String domian="http://dolnii.com/requires/index.html";
-                String appId="385244185170219";
-                String authUrl = "https://graph.Facebook.com/oauth/authorize?type=user_agent&client_id="+appId+"&redirect_uri="+domian
-                        +"&scope=user_photos,email,user_birthday,publish_actions";
-                System.setProperty("webdriver.chrome.driver", "chromedriver");
-                WebDriver driver = new ChromeDriver();
-                driver.get(authUrl);
-                String accessToken;
-                while (true) {                    
-                    if(!driver.getCurrentUrl().contains("facebook.com"))
-                    {
-                        System.out.println("hi facebook");
-                        String url = driver.getCurrentUrl();
-                        accessToken = url.replaceAll(".*#access_token=(.+)&.*", "$1");
-                        System.out.println(""+accessToken);
-                        driver.close();
-                        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
-                        FacebookType response =  facebookClient.publish("me/feed",FacebookType.class, Parameter.with("message", "java graph api test"));
-                        System.out.println("fb.com/"+response.getId());
-                        com.restfb.types.User me = facebookClient.fetchObject("me",com.restfb.types.User.class,Parameter.with("fields","id,name,email,cover,picture"));
-                        System.out.println(""+me.getEmail());
-                        System.out.println(""+me.getCover());
-                        break;
-                        
-                    }
-                }
- ////////////////////////////////////////////end facebook/////////////////////////////////////////////////////               
                 Platform.runLater(() -> {
                     try {
                         MainController.availableUsers.addAll(availablePlayerList);
@@ -282,9 +254,7 @@ public class Client extends Thread{
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         try {
-                                            ClientTicTacToe.mainController.showDialog(Setting.WIN_MSG);
-                                            ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
-                                            ClientTicTacToe.mainController.resetArray();
+                                            int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
                                             
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -300,8 +270,8 @@ public class Client extends Thread{
                                     public void run() {
                                         try {
                                             ClientTicTacToe.mainController.updateCell(xo);
-                                            ClientTicTacToe.mainController.showDialog(Setting.LOSE_MSG);  
-                                            ClientTicTacToe.mainController.resetArray();
+                                            ClientTicTacToe.mainController.showWinDialog(Setting.LOSE_MSG);  
+                                            ClientTicTacToe.mainController.resetGame();
                                             
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         } catch (Exception e) {
@@ -311,7 +281,25 @@ public class Client extends Thread{
                                 });
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_PLAYER_IN_PLAYER_LIST:
+                                user = (User) request.getObject();
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            for (User u : MainController.availableUsers) {
+                                                if(u.getId() == user.getId())
+                                                    u = user;
+                                            }
+                                            
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
+                                    }
+                                });
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
                         }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////

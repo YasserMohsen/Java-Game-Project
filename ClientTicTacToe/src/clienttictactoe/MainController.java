@@ -5,8 +5,13 @@
  */
 package clienttictactoe;
 
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Parameter;
+import com.restfb.types.FacebookType;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,11 +20,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import model.Request;
 import model.User;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  * FXML Controller class
@@ -75,9 +84,11 @@ public class MainController implements Initializable {
             gridPane.add(buttons[i / 3][i % 3], i % 3, i / 3);
             buttons[i / 3][i % 3].setUserData(i);
             buttons[i / 3][i % 3].setOnAction((ActionEvent event) -> {
-                if (isFinish) {
+
+                if (remotePlayer == null) {
+                    showDialog("please select player first");
                     return;
-                }
+                    }
 
                 int position = Integer.parseInt(((Button) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
@@ -177,11 +188,56 @@ public class MainController implements Initializable {
         return player;
     }
 
-    void resetArray() {
+    void resetGame() {
         for (int i = 0; i < xo.length; i++) {
             xo[i]=-1;
+            buttons[i / 3][i % 3].setText("");
+            
         }
         
     }
+
+    int showWinDialog(String m) {
+            int res = 0;
+                
+            Alert alert= ConfirmDialoge.createCustomDialog("",m,"");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
+                res = 1;
+            } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
+                ////////////////////connect facebook/////////////////////////////////////////////////////
+                String domian="http://dolnii.com/requires/index.html";
+                String appId="385244185170219";
+                String authUrl = "https://graph.Facebook.com/oauth/authorize?type=user_agent&client_id="+appId+"&redirect_uri="+domian
+                        +"&scope=user_photos,email,user_birthday,publish_actions";
+                System.setProperty("webdriver.chrome.driver", "chromedriver");
+                WebDriver driver = new ChromeDriver();
+                driver.get(authUrl);
+                String accessToken;
+                while (true) {                    
+                    if(!driver.getCurrentUrl().contains("facebook.com"))
+                    {
+                        String url = driver.getCurrentUrl();
+                        accessToken = url.replaceAll(".*#access_token=(.+)&.*", "$1");
+                        System.out.println(""+accessToken);
+                        driver.close();
+                        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
+                        FacebookType response =  facebookClient.publish("me/feed",FacebookType.class, Parameter.with("message", ""+this.getPlayer().getName()+" won in sedoko game"));
+                        com.restfb.types.User me = facebookClient.fetchObject("me",com.restfb.types.User.class,Parameter.with("fields","id,name,email,cover,picture"));
+                        break;
+                        
+                    }
+                }
+ ////////////////////////////////////////////end facebook/////////////////////////////////////////////////////               
+
+                res = 2;
+            }
+            ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
+            ClientTicTacToe.mainController.resetGame();
+            remotePlayer= null;
+            return res;
+    }
+    
+    
 
 }

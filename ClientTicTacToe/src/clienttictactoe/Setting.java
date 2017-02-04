@@ -30,5 +30,7 @@ public class Setting {
 
     public static final int ACCEPT_INVITATION = 2008;
     public static final int REFUSE_INVITATION = 2012;
+
+    public static final int UPDATE_PLAYER_IN_PLAYER_LIST = 2013;
     
 }

@@ -142,7 +142,7 @@ class GameHandler extends Thread {
                             UserController.saveScore(senderPlayer);
                             
                             request.setObject(senderPlayer);
-                            request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);                            
+                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);                            
                             
                             brodCast(request);
                             
@@ -151,7 +151,7 @@ class GameHandler extends Thread {
                             this.ous.reset();
                             
                             request.setObject(receiverPlayer);
-                            request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
+                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
                             brodCast(request);
                             this.ous.flush();
                             this.ous.reset();
