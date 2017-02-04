@@ -3,6 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/model/User.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Setting.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/register.fxml</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/LoginController.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Client.java</file>
+=======
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/LoginController.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Client.java</file>
@@ -10,6 +20,7 @@
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Setting.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/main.fxml</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
+>>>>>>> f65fbe9460c00a15cf8583c9748162f2e3b7d5d4
         </group>
     </open-files>
 </project-private>

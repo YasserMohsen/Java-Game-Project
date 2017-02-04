@@ -33,10 +33,9 @@ public class RegisterController implements Initializable {
     public Label errorsalma;
     @FXML
     public void btnActionSignUp(){
-        Client c = new Client();
         user = new User(name.getText(),email.getText(),password.getText());
-        Client.sendRequest(user , Setting.REG);
-        c.thread.start();
+        //create a new client and send the first request (register) in its constructor
+        Client c = new Client(user , Setting.REG);
     }
     
     @FXML

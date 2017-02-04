@@ -44,7 +44,6 @@ public class UserController {
             //ex.printStackTrace();
             int error = ex.getErrorCode();
             user.setId(id);
-            
         }
         return user;
         
@@ -66,16 +65,14 @@ public class UserController {
                 user.setId(id);
                 name = rs.getString(2);
                 user.setName(name);
-                return user;
             }
-            else{
-                return user;
-            }
+            con.close();
         } catch (SQLException ex) {
             int error = ex.getErrorCode();
             System.out.println("error in login code number :" + error);
-            return user;
+            
         }
+        return user;
         
     }
     public static boolean logout(User user){
