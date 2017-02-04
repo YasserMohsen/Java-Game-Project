@@ -1,4 +1,5 @@
-/ServerTicTacServer/dist/
-/ServerTicTacServer/build/
-/ClientTicTacToe/dist/
-/ClientTicTacToe/build/
+
+/*
+/*/
+!/ServerTicTacServer/src
+!/ClientTicTacToe/src
