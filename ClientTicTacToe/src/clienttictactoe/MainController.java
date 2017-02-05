@@ -6,9 +6,9 @@
 package clienttictactoe;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,8 +17,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import model.Request;
@@ -32,7 +33,10 @@ import model.User;
 public class MainController implements Initializable {
 
     @FXML
-    private ListView<User> lv_availableUsers;
+    private TableView<User> tv_Players;
+    
+    @FXML
+    private TableColumn<User,String>tc_name;
 
     @FXML
     private BorderPane bp_GameBoard;
@@ -52,18 +56,6 @@ public class MainController implements Initializable {
     private User player;
     private User remotePlayer;
 
-    @FXML
-    private void selectUser() {
-
-        remotePlayer = lv_availableUsers.getSelectionModel().getSelectedItem();
-        Request request = new Request();
-        request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
-        Object[] objects = {player, remotePlayer};
-        request.setObject(objects);
-        Client.sendRequest(request);
-        bp_GameBoard.setDisable(true);
-        playerChar_X_OR_O = 1;
-    }
 
     /**
      * Initializes the controller class.
@@ -111,12 +103,27 @@ public class MainController implements Initializable {
                     playDisable = true;
                 }
             });
+            
         }
 
         bp_GameBoard.setCenter(gridPane);
 
         // TODO
-        lv_availableUsers.setItems(availableUsers);
+        tv_Players.setItems(availableUsers);
+        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
+        tv_Players.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends User> observable, User oldValue, User newValue) -> {
+                if(newValue != null){
+                    remotePlayer= newValue;
+                    Request request = new Request();
+                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+                    Object[] objects = {player, remotePlayer};
+                    request.setObject(objects);
+                    Client.sendRequest(request);
+                    bp_GameBoard.setDisable(true);
+                    playerChar_X_OR_O = 1;
+                    
+                }
+        });
 
 //        ////////////////set which property will be render in List View/////////////////////////////////
 //        lv_availableUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
@@ -164,7 +171,7 @@ public class MainController implements Initializable {
     }
 
     public void setDisable_Enable_ListView(boolean bool) {
-        lv_availableUsers.setDisable(bool);
+        tv_Players.setDisable(bool);
     }
     public void setPlayer(User player) {
         this.player = player;
@@ -194,11 +201,11 @@ public class MainController implements Initializable {
     int showWinDialog(String m) {
             int res = 0;
                 
-            Alert alert= ConfirmDialog.createCustomDialog("",m,"");
+            Alert alert= ConfirmDialoge.createCustomDialog("",m,"");
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ConfirmDialog.buttonTypeOne) {                
+            if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
                 res = 1;
-            } else if (result.isPresent() && result.get() == ConfirmDialog.buttonTypeTwo)  {
+            } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
                 res = 2;
             }
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
