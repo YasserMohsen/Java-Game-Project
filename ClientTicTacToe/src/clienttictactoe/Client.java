@@ -95,7 +95,7 @@ public class Client extends Thread{
                 Platform.runLater(() -> {
                     try {
                         MainController.availableUsers.addAll(availablePlayerList);
-                        ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
+                        ClientTicTacToe.replaceSceneContent(ClientTicTacToe.main_XML, "Chat Menu");
                         ClientTicTacToe.mainController.setPlayer((User) objects[1]);
                     } catch (Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

@@ -20,20 +20,24 @@ public class ClientTicTacToe extends Application {
     private static Stage stage;
     public static final String LOGIN_XML="login.fxml";
     public static final String MAIN_XML="main.fxml";
+    public static final String main_XML="FXML.fxml";
+    
     
     public static RegisterController registerController;
     public static MainController mainController;
     public static LoginController loginController;
+     public static homeController home;
+    public static OfflineController offlineController;
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource("register.fxml"));      
+        FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource("homepage.fxml"));      
         Parent root = loader.load();
-        registerController  = (RegisterController)loader.getController();
+        home = (homeController)loader.getController();
         //registerController.email.setText("lol");
 
         this.stage = stage;
         Scene scene = new Scene(root);
-
+        scene.getStylesheets().add("file:///home/salma/Documents/iti/java/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/clientcss.css");
         
         this.stage.setScene(scene);
         this.stage.hide();
@@ -53,16 +57,28 @@ public class ClientTicTacToe extends Application {
         Parent page = loader.load();
 
         Scene scene = stage.getScene();
-
+        scene.getStylesheets().add("file:///home/salma/Documents/iti/java/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/clientcss.css");
         if(fxml=="login.fxml")
         {
             loginController = (LoginController)loader.getController();
             //stage.setTitle(loginController.user.getName());
         }
+        else if(fxml=="homepage.fxml")
+        {
+            home = (homeController)loader.getController();
+        }
+        else if(fxml=="register.fxml"){
+            registerController = (RegisterController)loader.getController();
+        }
+        
+        else if(fxml=="offline.fxml"){
+          
+        }
         else{
             mainController = (MainController)loader.getController();
-//            stage.setTitle(mainController.getPlayer().getName());
         }
+            //stage.setTitle(registerController.user.getName());
+        
 
         
         if (scene == null) {
