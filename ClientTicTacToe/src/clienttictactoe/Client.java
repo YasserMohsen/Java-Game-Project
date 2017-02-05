@@ -185,9 +185,11 @@ public class Client extends Thread{
                                             request.setObject(objects);
                                             request.setType(Setting.ACCEPT_INVITATION);
                                             Client.sendRequest(request);
+                                            
                                             ClientTicTacToe.mainController.playerChar_X_OR_O = 0;
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                             ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
+                                            ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
 
                                         } else {
                                             //////////////logic here///////////////////////
@@ -209,11 +211,11 @@ public class Client extends Thread{
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-
+                                        
                                         ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
-
+                                        ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
                                     }
                                 });
                                 break;
@@ -298,7 +300,61 @@ public class Client extends Thread{
                                     }
                                 });
                                 break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_2PLAYER_IN_PLAYER_LIST:
+                                objects = (Object[]) request.getObject();
+                                User player1 = (User) objects[0];
+                                User player2 = (User) objects[1];
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            for (User u : ClientTicTacToe.mainController.availableUsers) {
+                                                if(u.getId() == player1.getId()){
+                                                    u.setStatus(player1.getStatus());
+                                                    u.setScore(player1.getScore());
+                                                }
+                                                else if (u.getId() == player2.getId()){
+                                                    u.setStatus(player2.getStatus());
+                                                    u.setScore(player2.getScore());
+                                                }
+                                            }
+                                            ClientTicTacToe.mainController.tv_Players.refresh();
+                                            
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+
+                                    }
+                                });
+                                break;                               
+//////////////////////////////////////////////////////////////////////////////////////////////////                                
+                            case Setting.RECIEVE_MESSAGE:
+                                objects = (Object[]) request.getObject();
+                                User sender = (User) objects[0];
+                                String message = (String) objects[1];
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.chatArea.appendText(sender.getName() + ":\n" + message + "\n");
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_NEWS:
+                                String myNew = (String) request.getObject();
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.news.appendText(myNew);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
                         }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////

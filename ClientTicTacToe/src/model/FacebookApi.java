@@ -20,10 +20,7 @@ public class FacebookApi {
     private static  String domain = "http://dolnii.com/requires/index.html";
     private static  String appId = "385244185170219" ;
     private static  String accessToken;
-    private static  String authUrl = "https://graph.Facebook.com/oauth/authorize?type=user_agent&client_id="+appId+"&redirect_uri="+domain+"&scope="
-            + "                        user_photos,email,user_birthday,publish_actions"
-            + "                       ,user_about_me,user_birthday,publish_actions,user_birthday"
-            + "                       ,user_games_activity,user_likes,user_posts";
+    private static  String authUrl = "https://graph.Facebook.com/oauth/authorize?type=user_agent&client_id="+appId+"&redirect_uri="+domain+"&scope=email,user_birthday,publish_actions";
     private static WebDriver driver;
     private FacebookClient facebookClient;
     

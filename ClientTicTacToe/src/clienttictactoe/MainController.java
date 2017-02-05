@@ -16,6 +16,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -34,13 +38,20 @@ import model.User;
 public class MainController implements Initializable {
 
     @FXML
-    private TableView<User> tv_Players;
+    public TableView<User> tv_Players;
     
     @FXML
     private TableColumn<User,String>tc_name;
 
     @FXML
     private BorderPane bp_GameBoard;
+    @FXML
+    TextArea chatArea;
+    @FXML
+    TextField chatField;
+    @FXML
+    TextArea news;
+    
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
 
@@ -134,6 +145,9 @@ public class MainController implements Initializable {
                     User user = row.getItem();
                     
                     remotePlayer= user;
+                    
+                    System.out.println("user name   :: "+user.getName());
+                    System.out.println("user status :: "+user.getStatus());
  
                     if (remotePlayer.getStatus() != Setting.AVAILABLE)
                         return;
@@ -198,12 +212,21 @@ public class MainController implements Initializable {
     public void setDisable_Enable_ListView(boolean bool) {
         tv_Players.setDisable(bool);
     }
+    public void setDisable_Enable_ChatView(boolean bool) {
+        chatArea.clear();
+        chatField.clear();
+        chatArea.setDisable(bool);
+        chatField.setDisable(bool);
+    }
     public void setPlayer(User player) {
         this.player = player;
     }
 
     public void setRemotePlayer(User player) {
         this.remotePlayer = player;
+    }
+    public User getRemotePlayer() {
+        return remotePlayer;
     }
 
     public void setPlayerId(int id) {
@@ -231,15 +254,28 @@ public class MainController implements Initializable {
             if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
                 res = 1;
             } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
-
                 FacebookApi facebookApi = new FacebookApi();
                 facebookApi.publishToTimeLine(""+this.getPlayer().getName()+" Enta Kespet ya m3lm");
                 res = 2;
             }
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
+            ClientTicTacToe.mainController.setDisable_Enable_ChatView(true);
             ClientTicTacToe.mainController.resetGame();
             remotePlayer= null;
             return res;
+    }
+    
+    @FXML
+    public void sendBt(){
+        String myText = chatField.getText();
+        if (myText != "" && remotePlayer != null){
+            chatField.clear();
+            Request request = new Request();
+            request.setType(Setting.MESSAGE);
+            Object[] objects = {player, remotePlayer, myText};
+            request.setObject(objects);
+            Client.sendRequest(request);
+        }
     }
     
     

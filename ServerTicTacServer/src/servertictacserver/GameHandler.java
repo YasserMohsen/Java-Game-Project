@@ -13,8 +13,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Request;
 import model.User;
 
@@ -156,6 +154,11 @@ class GameHandler extends Thread {
                             this.ous.flush();
                             this.ous.reset();
                             senderPlayer.setStatus(Setting.AVAILABLE);
+                            //////////////////////////////////////////////
+                            //update news field
+                            request.setType(Setting.UPDATE_NEWS);
+                            request.setObject("**" + senderPlayer.getName() + " WINS " + receiverPlayer.getName() + "\n ================= \n");
+                            brodCastAll(request);
                         } else {
                             
                             request.setType(Setting.MOVEBACK);
@@ -172,7 +175,22 @@ class GameHandler extends Thread {
 
                             break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
-
+                    case Setting.MESSAGE:
+                        objects = (Object[]) request.getObject();
+                        senderPlayer = (User) objects[0];
+                        receiverPlayer = (User) objects[1];
+                        String message = (String) objects[2];
+                        
+                        request.setType(Setting.RECIEVE_MESSAGE);
+                        Object[] obj = {senderPlayer, message};
+                        request.setObject(obj);
+                        for (GameHandler ch : clientsVector) {
+                            if (ch.user.getId() == senderPlayer.getId() || ch.user.getId() == receiverPlayer.getId()) {
+                                ch.ous.writeObject(request);
+                            }
+                        }
+                        break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
                         case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
                             
                             System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");
@@ -207,8 +225,18 @@ class GameHandler extends Thread {
                                 {
                                     request.setType(Setting.ACCEPT_INVITATION);
                                     ch.ous.writeObject(request);
+                                    ch.ous.flush();
+                                    ch.ous.reset();                            
                                 }         
                             }
+                            ((User) objects[1]).setStatus(Setting.BUSY);
+                            ((User) objects[0]).setStatus(Setting.BUSY);
+                            
+                            System.out.println("Busy ::" +((User) objects[0]).getStatus());
+                            System.out.println("Busy ::" +((User) objects[1]).getStatus());
+                            request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
+                            brodCastAll(request);
+                            
                             break;
                             
 
@@ -268,7 +296,16 @@ class GameHandler extends Thread {
         for (GameHandler ch : clientsVector) {
             if (ch.user.getId() != ((User) request.getObject()).getId()) {
                 ch.ous.writeObject(request);
+                ch.ous.flush();
+                ch.ous.reset();
             }
+        }
+    }
+    void brodCastAll(Request request) throws IOException {
+        for (GameHandler ch : clientsVector) {
+            ch.ous.writeObject(request);
+            ch.ous.flush();
+            ch.ous.reset();
         }
     }
 

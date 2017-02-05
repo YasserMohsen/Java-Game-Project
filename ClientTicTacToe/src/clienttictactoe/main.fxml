@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -18,8 +19,8 @@
                   <Insets />
                </BorderPane.margin>
                <children>
-                  <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" />
-                  <TableView fx:id="tv_Players" prefHeight="403.0" prefWidth="236.0">
+                  <TextArea fx:id="news" editable="false" prefHeight="102.0" prefWidth="236.0" />
+                  <TableView fx:id="tv_Players" prefHeight="214.0" prefWidth="236.0">
                     <columns>
                       <TableColumn fx:id="tc_status" prefWidth="75.0" text="status" />
                       <TableColumn fx:id="tc_name" prefWidth="75.0" text="name" />
@@ -30,6 +31,15 @@
                </children>
             </VBox>
          </right>
+         <left>
+            <TextArea fx:id="chatArea" disable="true" editable="false" prefHeight="400.0" prefWidth="136.0" BorderPane.alignment="CENTER" />
+         </left>
+         <bottom>
+            <TextField fx:id="chatField" disable="true" prefHeight="26.0" prefWidth="290.0" BorderPane.alignment="CENTER" />
+         </bottom>
+         <top>
+            <Button fx:id="chatButton" mnemonicParsing="false" onAction="#sendBt" prefHeight="26.0" prefWidth="70.0" text="Send" BorderPane.alignment="CENTER" />
+         </top>
       </BorderPane>
    </children>
 </AnchorPane>
