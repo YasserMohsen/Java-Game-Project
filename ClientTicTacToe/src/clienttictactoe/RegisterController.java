@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.FacebookApi;
 import model.User;
 
 /**
@@ -28,7 +29,6 @@ public class RegisterController implements Initializable {
     public Label error, errorText;
     @FXML
     public TextField name,email,password;
-    
     @FXML
     public Label errorsalma;
     @FXML
@@ -46,6 +46,12 @@ public class RegisterController implements Initializable {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }
     
+    }
+    
+    @FXML
+    public void fbReg(){
+        FacebookApi facebookApi = new FacebookApi();
+        
     }
     
     @Override

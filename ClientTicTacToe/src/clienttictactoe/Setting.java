@@ -35,4 +35,5 @@ public class Setting {
     public static final int MESSAGE = 2020;
     public static final int RECIEVE_MESSAGE = 2021;
     
+    
 }
