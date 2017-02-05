@@ -22,6 +22,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import model.FacebookApi;
 import model.Request;
 import model.User;
 
@@ -206,6 +207,9 @@ public class MainController implements Initializable {
             if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
                 res = 1;
             } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
+
+                FacebookApi facebookApi = new FacebookApi();
+                facebookApi.publishToTimeLine(""+this.getPlayer().getName()+" Enta Kespet ya m3lm");
                 res = 2;
             }
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);

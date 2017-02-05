@@ -5,6 +5,10 @@
  */
 package clienttictactoe;
 
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Parameter;
+import com.restfb.types.FacebookType;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -20,6 +24,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import model.Request;
 import model.User;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  *
@@ -86,17 +92,13 @@ public class Client extends Thread{
             if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK){
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
-
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        try {
-                            MainController.availableUsers.addAll(availablePlayerList);
-                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
-                            ClientTicTacToe.mainController.setPlayer((User) objects[1]);
-                        } catch (Exception ex) {
-                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
+                Platform.runLater(() -> {
+                    try {
+                        MainController.availableUsers.addAll(availablePlayerList);
+                        ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
+                        ClientTicTacToe.mainController.setPlayer((User) objects[1]);
+                    } catch (Exception ex) {
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
                 start();
@@ -253,7 +255,6 @@ public class Client extends Thread{
                                     public void run() {
                                         try {
                                             int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
-                                            
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
