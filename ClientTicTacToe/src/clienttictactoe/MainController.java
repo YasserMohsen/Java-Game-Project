@@ -8,7 +8,6 @@ package clienttictactoe;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -112,18 +112,42 @@ public class MainController implements Initializable {
         // TODO
         tv_Players.setItems(availableUsers);
         tc_name.setCellValueFactory(new PropertyValueFactory("name"));
-        tv_Players.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends User> observable, User oldValue, User newValue) -> {
-                if(newValue != null){
-                    remotePlayer= newValue;
+//        tv_Players.setOnMouseClicked(event -> {
+//                    remotePlayer= tv_Players.getSelectionModel().getSelectedItem();
+// 
+//                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
+//                        return;
+//
+//                    Request request = new Request();
+//                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+//                    Object[] objects = {player, remotePlayer};
+//                    request.setObject(objects);
+//                    Client.sendRequest(request);
+//                    bp_GameBoard.setDisable(true);
+//                    playerChar_X_OR_O = 1;
+//                    
+//        });
+        tv_Players.setRowFactory( tv -> {
+            TableRow<User> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    User user = row.getItem();
+                    
+                    remotePlayer= user;
+ 
+                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
+                        return;
+
                     Request request = new Request();
                     request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
                     Object[] objects = {player, remotePlayer};
                     request.setObject(objects);
                     Client.sendRequest(request);
                     bp_GameBoard.setDisable(true);
-                    playerChar_X_OR_O = 1;
-                    
+                    playerChar_X_OR_O = 1;                    
                 }
+            });
+            return row ;
         });
 
 //        ////////////////set which property will be render in List View/////////////////////////////////

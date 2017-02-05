@@ -33,5 +33,8 @@ public class Setting {
 
     public static final int UPDATE_PLAYER_IN_PLAYER_LIST = 2013;
     
+    public static final int AVAILABLE = 3001;
+    public static final int BUSY = 3002;
+    public static final int OFFLINE = 3003;
     
 }
