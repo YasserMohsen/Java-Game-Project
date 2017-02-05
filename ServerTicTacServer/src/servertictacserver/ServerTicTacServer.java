@@ -43,6 +43,7 @@ public class ServerTicTacServer extends Application {
         Reflection rf = new Reflection();
         Rectangle r =new Rectangle(0,0,300, 250);
         Text t = new Text("TicTacToe Server");
+        Text show=new Text("Waiting For Choice");
         Button start = new Button("Start The Server");
         Button stop = new Button("Stop The Server");
         Pane root = new Pane();
@@ -53,13 +54,19 @@ public class ServerTicTacServer extends Application {
         rf.setFraction(0.7);
   
         t.setEffect(rf);
-        t.setLayoutX(90);
-        t.setLayoutY(60);
+        t.setLayoutX(75);
+        t.setLayoutY(40);
+        
+        show.setLayoutX(90);
+        show.setLayoutY(200);
+        t.setStyle("-fx-font: 16 arial;");
         
         start.setLayoutX(15);
         start.setLayoutY(100);
         stop.setLayoutX(155);
         stop.setLayoutY(100);
+        
+        
         
         start.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -69,6 +76,7 @@ public class ServerTicTacServer extends Application {
                     s = new Server();
                     s.start();
                     flag = 1;
+                    show.setText("The Server Is On");
                 }
                 else{
                     System.out.println("the server already started");
@@ -92,6 +100,7 @@ public class ServerTicTacServer extends Application {
                         GameHandler.clientsVector.clear();
   
                         flag = 0;
+                        show.setText("The Server Is Off");
                     } catch (IOException ex) {
                         System.out.println("close server exception");
                     }
@@ -105,7 +114,7 @@ public class ServerTicTacServer extends Application {
         
         
         
-        root.getChildren().addAll(start, stop, t);
+        root.getChildren().addAll(start, stop, t, show);
         Scene scene = new Scene(root, 300, 250);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);

@@ -47,8 +47,8 @@
             <Label fx:id="errorText" prefHeight="16.0" prefWidth="226.0" text="" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Button mnemonicParsing="false" onAction="#btnActionSignUp" prefHeight="25.0" prefWidth="96.0" text="Sign Up " GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Button mnemonicParsing="false" onAction="#btnActionLoginIn" prefHeight="25.0" prefWidth="96.0" text="Sign In" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" onAction="#fbLogin"  prefHeight="25.0" prefWidth="224.0" text="Sign In With Facebook" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" onAction="#fbReg"  prefHeight="25.0" prefWidth="242.0" text="Sign Up with Facebook" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+<!--            <Button mnemonicParsing="false" onAction="#fbLogin"  prefHeight="25.0" prefWidth="224.0" text="Sign In With Facebook" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Button mnemonicParsing="false" onAction="#fbReg"  prefHeight="25.0" prefWidth="242.0" text="Sign Up with Facebook" GridPane.columnIndex="2" GridPane.rowIndex="5" />-->
          </children>
       </GridPane>
    </center>    

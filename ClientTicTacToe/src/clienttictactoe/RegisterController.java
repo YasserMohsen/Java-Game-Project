@@ -37,7 +37,6 @@ public class RegisterController implements Initializable {
         //create a new client and send the first request (register) in its constructor
         Client c = new Client(user , Setting.REG);
     }
-    
     @FXML
     public void btnActionLoginIn(){
         try {
@@ -47,13 +46,17 @@ public class RegisterController implements Initializable {
         }
     
     }
-    
-    @FXML
-    public void fbReg(){
-        FacebookApi facebookApi = new FacebookApi();
-        
-    }
-    
+//    @FXML
+//    public void fbLogin(){
+//       
+//    }
+//    
+//    @FXML
+//    public void fbReg(){
+//        FacebookApi facebookApi = new FacebookApi();
+//        
+//    }
+//    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    
