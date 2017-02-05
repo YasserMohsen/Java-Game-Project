@@ -183,9 +183,11 @@ public class Client extends Thread{
                                             request.setObject(objects);
                                             request.setType(Setting.ACCEPT_INVITATION);
                                             Client.sendRequest(request);
+                                            
                                             ClientTicTacToe.mainController.playerChar_X_OR_O = 0;
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                             ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
+                                            ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
 
                                         } else {
                                             //////////////logic here///////////////////////
@@ -207,11 +209,11 @@ public class Client extends Thread{
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-
+                                        
                                         ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
-
+                                        ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
                                     }
                                 });
                                 break;
@@ -252,9 +254,7 @@ public class Client extends Thread{
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         try {
-                                            ClientTicTacToe.mainController.showDialog(Setting.WIN_MSG);
-                                            ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
-                                            ClientTicTacToe.mainController.resetArray();
+                                            int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
                                             
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -270,8 +270,8 @@ public class Client extends Thread{
                                     public void run() {
                                         try {
                                             ClientTicTacToe.mainController.updateCell(xo);
-                                            ClientTicTacToe.mainController.showDialog(Setting.LOSE_MSG);  
-                                            ClientTicTacToe.mainController.resetArray();
+                                            ClientTicTacToe.mainController.showWinDialog(Setting.LOSE_MSG);  
+                                            ClientTicTacToe.mainController.resetGame();
                                             
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         } catch (Exception e) {
@@ -281,7 +281,40 @@ public class Client extends Thread{
                                 });
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_PLAYER_IN_PLAYER_LIST:
+                                user = (User) request.getObject();
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            for (User u : MainController.availableUsers) {
+                                                if(u.getId() == user.getId())
+                                                    u = user;
+                                            }
+                                            
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
+                                    }
+                                });
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////                                
+                            case Setting.RECIEVE_MESSAGE:
+                                objects = (Object[]) request.getObject();
+                                User sender = (User) objects[0];
+                                String message = (String) objects[1];
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.chatArea.appendText(sender.getName() + ":\n" + message + "\n");
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
                         }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////

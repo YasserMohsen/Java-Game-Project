@@ -142,7 +142,7 @@ class GameHandler extends Thread {
                             UserController.saveScore(senderPlayer);
                             
                             request.setObject(senderPlayer);
-                            request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);                            
+                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);                            
                             
                             brodCast(request);
                             
@@ -151,7 +151,7 @@ class GameHandler extends Thread {
                             this.ous.reset();
                             
                             request.setObject(receiverPlayer);
-                            request.setType(Setting.ADD_PLAYER_TO_AVAILABLE_LIST);
+                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
                             brodCast(request);
                             this.ous.flush();
                             this.ous.reset();
@@ -172,7 +172,22 @@ class GameHandler extends Thread {
 
                             break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
-
+                    case Setting.MESSAGE:
+                        objects = (Object[]) request.getObject();
+                        senderPlayer = (User) objects[0];
+                        receiverPlayer = (User) objects[1];
+                        String message = (String) objects[2];
+                        
+                        request.setType(Setting.RECIEVE_MESSAGE);
+                        Object[] obj = {senderPlayer, message};
+                        request.setObject(obj);
+                        for (GameHandler ch : clientsVector) {
+                            if (ch.user.getId() == senderPlayer.getId() || ch.user.getId() == receiverPlayer.getId()) {
+                                ch.ous.writeObject(request);
+                            }
+                        }
+                        break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
                         case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
                             
                             System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");

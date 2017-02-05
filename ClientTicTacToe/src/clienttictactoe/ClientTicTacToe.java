@@ -33,6 +33,7 @@ public class ClientTicTacToe extends Application {
 
         this.stage = stage;
         Scene scene = new Scene(root);
+
         
         this.stage.setScene(scene);
         this.stage.hide();
@@ -44,7 +45,6 @@ public class ClientTicTacToe extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
         launch(args);
     }
     
