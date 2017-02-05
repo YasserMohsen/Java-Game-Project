@@ -156,6 +156,11 @@ class GameHandler extends Thread {
                             this.ous.flush();
                             this.ous.reset();
                             senderPlayer.setStatus(Setting.AVAILABLE);
+                            //////////////////////////////////////////////
+                            //update news field
+                            request.setType(Setting.UPDATE_NEWS);
+                            request.setObject("**" + senderPlayer.getName() + " WINS " + receiverPlayer.getName() + "\n ================= \n");
+                            brodCastAll(request);
                         } else {
                             
                             request.setType(Setting.MOVEBACK);
@@ -283,7 +288,16 @@ class GameHandler extends Thread {
         for (GameHandler ch : clientsVector) {
             if (ch.user.getId() != ((User) request.getObject()).getId()) {
                 ch.ous.writeObject(request);
+                ch.ous.flush();
+                ch.ous.reset();
             }
+        }
+    }
+    void brodCastAll(Request request) throws IOException {
+        for (GameHandler ch : clientsVector) {
+            ch.ous.writeObject(request);
+            ch.ous.flush();
+            ch.ous.reset();
         }
     }
 

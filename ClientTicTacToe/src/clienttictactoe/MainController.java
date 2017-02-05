@@ -49,6 +49,8 @@ public class MainController implements Initializable {
     TextArea chatArea;
     @FXML
     TextField chatField;
+    @FXML
+    TextArea news;
     
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();

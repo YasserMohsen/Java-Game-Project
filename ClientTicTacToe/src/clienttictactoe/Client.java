@@ -316,6 +316,18 @@ public class Client extends Thread{
                                 });
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_NEWS:
+                                String myNew = (String) request.getObject();
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.news.appendText(myNew);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
                         }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
