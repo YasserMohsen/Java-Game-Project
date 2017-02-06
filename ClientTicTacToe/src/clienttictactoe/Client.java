@@ -5,10 +5,10 @@
  */
 package clienttictactoe;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.Parameter;
-import com.restfb.types.FacebookType;
+//import com.restfb.DefaultFacebookClient;
+//import com.restfb.FacebookClient;
+//import com.restfb.Parameter;
+//import com.restfb.types.FacebookType;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,8 +24,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import model.Request;
 import model.User;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.WebDriver;
+//import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  *

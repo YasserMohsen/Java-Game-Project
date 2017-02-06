@@ -2,9 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
-        <group/>
-=======
         <group>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ServerTicTacServer/src/control/UserController.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ServerTicTacServer/src/servertictacserver/ServerTicTacServer.java</file>
@@ -13,6 +10,5 @@
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ServerTicTacServer/src/control/DBConnection.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ServerTicTacServer/src/servertictacserver/Setting.java</file>
         </group>
->>>>>>> d5c273a0b8550fea7b9f87d4ca513609fe5eae68
     </open-files>
 </project-private>

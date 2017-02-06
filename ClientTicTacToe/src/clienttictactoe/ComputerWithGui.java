@@ -39,7 +39,7 @@ public class ComputerWithGui extends Application {
     Board board = new Board();
     Turn boardTurn = new Turn();
     GridPane grid;
-    Label cell1, cell2, cell3,
+    Label   cell1, cell2, cell3,
             cell4, cell5, cell6,
             cell7, cell8, cell9;
     Label[] cells;
