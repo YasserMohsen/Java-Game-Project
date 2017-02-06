@@ -3,31 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/LoginController.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Client.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/model/User.java</file>
-            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Setting.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/main.fxml</file>
-            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/register.fxml</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/FXML.fxml</file>
-            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ComputerWithGui.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ConfirmDialoge.java</file>
-=======
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/model/User.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/model/FacebookApi.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Setting.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/register.fxml</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/LoginController.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Client.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/main.fxml</file>
->>>>>>> ef5ebbcdd647ab2dd5f14c6170e7f52ee5387df5
+            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
+            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/homeController.java</file>
+            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
+            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
+            <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ComputerWithGui.java</file>
         </group>
     </open-files>
 </project-private>
