@@ -7,14 +7,16 @@ package servertictacserver;
 
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.Reflection;
 
 import javafx.scene.layout.Pane;
@@ -47,25 +49,42 @@ public class ServerTicTacServer extends Application {
         Button start = new Button("Start The Server");
         Button stop = new Button("Stop The Server");
         Pane root = new Pane();
+        ScrollPane pane = new ScrollPane();
         root.setId("pane");
+        
+        ListView<String> list = new ListView<String>();
+        ObservableList<String> items =FXCollections.observableArrayList (
+        "sada","jlkjlk" , "uiooij","fdsf", "sdfsfs", "fdsfs","sada", "fdsf", "sdfsfs", "fdsfs","sada", "fdsf", "sdfsfs", "fdsfs","sada", "fdsf", "sdfsfs", "fdsfs");
+        list.setItems(items);
+        
+        
+        
+        pane.prefWidthProperty().bind(list.widthProperty());
+        pane.prefHeightProperty().bind(list.heightProperty());
+        pane.setContent(list);
+        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         
         r.setFill(lg1);
         
-        rf.setFraction(0.7);
+        rf.setFraction(0.2);
   
         t.setEffect(rf);
-        t.setLayoutX(75);
-        t.setLayoutY(40);
-        
-        show.setLayoutX(90);
-        show.setLayoutY(200);
+        t.setLayoutX(325);
+        t.setLayoutY(35);
         t.setStyle("-fx-font: 16 arial;");
         
-        start.setLayoutX(15);
-        start.setLayoutY(100);
-        stop.setLayoutX(155);
-        stop.setLayoutY(100);
+        show.setLayoutX(338);
+        show.setLayoutY(100);
         
+        pane.setLayoutX(100);
+        pane.setLayoutY(110);
+        list.setMinSize(600, 80);
+        
+        start.setLayoutX(265);
+        start.setLayoutY(50);
+        stop.setLayoutX(405);
+        stop.setLayoutY(50);
+         
         
         
         start.setOnAction(new EventHandler<ActionEvent>() {
@@ -114,8 +133,8 @@ public class ServerTicTacServer extends Application {
         
         
         
-        root.getChildren().addAll(start, stop, t, show);
-        Scene scene = new Scene(root, 300, 250);
+        root.getChildren().addAll(start, stop, t, show, list, pane);
+        Scene scene = new Scene(root, 800, 520);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);
         stage.show();

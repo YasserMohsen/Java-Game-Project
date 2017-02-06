@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/register.fxml</file>
-            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
-            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Client.java</file>
-            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ClientTicTacToe/src/model/FacebookApi.java</file>
-            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
-            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
-            <file>file:/home/walid/Desktop/ITI/Java/project/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ComputerWithGui.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
