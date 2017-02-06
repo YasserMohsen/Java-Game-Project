@@ -20,6 +20,20 @@ public class MyImage implements Serializable {
     private int[][] data;
 
     public MyImage() {}
+    
+    public MyImage(String url){
+        Image image = new Image(url);
+        width = ((int) image.getWidth());
+        height = ((int) image.getHeight());
+        data = new int[width][height];
+
+        PixelReader r = image.getPixelReader();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                data[i][j] = r.getArgb(i, j);
+            }
+        }
+    }
 
     public void setImage(Image image) {
         width = ((int) image.getWidth());
@@ -33,6 +47,20 @@ public class MyImage implements Serializable {
             }
         }
 
+    }
+    
+    public void setImage(String url){
+        Image image = new Image(url);
+        width = ((int) image.getWidth());
+        height = ((int) image.getHeight());
+        data = new int[width][height];
+
+        PixelReader r = image.getPixelReader();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                data[i][j] = r.getArgb(i, j);
+            }
+        }
     }
 
     public Image getImage() {

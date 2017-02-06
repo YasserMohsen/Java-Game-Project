@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.image.Image;
 import model.MyImage;
 import model.User;
 
@@ -54,7 +53,7 @@ public class UserController {
     public static User login(User user){
         int id = 0;
         String name = "";
-        String imgLink = "male.jpg";
+        String imgLink = "https://1001freedownloads.s3.amazonaws.com/icon/thumb/349154/Cook-Tux-icon.png";
         try {
             Connection con = DBConnection.openConnection();
             System.out.println("Connected for login");
@@ -66,13 +65,14 @@ public class UserController {
             if (rs.next()){
                 id =rs.getInt(1);
                 user.setId(id);
+                
                 name = rs.getString(2);
                 user.setName(name);
+                
                 //imgLink = rs.getString(6);
                 user.setImgLink(imgLink);
-                Image i = new Image("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Wiktionary_small.svg/350px-Wiktionary_small.svg.png");
-                MyImage s = new MyImage();
-                s.setImage(i);
+                
+                MyImage s = new MyImage(imgLink);
                 user.setSerializedImg(s);
             }
             con.close();
