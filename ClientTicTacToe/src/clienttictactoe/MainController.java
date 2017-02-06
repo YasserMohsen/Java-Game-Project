@@ -5,35 +5,36 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 
-import javafx.beans.value.ObservableValue;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
-import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import model.FacebookApi;
+import javafx.util.Callback;
 import model.Request;
 import model.User;
+import util.XCell;
 
 /**
  * FXML Controller class
@@ -49,10 +50,13 @@ public class MainController implements Initializable {
     GridPane gridPane; 
     
     @FXML
-    private TableView<User> tv_Players;
+    public ListView<User> lv_players;
     
-    @FXML
-    private TableColumn<User,String>tc_name;
+//    @FXML
+//    public TableView<User> tv_Players;
+//    
+//    @FXML
+//    private TableColumn<User,String>tc_name;
 
     @FXML
     private BorderPane bp_GameBoard;
@@ -164,11 +168,26 @@ public class MainController implements Initializable {
        // bp_GameBoard.setCenter(gridPane);
 
         // TODO
-        tv_Players.setItems(availableUsers);
-        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
-        tv_Players.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends User> observable, User oldValue, User newValue) -> {
-                if(newValue != null){
-                    remotePlayer= newValue;
+        
+        lv_players.setItems(availableUsers);        
+        lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+            @Override
+            public ListCell<User> call(ListView<User> param) {
+                return new XCell();
+            }
+        });
+        
+
+        lv_players.setOnMouseClicked((MouseEvent event) -> {
+            
+            System.out.println("clicked");
+
+            remotePlayer= lv_players.getSelectionModel().getSelectedItem();
+ 
+                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
+                        return;
+            System.out.println("not avai");
+
                     Request request = new Request();
                     request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
                     Object[] objects = {player, remotePlayer};
@@ -176,9 +195,52 @@ public class MainController implements Initializable {
                     Client.sendRequest(request);
                     bp_GameBoard.setDisable(true);
                     playerChar_X_OR_O = 1;
-                    
-                }
-        });
+            
+            
+          });
+
+        
+//        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
+//        tv_Players.setOnMouseClicked(event -> {
+//                    remotePlayer= tv_Players.getSelectionModel().getSelectedItem();
+// 
+//                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
+//                        return;
+//
+//                    Request request = new Request();
+//                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+//                    Object[] objects = {player, remotePlayer};
+//                    request.setObject(objects);
+//                    Client.sendRequest(request);
+//                    bp_GameBoard.setDisable(true);
+//                    playerChar_X_OR_O = 1;
+//                    
+//        });
+//        tv_Players.setRowFactory( tv -> {
+//            TableRow<User> row = new TableRow<>();
+//            row.setOnMouseClicked(event -> {
+//                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+//                    User user = row.getItem();
+//                    
+//                    remotePlayer= user;
+//                    
+//                    System.out.println("user name   :: "+user.getName());
+//                    System.out.println("user status :: "+user.getStatus());
+// 
+//                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
+//                        return;
+//
+//                    Request request = new Request();
+//                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+//                    Object[] objects = {player, remotePlayer};
+//                    request.setObject(objects);
+//                    Client.sendRequest(request);
+//                    bp_GameBoard.setDisable(true);
+//                    playerChar_X_OR_O = 1;                    
+//                }
+//            });
+//            return row ;
+//        });
 
 //        ////////////////set which property will be render in List View/////////////////////////////////
 //        lv_availableUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
@@ -232,7 +294,7 @@ public class MainController implements Initializable {
     }
 
     public void setDisable_Enable_ListView(boolean bool) {
-        tv_Players.setDisable(bool);
+        lv_players.setDisable(bool);
     }
     public void setDisable_Enable_ChatView(boolean bool) {
         chatArea.clear();
@@ -332,6 +394,9 @@ public class MainController implements Initializable {
     }
     
     public void selectUser(){
+        
+
+
         
     }
     

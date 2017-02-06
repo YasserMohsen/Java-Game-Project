@@ -13,8 +13,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Request;
 import model.User;
 
@@ -228,8 +226,18 @@ class GameHandler extends Thread {
                                 {
                                     request.setType(Setting.ACCEPT_INVITATION);
                                     ch.ous.writeObject(request);
+                                    ch.ous.flush();
+                                    ch.ous.reset();                            
                                 }         
                             }
+                            ((User) objects[1]).setStatus(Setting.BUSY);
+                            ((User) objects[0]).setStatus(Setting.BUSY);
+                            
+                            System.out.println("Busy ::" +((User) objects[0]).getStatus());
+                            System.out.println("Busy ::" +((User) objects[1]).getStatus());
+                            request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
+                            brodCastAll(request);
+                            
                             break;
                             
 

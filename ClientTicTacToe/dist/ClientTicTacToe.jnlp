@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="ClientTicTacToe.jar" size="137545" download="eager" />
+    <jar href="ClientTicTacToe.jar" size="142329" download="eager" />
     <jar href="lib/cglib-nodep-3.2.4.jar" size="350926" download="eager" />
     <jar href="lib/client-combined-3.0.1-nodeps.jar" size="1403747" download="eager" />
     <jar href="lib/commons-codec-1.10.jar" size="284184" download="eager" />
@@ -32,7 +32,6 @@
     <jar href="lib/jna-4.1.0.jar" size="914597" download="eager" />
     <jar href="lib/jna-platform-4.1.0.jar" size="1464423" download="eager" />
     <jar href="lib/junit-4.12.jar" size="314932" download="eager" />
-    <jar href="lib/mysql-connector-java-5.1.23-bin.jar" size="834126" download="eager" />
     <jar href="lib/mysql-connector-java-5.1.40-bin.jar" size="990927" download="eager" />
     <jar href="lib/neko-htmlunit-2.23.jar" size="125105" download="eager" />
     <jar href="lib/netty-3.5.7.Final.jar" size="1106629" download="eager" />

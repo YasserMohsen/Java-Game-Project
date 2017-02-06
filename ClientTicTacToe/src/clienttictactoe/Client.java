@@ -5,10 +5,10 @@
  */
 package clienttictactoe;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.Parameter;
-import com.restfb.types.FacebookType;
+//import com.restfb.DefaultFacebookClient;
+//import com.restfb.FacebookClient;
+//import com.restfb.Parameter;
+//import com.restfb.types.FacebookType;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,8 +24,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import model.Request;
 import model.User;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.WebDriver;
+//import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  *
@@ -321,6 +321,33 @@ public class Client extends Thread{
                                     }
                                 });
                                 break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_2PLAYER_IN_PLAYER_LIST:
+                                objects = (Object[]) request.getObject();
+                                User player1 = (User) objects[0];
+                                User player2 = (User) objects[1];
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            for (User u : ClientTicTacToe.mainController.availableUsers) {
+                                                if(u.getId() == player1.getId()){
+                                                    u.setStatus(player1.getStatus());
+                                                    u.setScore(player1.getScore());
+                                                }
+                                                else if (u.getId() == player2.getId()){
+                                                    u.setStatus(player2.getStatus());
+                                                    u.setScore(player2.getScore());
+                                                }
+                                            }
+                                            ClientTicTacToe.mainController.lv_players.refresh();
+                                            
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+
+                                    }
+                                });
+                                break;                               
 //////////////////////////////////////////////////////////////////////////////////////////////////                                
                             case Setting.RECIEVE_MESSAGE:
                                 objects = (Object[]) request.getObject();
