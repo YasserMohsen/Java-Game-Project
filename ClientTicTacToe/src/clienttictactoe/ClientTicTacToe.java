@@ -37,7 +37,9 @@ public class ClientTicTacToe extends Application {
 
         this.stage = stage;
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("file:///home/salma/Documents/iti/java/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/clientcss.css");
+        String css = ClientTicTacToe.class.getResource("clientcss.css").toExternalForm();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(css);
         
         this.stage.setScene(scene);
         this.stage.hide();
@@ -57,12 +59,15 @@ public class ClientTicTacToe extends Application {
         Parent page = loader.load();
 
         Scene scene = stage.getScene();
-        scene.getStylesheets().add("file:///home/salma/Documents/iti/java/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/clientcss.css");
+        String css = ClientTicTacToe.class.getResource("clientcss.css").toExternalForm();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(css);
         if(fxml=="login.fxml")
         {
             loginController = (LoginController)loader.getController();
             //stage.setTitle(loginController.user.getName());
         }
+
         else if(fxml=="homepage.fxml")
         {
             home = (homeController)loader.getController();

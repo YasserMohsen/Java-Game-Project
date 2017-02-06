@@ -29,6 +29,7 @@
         </rowConstraints>
          <children>
      
+
             <TextField fx:id="name" prefHeight="35.0" prefWidth="35.0" promptText="Name" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
             <TextField fx:id="email" prefHeight="35.0" prefWidth="35.0" promptText="Email Address" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             <PasswordField fx:id="password" prefHeight="35.0" prefWidth="35.0" promptText="Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
@@ -40,7 +41,7 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></Button>
-         
+
          </children>
       </GridPane>
    </center>    

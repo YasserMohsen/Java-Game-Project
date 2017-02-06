@@ -7,6 +7,7 @@ package model;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
+import com.restfb.FacebookClient.AccessToken;
 import com.restfb.Parameter;
 import com.restfb.types.FacebookType;
 import org.openqa.selenium.WebDriver;
@@ -19,14 +20,20 @@ import org.openqa.selenium.chrome.ChromeDriver;
 public class FacebookApi {
     private static  String domain = "http://dolnii.com/requires/index.html";
     private static  String appId = "385244185170219" ;
+    private static  String appSec = "385244185170219" ;
     private static  String accessToken;
-    private static  String authUrl = "https://graph.Facebook.com/oauth/authorize?type=user_agent&client_id="+appId+"&redirect_uri="+domain+"&scope=email,user_birthday,publish_actions";
+
+    private static  String authUrl = "https://graph.facebook.com/oauth/access_token?client_id=" +
+                appId +
+                "&client_secret=" + appSec +
+                "&grant_type=client_credentials" +
+                "&redirect_uri=" + domain +
+                "&scope=user_about_me";
     private static WebDriver driver;
     private FacebookClient facebookClient;
     
     
     public FacebookApi() {
-
         System.setProperty("webdriver.chrome.driver", "chromedriver");
         driver = new ChromeDriver();
         driver.get(authUrl);
@@ -37,8 +44,9 @@ public class FacebookApi {
                 FacebookApi.setAccessToken(url);
                 driver.close();
                 this.facebookClient = new DefaultFacebookClient(accessToken);
+                AccessToken accessTokened = facebookClient.obtainAppAccessToken(appId, appSec);
+                this.facebookClient = new DefaultFacebookClient(accessTokened.getAccessToken());
                 break;
-
             }
         } 
     }
