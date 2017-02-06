@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.FacebookApi;
 import model.User;
@@ -26,9 +27,11 @@ public class RegisterController implements Initializable {
     User user ;
     
     @FXML
-    public Label error, errorText;
+    public Label errorText,nameerror,mailerror,passerror,repasserror;
     @FXML
-    public TextField name,email,password;
+    public TextField name,email;
+    @FXML
+    public PasswordField password,repassword;
     @FXML
     public Label errorsalma;
     @FXML
@@ -46,27 +49,7 @@ public class RegisterController implements Initializable {
         }
     
     }
-//    @FXML
-//    public void fbLogin(){
-//       
-//    }
-//    
-//    @FXML
-//    public void fbReg(){
-    
-    
-//    @FXML
-//    public void fbReg(){
-//        FacebookApi facebookApi = new FacebookApi();
-//        
-//    }
-//    
-//    @FXML
-//    public void fbLogin(){
-//        FacebookApi facebookApi = new FacebookApi();
-//        
-//    }
-//    
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    

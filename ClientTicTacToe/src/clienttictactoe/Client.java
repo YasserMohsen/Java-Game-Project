@@ -38,7 +38,8 @@ public class Client extends Thread{
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
-
+    boolean flag=true;
+    
     public static void sendRequest(User user, int type) {
 
         try {
@@ -82,14 +83,30 @@ public class Client extends Thread{
     //if it succeded, start the thread of the coming requests
     //else, close the socket 
     public Client(User u, int t) {
-
+        
+        
         try {
+            
             mySocket = new Socket("127.0.0.1", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
             this.sendRequest(u, t);
             Request request = (Request) ois.readObject();
             if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK){
+                
+              //  System.out.print(request.getType());
+                if(request.getType()==Setting.REG_OK)
+                {
+                 //   System.out.print(ClientTicTacToe.registerController.password.getText());
+//                    if(!ClientTicTacToe.registerController.password.getText().equals(ClientTicTacToe.registerController.repassword.getText()))
+//                    {
+//                        ClientTicTacToe.registerController.repasserror.setVisible(true);
+//                        ClientTicTacToe.registerController.repasserror.setText("Passwords must be the same");
+//                        flag=false;
+//                    }
+                }
+                
+                if(flag){
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
                 Platform.runLater(() -> {
@@ -104,15 +121,17 @@ public class Client extends Thread{
                 });
                 start();
             }
+            }
             else if (request.getType() == Setting.REG_NO || request.getType() == Setting.LOGIN_NO){
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         String myError = (String) request.getObject();
                         if (request.getType() == Setting.REG_NO){
-                            ClientTicTacToe.registerController.error.setVisible(true);
-                            ClientTicTacToe.registerController.errorText.setVisible(true);
-                            ClientTicTacToe.registerController.errorText.setText(myError);
+                            System.out.print("salma"+myError);
+                           // ClientTicTacToe.registerController.error.setVisible(true);
+                            ClientTicTacToe.registerController.mailerror.setVisible(true);
+                            ClientTicTacToe.registerController.mailerror.setText(myError);
                         }
                         else{
                             ClientTicTacToe.loginController.errorsalma.setText(myError);
