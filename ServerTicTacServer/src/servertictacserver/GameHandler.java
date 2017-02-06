@@ -48,7 +48,7 @@ class GameHandler extends Thread {
                         this.ous.reset();
                         user.setStatus(Setting.AVAILABLE);
                         request.setType(Setting.REG_OK);  
-
+                        
                         List availablePlayerList = new ArrayList<User>();                                
                         for (GameHandler gameHandler : clientsVector){
                             if(gameHandler.user != null && gameHandler.user.getId()!=user.getId())

@@ -1,5 +1,6 @@
 package clienttictactoe;
 
+import com.restfb.types.ProfilePictureSource;
 import java.net.URL;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -63,6 +64,9 @@ public class MainController implements Initializable {
     @FXML
     TextArea news;
     
+    @FXML
+    public ImageView profilePic;
+    
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
 
@@ -89,8 +93,11 @@ public class MainController implements Initializable {
        gridPane.setPrefWidth(473.0);
        gridPane.setGridLinesVisible(true);
         gridPane.setStyle("-fx-background-color: white;");
+        
     OPic = new Image(getClass().getResourceAsStream("O.png"));
-    XPic = new Image(getClass().getResourceAsStream("X.png"));    
+    XPic = new Image(getClass().getResourceAsStream("X.png"));
+    
+    //profilePic.setImage(new Image(getClass().getResourceAsStream("male.jpg")));
 //        cell1 = new Label();
 //        cell2 = new Label();
 //        cell3 = new Label();
@@ -239,6 +246,9 @@ public class MainController implements Initializable {
         chatField.clear();
         chatArea.setDisable(bool);
         chatField.setDisable(bool);
+    }
+    public void setMyImage(Image i){
+        profilePic.setImage(i);
     }
     public void setPlayer(User player) {
         this.player = player;

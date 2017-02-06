@@ -6,6 +6,7 @@
 package model;
 
 import java.io.Serializable;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -18,7 +19,9 @@ public class User implements Serializable{
     String name;
     String email;
     String password;
-  
+    //Image img;
+    MyImage serializedImg;
+    String imgLink;
     private int score;
 
     public User(int id, int status, String name, String email, String password, int score) {
@@ -84,6 +87,30 @@ public class User implements Serializable{
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+//    public Image getImg() {
+//        return img;
+//    }
+//
+//    public void setImg(Image img) {
+//        this.img = img;
+//    }
+
+    public String getImgLink() {
+        return imgLink;
+    }
+
+    public void setImgLink(String imgLink) {
+        this.imgLink = imgLink;
+    }
+
+    public MyImage getSerializedImg() {
+        return serializedImg;
+    }
+
+    public void setSerializedImg(MyImage serializedImg) {
+        this.serializedImg = serializedImg;
     }
     
     
