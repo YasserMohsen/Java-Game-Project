@@ -85,6 +85,9 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+          gridPane.setPrefHeight(454.0);
+       gridPane.setPrefWidth(473.0);
+       gridPane.setGridLinesVisible(true);
         gridPane.setStyle("-fx-background-color: white;");
     OPic = new Image(getClass().getResourceAsStream("O.png"));
     XPic = new Image(getClass().getResourceAsStream("X.png"));    
@@ -108,6 +111,8 @@ public class MainController implements Initializable {
             //System.out.print("salma"+i/3); 0,0 0,1 0,2 
             //System.out.print("salmaa"+i%3);
             
+                   labels[i / 3][i % 3].setPrefSize(160, 155);
+
             gridPane.add(labels[i / 3][i % 3], i % 3, i / 3);
             labels[i / 3][i % 3].setUserData(i);
             labels[i / 3][i % 3].setOnMouseClicked(event -> {
@@ -290,7 +295,7 @@ public class MainController implements Initializable {
 
                                     if (WebViewController.engine.getLocation().matches("http://dolnii.com/requires/index.html(.*)")) {
                                         try {
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.main_XML, "Chat Menu");
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                                         }

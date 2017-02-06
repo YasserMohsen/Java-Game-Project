@@ -20,7 +20,7 @@ public class DBConnection {
             DriverManager.registerDriver(new Driver());
 
 
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","walid", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","root", "sa");
 
             
         } catch (SQLException ex) {

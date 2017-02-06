@@ -69,8 +69,8 @@
                   <Label layoutX="9.0" layoutY="44.0" prefHeight="28.0" prefWidth="78.0" />
                </children>
             </Pane>
-            <TextArea editable="false" prefHeight="455.0" prefWidth="233.0" />
-            <TextField fx:id="t1" prefHeight="40.0" prefWidth="157.0" promptText="write a message" />
+            <TextArea fx:id="chatArea" editable="false" prefHeight="455.0" prefWidth="233.0" />
+            <TextField fx:id="chatField" prefHeight="40.0" prefWidth="157.0" promptText="write a message" />
          </children>
       </VBox>
    </left>
