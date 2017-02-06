@@ -320,7 +320,7 @@ public class Client extends Thread{
                                                     u.setScore(player2.getScore());
                                                 }
                                             }
-                                            ClientTicTacToe.mainController.tv_Players.refresh();
+                                            ClientTicTacToe.mainController.lv_players.refresh();
                                             
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
