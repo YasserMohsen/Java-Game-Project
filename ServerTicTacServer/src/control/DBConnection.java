@@ -18,7 +18,7 @@ public class DBConnection {
         Connection con = null;
         try {
             DriverManager.registerDriver(new Driver());
-             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","yasser", "");
+             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","root", "sa");
 
             
         } catch (SQLException ex) {

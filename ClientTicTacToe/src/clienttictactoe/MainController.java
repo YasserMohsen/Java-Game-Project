@@ -6,6 +6,8 @@
 package clienttictactoe;
 
 import java.net.URL;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
@@ -72,21 +74,38 @@ public class MainController implements Initializable {
     private boolean isFinish = false;
 
     int playerChar_X_OR_O;
-
+    Image OPic;
+    Image XPic;
     private User player;
     private User remotePlayer;
-
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        gridPane.setStyle("-fx-background-color: white;");
+    OPic = new Image(getClass().getResourceAsStream("O.png"));
+    XPic = new Image(getClass().getResourceAsStream("X.png"));    
+//        cell1 = new Label();
+//        cell2 = new Label();
+//        cell3 = new Label();
+//        cell4 = new Label();
+//        cell5 = new Label();
+//        cell6 = new Label();
+//        cell7 = new Label();
+//        cell8 = new Label();
+//        cell9 = new Label();
 
+//        cells = new Label[]{cell1, cell2, cell3,
+//            cell4, cell5, cell6,
+//            cell7, cell8, cell9};
         //GridPane gridPane = new GridPane();
 
         for (int i = 0; i < 9; i++) {
-              labels[i / 3][i % 3] = new Label("");
+              labels[i / 3][i % 3] = new Label();
+            //System.out.print("salma"+i/3); 0,0 0,1 0,2 
+            //System.out.print("salmaa"+i%3);
             
             gridPane.add(labels[i / 3][i % 3], i % 3, i / 3);
             labels[i / 3][i % 3].setUserData(i);
@@ -104,6 +123,7 @@ public class MainController implements Initializable {
                 int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
                 if (xo[position] == -1) {
+                    System.out.print("ssssss"+playerChar_X_OR_O);
                     counter++;
                     if (!playDisable) {
                         xo[position] = playerChar_X_OR_O;
@@ -116,7 +136,11 @@ public class MainController implements Initializable {
                         System.out.println(" id n :" + remotePlayer.toString());
                         request.setObject(objects);
                         Client.sendRequest(request);
-                        ((Label) event.getSource()).setText((playerChar_X_OR_O == 0) ? "O" : "X");
+                        
+                       
+                   
+                        
+                        ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
                     }
@@ -169,15 +193,21 @@ public class MainController implements Initializable {
 //            }
 //        });
     }
+//         if(playerChar_X_OR_O == 0){
+//                           ((Label) event.getSource()).setGraphic(new ImageView(OPic)); 
+//                        }
+//                        else{
+//                            ((Label) event.getSource()).setGraphic(new ImageView(XPic)); 
+//                        }
 
     public void updateCell(int[] xo) {
         playDisable = false;
         for (int i = 0; i < 9; i++) {
             this.xo[i] = (xo[i]);
             if (xo[i] == 1) {
-                labels[i / 3][i % 3].setText("x");
+                labels[i / 3][i % 3].setGraphic(new ImageView(XPic));
             } else if (xo[i] == 0) {
-                labels[i / 3][i % 3].setText("o");
+                labels[i / 3][i % 3].setGraphic(new ImageView(OPic));
             }
         }
     }
@@ -262,6 +292,10 @@ public class MainController implements Initializable {
             request.setObject(objects);
             Client.sendRequest(request);
         }
+    }
+    
+    public void selectUser(){
+        
     }
     
     
