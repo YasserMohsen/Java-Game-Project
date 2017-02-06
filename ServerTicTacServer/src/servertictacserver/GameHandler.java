@@ -68,6 +68,7 @@ class GameHandler extends Thread {
 
                         // error in registration or login >> send to client error message
                         if(request.getType()== Setting.REG){
+                            
                         request.setType(Setting.REG_NO);                                    
                         request.setObject("email already exist");
                         }
