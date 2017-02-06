@@ -59,7 +59,7 @@ public class ClientTicTacToe extends Application {
             loginController = (LoginController)loader.getController();
             //stage.setTitle(loginController.user.getName());
         }
-        else{
+        else if(fxml=="main.fxml"){
             mainController = (MainController)loader.getController();
 //            stage.setTitle(mainController.getPlayer().getName());
         }

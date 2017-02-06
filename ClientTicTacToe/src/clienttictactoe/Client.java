@@ -94,6 +94,7 @@ public class Client extends Thread{
                 List<User> availablePlayerList = (ArrayList) objects[0];
                 Platform.runLater(() -> {
                     try {
+                            
                         MainController.availableUsers.addAll(availablePlayerList);
                         ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
                         ClientTicTacToe.mainController.setPlayer((User) objects[1]);

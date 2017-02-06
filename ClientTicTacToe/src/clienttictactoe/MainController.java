@@ -9,8 +9,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -200,8 +204,39 @@ public class MainController implements Initializable {
             if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
                 res = 1;
             } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
-                FacebookApi facebookApi = new FacebookApi();
-                facebookApi.publishToTimeLine(""+this.getPlayer().getName()+" Enta Kespet ya m3lm");
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+                            ClientTicTacToe.replaceSceneContent("webView.fxml", "Chat Menu");
+                            String quote = getPlayer().getName()+" won in TicTacToe Game";
+                            WebViewController.engine.load("https://www.facebook.com/dialog/feed?app_id=385244185170219"
+                                    + "&display=popup&caption=hhhhhhhhhhh"
+                                    + "&link=developers.facebook.com/docs/graph-api/"
+                                    + "&quote="+quote
+                                    + "&name=ahlan"
+                                    + "&redirect_uri=http://dolnii.com/requires/index.html"
+                                    + "&description=ahlan%20desc");
+                            WebViewController.engine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+                                if (Worker.State.SUCCEEDED.equals(newValue)) {
+
+                                    if (WebViewController.engine.getLocation().matches("http://dolnii.com/requires/index.html(.*)")) {
+                                        try {
+                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+
+                                    }
+                                }
+                            });
+                        } catch (Exception ex) {
+                            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+                });
                 res = 2;
             }
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);

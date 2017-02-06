@@ -48,12 +48,18 @@ public class RegisterController implements Initializable {
     
     }
     
-    @FXML
-    public void fbReg(){
-        FacebookApi facebookApi = new FacebookApi();
-        
-    }
-    
+//    @FXML
+//    public void fbReg(){
+//        FacebookApi facebookApi = new FacebookApi();
+//        
+//    }
+//    
+//    @FXML
+//    public void fbLogin(){
+//        FacebookApi facebookApi = new FacebookApi();
+//        
+//    }
+//    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    
