@@ -102,7 +102,7 @@ public class Client extends Thread{
                         ClientTicTacToe.mainController.setPlayer(player);
                         
                         MyImage s = player.getSerializedImg();
-                        ClientTicTacToe.mainController.setMyImage(s.getImage());
+                        //ClientTicTacToe.mainController.setMyImage(s.getImage());
                     } catch (Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
