@@ -38,15 +38,6 @@ public class RegisterController implements Initializable {
         Client c = new Client(user , Setting.REG);
     }
     
-    @FXML
-    public void btnActionLoginIn(){
-        try {
-            ClientTicTacToe.replaceSceneContent("login.fxml","login");
-        } catch (Exception ex) {
-            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
-    }
     
 //    @FXML
 //    public void fbReg(){

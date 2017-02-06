@@ -22,6 +22,7 @@ public class FacebookApi {
     private static  String appId = "385244185170219" ;
     private static  String appSec = "385244185170219" ;
     private static  String accessToken;
+
     private static  String authUrl = "https://graph.facebook.com/oauth/access_token?client_id=" +
                 appId +
                 "&client_secret=" + appSec +

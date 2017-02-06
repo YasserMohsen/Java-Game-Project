@@ -6,12 +6,16 @@
 package clienttictactoe;
 
 import java.net.URL;
-import java.util.ArrayList;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+
+import javafx.beans.value.ObservableValue;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
@@ -22,7 +26,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import model.FacebookApi;
@@ -36,16 +47,32 @@ import model.User;
  */
 public class MainController implements Initializable {
 
+       
+    Background background;
+        
     @FXML
-    private ListView<User> lv_availableUsers;
+    GridPane gridPane; 
+    
+    @FXML
+    private TableView<User> tv_Players;
+    
+    @FXML
+    private TableColumn<User,String>tc_name;
 
     @FXML
     private BorderPane bp_GameBoard;
+    @FXML
+    TextArea chatArea;
+    @FXML
+    TextField chatField;
+    @FXML
+    TextArea news;
+    
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
 
     private boolean playDisable = false;
-    private Button[][] buttons = new Button[3][3];
+    private Label[][] labels = new Label[3][3];
     /// init array of empty play board
     private int[] xo = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 
@@ -53,45 +80,56 @@ public class MainController implements Initializable {
     private boolean isFinish = false;
 
     int playerChar_X_OR_O;
-
+    Image OPic;
+    Image XPic;
     private User player;
     private User remotePlayer;
-
-    @FXML
-    private void selectUser() {
-
-        remotePlayer = lv_availableUsers.getSelectionModel().getSelectedItem();
-        Request request = new Request();
-        request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
-        Object[] objects = {player, remotePlayer};
-        request.setObject(objects);
-        Client.sendRequest(request);
-        bp_GameBoard.setDisable(true);
-        playerChar_X_OR_O = 1;
-    }
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        gridPane.setStyle("-fx-background-color: white;");
+    OPic = new Image(getClass().getResourceAsStream("O.png"));
+    XPic = new Image(getClass().getResourceAsStream("X.png"));    
+//        cell1 = new Label();
+//        cell2 = new Label();
+//        cell3 = new Label();
+//        cell4 = new Label();
+//        cell5 = new Label();
+//        cell6 = new Label();
+//        cell7 = new Label();
+//        cell8 = new Label();
+//        cell9 = new Label();
 
-        GridPane gridPane = new GridPane();
+//        cells = new Label[]{cell1, cell2, cell3,
+//            cell4, cell5, cell6,
+//            cell7, cell8, cell9};
+        //GridPane gridPane = new GridPane();
 
         for (int i = 0; i < 9; i++) {
-            buttons[i / 3][i % 3] = new Button("");
-            gridPane.add(buttons[i / 3][i % 3], i % 3, i / 3);
-            buttons[i / 3][i % 3].setUserData(i);
-            buttons[i / 3][i % 3].setOnAction((ActionEvent event) -> {
+              labels[i / 3][i % 3] = new Label();
+            //System.out.print("salma"+i/3); 0,0 0,1 0,2 
+            //System.out.print("salmaa"+i%3);
+            
+            gridPane.add(labels[i / 3][i % 3], i % 3, i / 3);
+            labels[i / 3][i % 3].setUserData(i);
+            labels[i / 3][i % 3].setOnMouseClicked(event -> {
+//                if (isFinish) {
+//                    return;
+//                }
+           // buttons[i / 3][i % 3].setOnAction((ActionEvent event) -> {
 
                 if (remotePlayer == null) {
                     showDialog("please select player first");
                     return;
                     }
 
-                int position = Integer.parseInt(((Button) event.getSource()).getUserData().toString());
+                int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
                 if (xo[position] == -1) {
+                    System.out.print("ssssss"+playerChar_X_OR_O);
                     counter++;
                     if (!playDisable) {
                         xo[position] = playerChar_X_OR_O;
@@ -104,7 +142,11 @@ public class MainController implements Initializable {
                         System.out.println(" id n :" + remotePlayer.toString());
                         request.setObject(objects);
                         Client.sendRequest(request);
-                        ((Button) event.getSource()).setText((playerChar_X_OR_O == 0) ? "O" : "X");
+                        
+                       
+                   
+                        
+                        ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
                     }
@@ -116,12 +158,27 @@ public class MainController implements Initializable {
                     playDisable = true;
                 }
             });
+            
         }
 
-        bp_GameBoard.setCenter(gridPane);
+       // bp_GameBoard.setCenter(gridPane);
 
         // TODO
-        lv_availableUsers.setItems(availableUsers);
+        tv_Players.setItems(availableUsers);
+        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
+        tv_Players.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends User> observable, User oldValue, User newValue) -> {
+                if(newValue != null){
+                    remotePlayer= newValue;
+                    Request request = new Request();
+                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+                    Object[] objects = {player, remotePlayer};
+                    request.setObject(objects);
+                    Client.sendRequest(request);
+                    bp_GameBoard.setDisable(true);
+                    playerChar_X_OR_O = 1;
+                    
+                }
+        });
 
 //        ////////////////set which property will be render in List View/////////////////////////////////
 //        lv_availableUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
@@ -142,15 +199,21 @@ public class MainController implements Initializable {
 //            }
 //        });
     }
+//         if(playerChar_X_OR_O == 0){
+//                           ((Label) event.getSource()).setGraphic(new ImageView(OPic)); 
+//                        }
+//                        else{
+//                            ((Label) event.getSource()).setGraphic(new ImageView(XPic)); 
+//                        }
 
     public void updateCell(int[] xo) {
         playDisable = false;
         for (int i = 0; i < 9; i++) {
             this.xo[i] = (xo[i]);
             if (xo[i] == 1) {
-                buttons[i / 3][i % 3].setText("x");
+                labels[i / 3][i % 3].setGraphic(new ImageView(XPic));
             } else if (xo[i] == 0) {
-                buttons[i / 3][i % 3].setText("o");
+                labels[i / 3][i % 3].setGraphic(new ImageView(OPic));
             }
         }
     }
@@ -169,7 +232,13 @@ public class MainController implements Initializable {
     }
 
     public void setDisable_Enable_ListView(boolean bool) {
-        lv_availableUsers.setDisable(bool);
+        tv_Players.setDisable(bool);
+    }
+    public void setDisable_Enable_ChatView(boolean bool) {
+        chatArea.clear();
+        chatField.clear();
+        chatArea.setDisable(bool);
+        chatField.setDisable(bool);
     }
     public void setPlayer(User player) {
         this.player = player;
@@ -177,6 +246,9 @@ public class MainController implements Initializable {
 
     public void setRemotePlayer(User player) {
         this.remotePlayer = player;
+    }
+    public User getRemotePlayer() {
+        return remotePlayer;
     }
 
     public void setPlayerId(int id) {
@@ -190,7 +262,7 @@ public class MainController implements Initializable {
     void resetGame() {
         for (int i = 0; i < xo.length; i++) {
             xo[i]=-1;
-            buttons[i / 3][i % 3].setText("");
+            labels[i / 3][i % 3].setText("");
             
         }
         
@@ -240,9 +312,27 @@ public class MainController implements Initializable {
                 res = 2;
             }
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
+            ClientTicTacToe.mainController.setDisable_Enable_ChatView(true);
             ClientTicTacToe.mainController.resetGame();
             remotePlayer= null;
             return res;
+    }
+    
+    @FXML
+    public void sendBt(){
+        String myText = chatField.getText();
+        if (myText != "" && remotePlayer != null){
+            chatField.clear();
+            Request request = new Request();
+            request.setType(Setting.MESSAGE);
+            Object[] objects = {player, remotePlayer, myText};
+            request.setObject(objects);
+            Client.sendRequest(request);
+        }
+    }
+    
+    public void selectUser(){
+        
     }
     
     

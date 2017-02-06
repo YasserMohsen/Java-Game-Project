@@ -96,7 +96,7 @@ public class Client extends Thread{
                     try {
                             
                         MainController.availableUsers.addAll(availablePlayerList);
-                        ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
+                        ClientTicTacToe.replaceSceneContent(ClientTicTacToe.main_XML, "Chat Menu");
                         ClientTicTacToe.mainController.setPlayer((User) objects[1]);
                     } catch (Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -186,9 +186,11 @@ public class Client extends Thread{
                                             request.setObject(objects);
                                             request.setType(Setting.ACCEPT_INVITATION);
                                             Client.sendRequest(request);
+                                            
                                             ClientTicTacToe.mainController.playerChar_X_OR_O = 0;
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                             ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
+                                       //     ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
 
                                         } else {
                                             //////////////logic here///////////////////////
@@ -210,13 +212,14 @@ public class Client extends Thread{
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-
+                                        
                                         ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
-
+                                     //  ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
                                     }
                                 });
+                                
                                 break;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -299,7 +302,34 @@ public class Client extends Thread{
                                     }
                                 });
                                 break;
+//////////////////////////////////////////////////////////////////////////////////////////////////                                
+                            case Setting.RECIEVE_MESSAGE:
+                                objects = (Object[]) request.getObject();
+                                User sender = (User) objects[0];
+                                String message = (String) objects[1];
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.chatArea.appendText(sender.getName() + ":\n" + message + "\n");
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_NEWS:
+                                String myNew = (String) request.getObject();
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ClientTicTacToe.mainController.news.appendText(myNew);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
                         }
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
