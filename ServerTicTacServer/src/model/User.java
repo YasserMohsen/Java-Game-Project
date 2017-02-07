@@ -18,6 +18,8 @@ public class User implements Serializable{
     String name;
     String email;
     String password;
+    long fbId;
+    String img;
   
     private int score;
 
@@ -84,6 +86,22 @@ public class User implements Serializable{
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public void setFbId(int fbId) {
+        this.fbId = fbId;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public long getFbId() {
+        return fbId;
+    }
+
+    public String getImg() {
+        return img;
     }
     
     

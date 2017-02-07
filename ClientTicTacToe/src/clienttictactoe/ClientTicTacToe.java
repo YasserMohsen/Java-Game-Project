@@ -79,7 +79,8 @@ public class ClientTicTacToe extends Application {
         else if(fxml=="offline.fxml"){
           
         }
-        else{
+
+        else if(fxml==main_XML){
             mainController = (MainController)loader.getController();
         }
             //stage.setTitle(registerController.user.getName());

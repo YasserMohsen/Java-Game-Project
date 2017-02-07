@@ -5,35 +5,37 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 
-import javafx.beans.value.ObservableValue;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
-import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 import model.FacebookApi;
 import model.Request;
 import model.User;
+import util.XCell;
 
 /**
  * FXML Controller class
@@ -49,10 +51,13 @@ public class MainController implements Initializable {
     GridPane gridPane; 
     
     @FXML
-    private TableView<User> tv_Players;
+    public ListView<User> lv_players;
     
-    @FXML
-    private TableColumn<User,String>tc_name;
+//    @FXML
+//    public TableView<User> tv_Players;
+//    
+//    @FXML
+//    private TableColumn<User,String>tc_name;
 
     @FXML
     private BorderPane bp_GameBoard;
@@ -85,6 +90,9 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+          gridPane.setPrefHeight(454.0);
+       gridPane.setPrefWidth(473.0);
+       gridPane.setGridLinesVisible(true);
         gridPane.setStyle("-fx-background-color: white;");
     OPic = new Image(getClass().getResourceAsStream("O.png"));
     XPic = new Image(getClass().getResourceAsStream("X.png"));    
@@ -108,6 +116,8 @@ public class MainController implements Initializable {
             //System.out.print("salma"+i/3); 0,0 0,1 0,2 
             //System.out.print("salmaa"+i%3);
             
+                   labels[i / 3][i % 3].setPrefSize(160, 155);
+
             gridPane.add(labels[i / 3][i % 3], i % 3, i / 3);
             labels[i / 3][i % 3].setUserData(i);
             labels[i / 3][i % 3].setOnMouseClicked(event -> {
@@ -159,11 +169,26 @@ public class MainController implements Initializable {
        // bp_GameBoard.setCenter(gridPane);
 
         // TODO
-        tv_Players.setItems(availableUsers);
-        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
-        tv_Players.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends User> observable, User oldValue, User newValue) -> {
-                if(newValue != null){
-                    remotePlayer= newValue;
+        
+        lv_players.setItems(availableUsers);        
+        lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+            @Override
+            public ListCell<User> call(ListView<User> param) {
+                return new XCell();
+            }
+        });
+        
+
+        lv_players.setOnMouseClicked((MouseEvent event) -> {
+            
+            System.out.println("clicked");
+
+            remotePlayer= lv_players.getSelectionModel().getSelectedItem();
+ 
+                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
+                        return;
+            System.out.println("not avai");
+
                     Request request = new Request();
                     request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
                     Object[] objects = {player, remotePlayer};
@@ -171,14 +196,58 @@ public class MainController implements Initializable {
                     Client.sendRequest(request);
                     bp_GameBoard.setDisable(true);
                     playerChar_X_OR_O = 1;
-                    
-                }
-        });
+            
+            
+          });
 
-//        ////////////////set which property will be render in List View/////////////////////////////////
-//        lv_availableUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+        
+//        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
+//        tv_Players.setOnMouseClicked(event -> {
+//                    remotePlayer= tv_Players.getSelectionModel().getSelectedItem();
+// 
+//                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
+//                        return;
+//
+//                    Request request = new Request();
+//                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+//                    Object[] objects = {player, remotePlayer};
+//                    request.setObject(objects);
+//                    Client.sendRequest(request);
+//                    bp_GameBoard.setDisable(true);
+//                    playerChar_X_OR_O = 1;
+//                    
+//        });
+//        tv_Players.setRowFactory( tv -> {
+//            TableRow<User> row = new TableRow<>();
+//            row.setOnMouseClicked(event -> {
+//                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+//                    User user = row.getItem();
+//                    
+//                    remotePlayer= user;
+//                    
+//                    System.out.println("user name   :: "+user.getName());
+//                    System.out.println("user status :: "+user.getStatus());
+// 
+//                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
+//                        return;
+//
+//                    Request request = new Request();
+//                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
+//                    Object[] objects = {player, remotePlayer};
+//                    request.setObject(objects);
+//                    Client.sendRequest(request);
+//                    bp_GameBoard.setDisable(true);
+//                    playerChar_X_OR_O = 1;                    
+//                }
+//            });
+//            return row ;
+//        });
+
+        ////////////////set which property will be render in List View/////////////////////////////////
+//        lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
 //            @Override
 //            public ListCell<User> call(ListView<User> lv) {
+//                ImageView imageView = new ImageView(); 
 //                return new ListCell<User>() {
 //                    @Override
 //                    public void updateItem(User user, boolean empty) {
@@ -187,7 +256,8 @@ public class MainController implements Initializable {
 //                            setText(null);
 //                        } else {
 //                            // assume MyDataType.getSomeProperty() returns a string
-//                            setText(user.getEmail());
+//                            Image image = new Image(user.getImg());
+//                            imageView.setImage(image);
 //                        }
 //                    }
 //                };
@@ -227,7 +297,7 @@ public class MainController implements Initializable {
     }
 
     public void setDisable_Enable_ListView(boolean bool) {
-        tv_Players.setDisable(bool);
+        lv_players.setDisable(bool);
     }
     public void setDisable_Enable_ChatView(boolean bool) {
         chatArea.clear();
@@ -271,39 +341,7 @@ public class MainController implements Initializable {
             if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
                 res = 1;
             } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-
-                            ClientTicTacToe.replaceSceneContent("webView.fxml", "Chat Menu");
-                            String quote = getPlayer().getName()+" won in TicTacToe Game";
-                            WebViewController.engine.load("https://www.facebook.com/dialog/feed?app_id=385244185170219"
-                                    + "&display=popup&caption=hhhhhhhhhhh"
-                                    + "&link=developers.facebook.com/docs/graph-api/"
-                                    + "&quote="+quote
-                                    + "&name=ahlan"
-                                    + "&redirect_uri=http://dolnii.com/requires/index.html"
-                                    + "&description=ahlan%20desc");
-                            WebViewController.engine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
-                                if (Worker.State.SUCCEEDED.equals(newValue)) {
-
-                                    if (WebViewController.engine.getLocation().matches("http://dolnii.com/requires/index.html(.*)")) {
-                                        try {
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.MAIN_XML, "Chat Menu");
-                                        } catch (Exception ex) {
-                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-
-                                    }
-                                }
-                            });
-                        } catch (Exception ex) {
-                            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    }
-                });
+                FacebookApi.shareMSG("quote", "http://stackoverflow.com/questions/997482/does-java-support-default-parameter-values", "name", "desc", "caption", "popup", "https://scontent-cai1-1.xx.fbcdn.net/v/t1.0-9/282864_10200182327274552_1193770825_n.jpg?oh=76c7d186e66cbd88db52240420715116&oe=59111D89");
                 res = 2;
             }
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
@@ -327,6 +365,9 @@ public class MainController implements Initializable {
     }
     
     public void selectUser(){
+        
+
+
         
     }
     

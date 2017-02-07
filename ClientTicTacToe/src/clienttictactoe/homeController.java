@@ -20,8 +20,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+import model.FacebookApi;
 import model.User;
 /**
  *
@@ -49,6 +48,11 @@ public class homeController implements Initializable{
     
     @FXML
     Button reg;
+    
+    @FXML
+    Button fbLog;
+
+    User user;
     
     public homeController(){
         try {
@@ -144,12 +148,17 @@ public class homeController implements Initializable{
             
             border.setCenter(null);
             border.setCenter(page);
-//        WebView browser = new WebView();
-//        WebEngine webEngine = browser.getEngine();
-//        webEngine.load("https://playtictactoe.org/");
         } catch (IOException ex) {
             Logger.getLogger(homeController.class.getName()).log(Level.SEVERE, null, ex);
         }
+   }
+   
+   
+   /*
+   *facebook Login
+   */
+   public void fbLogin(){
+        FacebookApi facebookApi = new FacebookApi();        
    }
     
 }

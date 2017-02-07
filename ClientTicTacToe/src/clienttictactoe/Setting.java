@@ -14,6 +14,7 @@ public class Setting {
     public static final int REG_OK = 2001;
     public static final int REG_NO = 2002;
     public static final int LOGIN = 1002;
+    public static final int FBLOG = 1003;
     public static final int LOGIN_OK = 2003;
     public static final int LOGIN_NO = 2004;   
     public static final int ADD_PLAYER_TO_AVAILABLE_LIST = 2005;
@@ -32,9 +33,13 @@ public class Setting {
     public static final int REFUSE_INVITATION = 2012;
 
     public static final int UPDATE_PLAYER_IN_PLAYER_LIST = 2013;
+    public static final int UPDATE_2PLAYER_IN_PLAYER_LIST = 2014;
     public static final int MESSAGE = 2020;
     public static final int RECIEVE_MESSAGE = 2021;
     public static final int UPDATE_NEWS = 2000;
     
+    public static final int AVAILABLE = 3001;
+    public static final int BUSY = 3002;
+    public static final int OFFLINE = 3003;
     
 }

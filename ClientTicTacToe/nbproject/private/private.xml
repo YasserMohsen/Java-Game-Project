@@ -3,18 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/login.fxml</file>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/register.fxml</file>
             <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/model/FacebookApi.java</file>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/webView.fxml</file>
+            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/model/User.java</file>
             <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/homeController.java</file>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/FXML.fxml</file>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/WebViewController.java</file>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
             <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/Client.java</file>
-            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/homepage.fxml</file>
         </group>
     </open-files>
 </project-private>
