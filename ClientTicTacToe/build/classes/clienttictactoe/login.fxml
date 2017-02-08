@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="kazafyborder" prefHeight="600.0" prefWidth="800.0" styleClass="border" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clienttictactoe.LoginController">
+   
+    <children>
+      <BorderPane layoutX="25.0" layoutY="7.0" prefHeight="600.0" prefWidth="800.0">
+         <center>
+            <GridPane prefHeight="300.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.0" minWidth="0.0" prefWidth="36.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="601.0" minWidth="0.0" prefWidth="177.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="601.0" minWidth="0.0" prefWidth="347.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="0.0" prefWidth="238.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="125.0" minHeight="50.0" prefHeight="123.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="130.0" minHeight="50.0" prefHeight="95.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="178.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="232.0" minHeight="10.0" prefHeight="208.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TextField fx:id="email" prefHeight="50.0" prefWidth="337.0" promptText="Email Address" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <PasswordField fx:id="password" prefHeight="50.0" prefWidth="35.0" promptText="Password" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+               <BorderPane prefHeight="121.0" prefWidth="557.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                     <center>
+                        <Label fx:id="errorsalma" prefHeight="34.0" prefWidth="76.0" text="salma" visible="false" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="741.0" textFill="WHITE" GridPane.columnIndex="2">
+                        <text>Welcome Back!</text>
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets top="20.0" />
+                     </GridPane.margin>
+                    </Label>
+                  <Button fx:id="login" alignment="CENTER" contentDisplay="CENTER" onAction="#loginBt" prefHeight="60.0" prefWidth="300.0" styleClass="buttonsStyle" text="LOG IN" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.rowSpan="2147483647">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets right="240.0" />
+                     </GridPane.margin></Button>
+               </children>
+            </GridPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

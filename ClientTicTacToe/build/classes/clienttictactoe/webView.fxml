@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="633.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clienttictactoe.WebViewController">
+   <children>
+      <WebView fx:id="share" layoutX="7.0" layoutY="7.0" onAccessibleTextChange="" prefHeight="623.0" prefWidth="841.0" />
+   </children>
+</AnchorPane>

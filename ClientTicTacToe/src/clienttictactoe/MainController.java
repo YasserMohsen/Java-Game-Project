@@ -60,18 +60,27 @@ public class MainController implements Initializable {
 
     @FXML
     private BorderPane bp_GameBoard;
+    
+    //ListView<String> lv_chat;
     @FXML
-    TextArea chatArea;
+    ListView<Label> chatArea;
     @FXML
     TextField chatField;
     @FXML
     TextArea news;
+
+    @FXML
+    Label turnStatus;
+
     
     @FXML
-    public ImageView profilePic;
-    
+    ImageView profilePic;
+    @FXML 
+    Label playerName, playerScore;
+
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
+    ObservableList<Label> chatInstance = FXCollections.observableArrayList();
 
     boolean playDisable = false;
     
@@ -103,10 +112,11 @@ public class MainController implements Initializable {
         
 
     OPic = new Image(getClass().getResourceAsStream("O.png"));
+
     XPic = new Image(getClass().getResourceAsStream("X.png"));
     
     //profilePic.setImage(new Image(getClass().getResourceAsStream("male.jpg")));
-//        cell1 = new Label();
+
 //        cell2 = new Label();
 //        cell3 = new Label();
 //        cell4 = new Label();
@@ -161,7 +171,7 @@ public class MainController implements Initializable {
                    
                         
                         ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
-
+                     //turnStatus.setText("Your Turn");
 ///////////////////////////////////////////////////////////////////////////////////////////////////
                     }
 //                        if (checkWins()){
@@ -170,6 +180,8 @@ public class MainController implements Initializable {
 //                        }                        
 
                     playDisable = true;
+                    turnStatus.setText(remotePlayer.getName()+"'s Turn");
+                   
                 }
             });
             
@@ -178,7 +190,7 @@ public class MainController implements Initializable {
        // bp_GameBoard.setCenter(gridPane);
 
         // TODO
-       
+        chatArea.setItems(chatInstance);
         lv_players.setItems(availableUsers);        
         lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
             @Override
@@ -318,6 +330,7 @@ public class MainController implements Initializable {
 
     public void updateCell(int[] xo) {
         playDisable = false;
+        turnStatus.setText("Your Turn");
         for (int i = 0; i < 9; i++) {
             this.xo[i] = (xo[i]);
             if (xo[i] == 1) {
@@ -345,13 +358,19 @@ public class MainController implements Initializable {
         lv_players.setDisable(bool);
     }
     public void setDisable_Enable_ChatView(boolean bool) {
-        chatArea.clear();
+        chatInstance.clear();
         chatField.clear();
         chatArea.setDisable(bool);
         chatField.setDisable(bool);
     }
     public void setMyImage(Image i){
         profilePic.setImage(i);
+    }
+    public void setMyName(String name){
+        playerName.setText(name);
+    }
+    public void setMyScore(int score){
+        playerScore.setText(score + "");
     }
     public void setPlayer(User player) {
         this.player = player;
@@ -416,7 +435,7 @@ public class MainController implements Initializable {
     @FXML
     public void sendBt(){
         String myText = chatField.getText();
-        if (myText != "" && remotePlayer != null){
+        if (myText != "" &&  remotePlayer!= null){
             chatField.clear();
             Request request = new Request();
             request.setType(Setting.MESSAGE);
@@ -426,6 +445,11 @@ public class MainController implements Initializable {
         }
     }
     
+    @FXML
+    public void changePic(){
+        
+    }
+    
     public void selectUser(){
         
 
@@ -433,6 +457,6 @@ public class MainController implements Initializable {
         
     }
     
-    
-
+  
+   
 }

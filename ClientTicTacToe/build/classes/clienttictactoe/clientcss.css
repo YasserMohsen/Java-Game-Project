@@ -1,0 +1,50 @@
+
+.selected {
+    
+  -fx-background-color: #1ab188;
+    -fx-text-fill: white;
+    -fx-border: none
+}
+#bp_GameBoard{
+    -fx-background-color: #13232f;
+}
+
+#border {
+    -fx-background-color: #13232f;
+
+}
+
+.unselected{ 
+  -fx-background-color: #a0b3b0;
+    -fx-text-fill: #ddd;
+    -fx-border: none
+   
+}
+
+.buttonsStyle{
+        -fx-background-color: #1ab188;
+}
+
+
+/*#online {
+  border-radius: 10px;
+  background: #BADA55;
+}
+#offline {
+  border-radius: 10px;
+  border: 3px solid #BADA55;
+}*/
+
+.repasserror{
+  color:red;  
+}
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 4, 2017, 5:36:47 AM
+    Author     : salma
+*/
+
