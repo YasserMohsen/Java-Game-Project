@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import javafx.application.Platform;
 
 
 import javafx.collections.FXCollections;
@@ -49,6 +51,8 @@ public class MainController implements Initializable {
     
     @FXML
     Button btnGoOffLine; 
+    
+    boolean offLineMode = false;
 //    
 //    @FXML
 //    private TableColumn<User,String>tc_name;
@@ -92,8 +96,10 @@ public class MainController implements Initializable {
     Image XPic;
     private User player;
     private User remotePlayer;
-
+    Timer timer;
     ComputerWithGui computerWithGui = new ComputerWithGui();
+    Board board = new Board();
+
     /**
      * Initializes the controller class.
      */
@@ -111,26 +117,9 @@ public class MainController implements Initializable {
 
     XPic = new Image(getClass().getResourceAsStream("X.png"));
     
-    //profilePic.setImage(new Image(getClass().getResourceAsStream("male.jpg")));
-
-//        cell2 = new Label();
-//        cell3 = new Label();
-//        cell4 = new Label();
-//        cell5 = new Label();
-//        cell6 = new Label();
-//        cell7 = new Label();
-//        cell8 = new Label();
-//        cell9 = new Label();
-
-//        cells = new Label[]{cell1, cell2, cell3,
-//            cell4, cell5, cell6,
-//            cell7, cell8, cell9};
-        //GridPane gridPane = new GridPane();
 
         for (int i = 0; i < 9; i++) {
               labels[i / 3][i % 3] = new Label();
-            //System.out.print("salma"+i/3); 0,0 0,1 0,2 
-            //System.out.print("salmaa"+i%3);
             
                    labels[i / 3][i % 3].setPrefSize(160, 155);
                    labels[i / 3][i % 3].setAlignment(Pos.CENTER);
@@ -138,17 +127,93 @@ public class MainController implements Initializable {
             labels[i / 3][i % 3].setUserData(i);
             
             labels[i / 3][i % 3].setOnMouseClicked(event -> {
-//                if (isFinish) {
-//                    return;
-//                }
-           // buttons[i / 3][i % 3].setOnAction((ActionEvent event) -> {
+                
+                if(offLineMode){
+                    
 
+                int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
+                ///  click in an empty position 
+                if (xo[position] == -1) {
+                    counter++;
+                    
+                    if (!playDisable) {
+                        xo[position] = playerChar_X_OR_O;
+                        for (int j = 0; j <9; j++) {
+                            System.out.println("xo :"+xo[j]);
+                        }
+                        
+                        board.placeAMove(new Point(position / 3, position % 3), 2);
+                        
+                        board.displayBoard();/// print to console
+                        ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
+
+                        int next = board.returnNextMove();
+                        System.out.println(" next move ::: "+next);
+                        if (next != -1) {   //If the game isn't finished yet!   
+                            int indexCell = next;
+                            xo[indexCell] = 1;
+
+                            Timer timer = new Timer();
+                            timer.schedule(
+                                    new java.util.TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if(offLineMode){
+                                                        System.out.println("go to next move runLater ");
+                                                        labels[indexCell/3][indexCell%3].setGraphic(new ImageView(XPic));
+    //                                                    ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
+                                                        playDisable = false;
+                                                        turnStatus.setText("your Turn");
+                                                    }
+                                                }
+
+                                            });
+
+                                        }
+                                    },
+                                    1500
+                            );
+
+                            board.placeAMove(new Point(indexCell / 3, indexCell % 3), 1);
+
+                        playDisable = true;
+                        turnStatus.setText("computer's Turn");
+                                                                  
+                        }
+                        
+                        if (board.isGameOver()) {
+                        
+                            if (board.hasXWon()) {
+                                showDialog(Setting.LOSE_MSG);
+                            }else {
+                                showDialog(Setting.DRAW_MSG);
+                              }
+                            
+                            resetGame();
+                            board.resetBoard();
+                           
+                        }
+
+                   
+                }
+                    
+                
+                }
+                    return;
+                
+                }
+                
+                
+                
                 if (remotePlayer == null) {
                     showDialog("please select player first");
                     return;
                     }
 
-                int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
+                 int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
                 if (xo[position] == -1) {
                     counter++;
@@ -170,16 +235,11 @@ public class MainController implements Initializable {
                    
                         
                         ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
-                     //turnStatus.setText("Your Turn");
-///////////////////////////////////////////////////////////////////////////////////////////////////
                     }
-//                        if (checkWins()){
-//                            isFinish=true;
-//                            System.out.println(" plyer number "+((playDisable)?" 1 ":" 2 ") +" win");
-//                        }                        
 
                    
                 }
+                
             });
             
         }
@@ -216,90 +276,17 @@ public class MainController implements Initializable {
             
             
           });
-        
        
-//        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
-//        tv_Players.setOnMouseClicked(event -> {
-//                    remotePlayer= tv_Players.getSelectionModel().getSelectedItem();
-// 
-//                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
-//                        return;
-//
-//                    Request request = new Request();
-//                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
-//                    Object[] objects = {player, remotePlayer};
-//                    request.setObject(objects);
-//                    Client.sendRequest(request);
-//                    bp_GameBoard.setDisable(true);
-//                    playerChar_X_OR_O = 1;
-//                    
-//        });
-//        tv_Players.setRowFactory( tv -> {
-//            TableRow<User> row = new TableRow<>();
-//            row.setOnMouseClicked(event -> {
-//                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-//                    User user = row.getItem();
-//                    
-//                    remotePlayer= user;
-//                    
-//                    System.out.println("user name   :: "+user.getName());
-//                    System.out.println("user status :: "+user.getStatus());
-// 
-//                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
-//                        return;
-//
-//                    Request request = new Request();
-//                    request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
-//                    Object[] objects = {player, remotePlayer};
-//                    request.setObject(objects);
-//                    Client.sendRequest(request);
-//                    bp_GameBoard.setDisable(true);
-//                    playerChar_X_OR_O = 1;                    
-//                }
-//            });
-//            return row ;
-//        });
-
-        
-        ////////////////set which property will be render in List View/////////////////////////////////
-//        lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
-//            @Override
-//            public ListCell<User> call(ListView<User> lv) {
-//                ImageView imageView = new ImageView(); 
-//                return new ListCell<User>() {
-//                    @Override
-//                    public void updateItem(User user, boolean empty) {
-//                        super.updateItem(user, empty);
-//                        if (user == null) {
-//                            setText(null);
-//                        } else {
-//                            // assume MyDataType.getSomeProperty() returns a string
-//                            Image image = new Image(user.getImg());
-//                            imageView.setImage(image);
-//                        }
-//                    }
-//                };
-//            }
-//        });
     }
 
-                     
-
-//         if(playerChar_X_OR_O == 0){
-//                           ((Label) event.getSource()).setGraphic(new ImageView(OPic)); 
-//                        }
-//                        else{
-//                            ((Label) event.getSource()).setGraphic(new ImageView(XPic)); 
-//                        }
-
-    
-    
-//////////////////////////////////////////////////////////////////////////////////////////////
-    
+                         
     public void playOff() {
      
-        
-        new ComputerWithGui().start(ClientTicTacToe.getStage());
+        offLineMode = !offLineMode;
+        resetGame();
+        btnGoOffLine.setText((offLineMode)?"GO ONLINE":"GO OFFLINE");
+        if (timer != null)
+            timer.cancel();
     }   
     
     public void btnActionChangeStatus(){
@@ -386,6 +373,7 @@ public class MainController implements Initializable {
             labels[i / 3][i % 3].setGraphic(null);
             
         }
+        board.resetBoard();
     }
 
     int showWinDialog(String m) {
