@@ -38,4 +38,6 @@ public class Setting {
     public static final int MESSAGE = 2020;
     public static final int RECIEVE_MESSAGE = 2021;
     public static final int UPDATE_NEWS = 2000;
+    
+    public static final String DEFAULT_IMAGE = "male.jpg";
 }

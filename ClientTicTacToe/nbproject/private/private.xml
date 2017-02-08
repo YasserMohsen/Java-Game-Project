@@ -5,13 +5,19 @@
         <group>
             <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/model/MyImage.java</file>
             <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/util/XCell.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/homeController.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/FXML.fxml</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/LoginController.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/register.fxml</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/RegisterController.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ComputerWithGui.java</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/OfflineController.java</file>
             <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/model/User.java</file>
             <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ConfirmDialoge.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/FXML.fxml</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/FXML.css</file>
+            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Setting.java</file>
             <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
             <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Client.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ComputerWithGui.java</file>
         </group>
     </open-files>
 </project-private>

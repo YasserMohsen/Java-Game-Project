@@ -61,18 +61,22 @@ public class MainController implements Initializable {
 
     @FXML
     private BorderPane bp_GameBoard;
+    
+    //ListView<String> lv_chat;
     @FXML
-    TextArea chatArea;
+    ListView<Label> chatArea;
     @FXML
     TextField chatField;
     @FXML
     TextArea news;
     
     @FXML
-    public ImageView profilePic;
-    
+    ImageView profilePic;
+    @FXML 
+    Label playerName, playerScore;
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
+    ObservableList<Label> chatInstance = FXCollections.observableArrayList();
 
     private boolean playDisable = false;
     private Label[][] labels = new Label[3][3];
@@ -175,7 +179,7 @@ public class MainController implements Initializable {
        // bp_GameBoard.setCenter(gridPane);
 
         // TODO
-        
+        chatArea.setItems(chatInstance);
         lv_players.setItems(availableUsers);        
         lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
             @Override
@@ -304,13 +308,19 @@ public class MainController implements Initializable {
         lv_players.setDisable(bool);
     }
     public void setDisable_Enable_ChatView(boolean bool) {
-        chatArea.clear();
+        chatInstance.clear();
         chatField.clear();
         chatArea.setDisable(bool);
         chatField.setDisable(bool);
     }
     public void setMyImage(Image i){
         profilePic.setImage(i);
+    }
+    public void setMyName(String name){
+        playerName.setText(name);
+    }
+    public void setMyScore(int score){
+        playerScore.setText(score + "");
     }
     public void setPlayer(User player) {
         this.player = player;
@@ -401,6 +411,11 @@ public class MainController implements Initializable {
             request.setObject(objects);
             Client.sendRequest(request);
         }
+    }
+    
+    @FXML
+    public void changePic(){
+        
     }
     
     public void selectUser(){

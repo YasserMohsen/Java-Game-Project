@@ -136,7 +136,7 @@ class GameHandler extends Thread {
                             this.ous.writeObject(request);
                             this.ous.flush();
                             this.ous.reset();
-
+                            
                             UserController.saveScore(senderPlayer);
                             
                             request.setObject(senderPlayer);

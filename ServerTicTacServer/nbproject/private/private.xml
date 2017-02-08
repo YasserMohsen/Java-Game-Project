@@ -4,11 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/control/DBConnection.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/model/Request.java</file>
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/model/MyImage.java</file>
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/control/UserController.java</file>
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/model/User.java</file>
-            <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/nbproject/jfx-impl.xml</file>
+            <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/servertictacserver/Setting.java</file>
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/servertictacserver/GameHandler.java</file>
         </group>
     </open-files>
