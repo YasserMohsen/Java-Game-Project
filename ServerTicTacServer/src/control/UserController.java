@@ -46,6 +46,7 @@ public class UserController {
             {
                 id =rs.getInt(1);
                 user.setId(id);
+
 //              user.setScore(rs.getInt(5));
                 user.setImgLink(Setting.DEFAULT_IMAGE);
                 
@@ -102,6 +103,53 @@ public class UserController {
         } catch (SQLException ex) {
             int error = ex.getErrorCode();
             System.out.println("error in login code number :" + error);
+            
+        }
+        return user;
+        
+    }
+    
+    /*
+    *facebook login
+    */
+    public static User fbLogin(User user){
+        int id = 0;
+        String name = "";
+        try {
+            Connection con = DBConnection.openConnection();
+            System.out.println("Connected for login");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM user WHERE fb_id=?;");
+            stmt.setLong(1, user.getFbId());
+            ResultSet rs = stmt.executeQuery();
+            //con.close();
+            if (rs.next()){
+                id =rs.getInt(1);
+                user.setId(id);
+                name = rs.getString(2);
+                user.setName(name);
+            }
+            else{
+                System.out.println("i need to insert " );
+                stmt = con.prepareStatement("INSERT INTO user (name,email,password,score,fb_id,img) VALUES(?,?,?,0,?,?);", Statement.RETURN_GENERATED_KEYS);
+                stmt.setString(1, user.getName());
+                stmt.setString(2, user.getEmail());
+                stmt.setLong(3, user.getFbId());
+                stmt.setLong(4, user.getFbId());
+                stmt.setString(5, user.getImg());
+                stmt.executeUpdate();
+                rs = stmt.getGeneratedKeys();
+                if(rs.next())
+                {
+                    id =rs.getInt(1);
+                    user.setId(id);
+                }
+                
+            }
+            con.close();
+        } catch (SQLException ex) {
+            ex.getSQLState();
+            int error = ex.getErrorCode();
+            System.out.println("error in login code number :" +  ex.getSQLState()+ex.getMessage());
             
         }
         return user;

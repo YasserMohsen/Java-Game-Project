@@ -19,6 +19,9 @@ public class User implements Serializable{
     String name;
     String password;
     int score;
+    long fbId;
+    String img;
+    
     MyImage serializedImg;
     String imgLink;
     /*
@@ -46,6 +49,17 @@ public class User implements Serializable{
         this.password = password;
         this.name = "";
         this.score = 0;
+    }
+    
+    /*
+    *constructor for Facebook Login
+    */
+    public User(long fbId,String name, String email,String img) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.fbId = fbId;
+        this.img = img;
     }
     
     public int getId() {
@@ -95,6 +109,23 @@ public class User implements Serializable{
     public void setStatus(int status) {
         this.status = status;
     }
+
+    public long getFbId() {
+        return fbId;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setFbId(int fbId) {
+        this.fbId = fbId;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+    
 
     @Override
     public String toString() {

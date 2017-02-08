@@ -36,9 +36,18 @@ class GameHandler extends Thread {
             ois = new ObjectInputStream(cs.getInputStream());
             try {
                 Request request = (Request) ois.readObject();
-                if (request.getType() == Setting.REG || request.getType() == Setting.LOGIN){
+                if (request.getType() == Setting.REG || request.getType() == Setting.LOGIN || request.getType() == Setting.FBLOG ){
                     user = (User) request.getObject();
-                    user = (request.getType()==Setting.LOGIN)?UserController.login(user):UserController.register(user);
+                    if (request.getType()==Setting.LOGIN) {
+                        user = UserController.login(user);
+                    }
+                    else if(request.getType()==Setting.REG){
+                        user = UserController.register(user);
+                    }
+                    else if(request.getType()==Setting.FBLOG){
+                        user = UserController.fbLogin(user);
+                    }
+                    
                     if(user.getId() != 0){
                         clientsVector.add(this);
                         // if register or login is ok send list off available players to client                                
@@ -66,6 +75,7 @@ class GameHandler extends Thread {
 
                         // error in registration or login >> send to client error message
                         if(request.getType()== Setting.REG){
+                            
                         request.setType(Setting.REG_NO);                                    
                         request.setObject("email already exist");
                         }
@@ -110,19 +120,22 @@ class GameHandler extends Thread {
                         System.out.println("s id "+senderPlayer.getId());
                         System.out.println("r id "+receiverPlayer.getId());
                         int []xo =  (int[]) objects[2];
-
+                        boolean win  = false;
+                        boolean draw = false;
                         
-                        System.out.println("xo " + xo.length);
-
+                        if(checkWins(xo)){
+                            win = true;
+                        }else if(checkDraw(xo)){
+                            draw = true;
+                        }
                         
-                        if (checkWins(xo)) {
+                        if (win || draw) {
 
                             for (GameHandler ch : clientsVector) {
                                 if (ch.user.getId() == senderPlayer.getId() || ch.user.getId() == receiverPlayer.getId()) {
                                     ch.user.setStatus(Setting.AVAILABLE);
-
                                     if (ch.user.getId() == receiverPlayer.getId()) {
-                                        request.setType(Setting.LOSER);
+                                        request.setType((win)?Setting.LOSER:Setting.DRAW);
                                         request.setObject(xo);
                                         ch.ous.writeObject(request);
                                         ch.ous.flush();
@@ -131,12 +144,13 @@ class GameHandler extends Thread {
 
                                 }
                             }
-                            System.out.println("win");
-                            request.setType(Setting.WINNER);
+                            request.setType((win)?Setting.WINNER:Setting.DRAW);
                             this.ous.writeObject(request);
                             this.ous.flush();
                             this.ous.reset();
-                            
+
+                            senderPlayer.setScore((win)?senderPlayer.getScore()+Setting.POINTS:senderPlayer.getScore());
+
                             UserController.saveScore(senderPlayer);
                             
                             request.setObject(senderPlayer);
@@ -157,14 +171,21 @@ class GameHandler extends Thread {
                             //////////////////////////////////////////////
                             //update news field
                             request.setType(Setting.UPDATE_NEWS);
-                            request.setObject("**" + senderPlayer.getName() + " WINS " + receiverPlayer.getName() + "\n ================= \n");
+                            if(win)
+                                request.setObject("**" + senderPlayer.getName() + " WINS " + receiverPlayer.getName() + "\n ================= \n");
+                            else
+                                request.setObject("**" + senderPlayer.getName() + " draw " + receiverPlayer.getName()+"\n ================= \n");
                             brodCastAll(request);
-                        } else {
+                        } else if(checkDraw(xo)){
+                            
+                            // draw
+                            }
+                        else{
                             
                             request.setType(Setting.MOVEBACK);
                             request.setObject(xo);
 
-                            for (GameHandler ch : clientsVector) {
+                                for (GameHandler ch : clientsVector) {
                                    if (ch.user.getId() == receiverPlayer.getId()) {
                                         ch.ous.writeObject(request);
                                         ch.ous.flush();
@@ -223,17 +244,20 @@ class GameHandler extends Thread {
                             for (GameHandler ch : clientsVector) {
                                 if(ch.user.getId() == receiverPlayer.getId())
                                 {
+                                    ch.user.setStatus(Setting.BUSY); /// update player status in vector
                                     request.setType(Setting.ACCEPT_INVITATION);
                                     ch.ous.writeObject(request);
                                     ch.ous.flush();
                                     ch.ous.reset();                            
-                                }         
+                                }else if(ch.user.getId() == senderPlayer.getId()){
+                                    ch.user.setStatus(Setting.BUSY); /// update player status in vector
+                                }       
                             }
                             ((User) objects[1]).setStatus(Setting.BUSY);
                             ((User) objects[0]).setStatus(Setting.BUSY);
                             
-                            System.out.println("Busy ::" +((User) objects[0]).getStatus());
-                            System.out.println("Busy ::" +((User) objects[1]).getStatus());
+                          //  System.out.println("Busy ::" +((User) objects[0]).getStatus());
+                           // System.out.println("Busy ::" +((User) objects[1]).getStatus());
                             request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
                             brodCastAll(request);
                             
@@ -256,6 +280,16 @@ class GameHandler extends Thread {
                                     ch.ous.writeObject(request);
                                 }         
                             }
+                            break;
+                            
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATEPLAYER:
+                            senderPlayer = (User) request.getObject();
+                            this.user.setStatus(senderPlayer.getStatus());
+                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
+                            brodCast(request);
                             break;
                             
 
@@ -321,5 +355,15 @@ class GameHandler extends Thread {
                 || (x[3] == x[4] && x[3] == x[5] && x[3] != -1)
                 );
     }
-
+    private boolean checkDraw(int []x){
+        boolean draw =true;
+        for (int i=0;i<x.length;i++)
+        {
+            if (x[i]==-1)
+                draw=false;
+        }
+    
+        return draw;
+    }
+    
 }

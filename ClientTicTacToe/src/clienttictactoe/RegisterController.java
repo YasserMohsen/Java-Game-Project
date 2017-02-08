@@ -11,9 +11,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import model.FacebookApi;
 import model.User;
 
@@ -24,16 +27,22 @@ import model.User;
 public class RegisterController implements Initializable {
     
     User user ;
-    
+   // String s="sss";
     @FXML
-    public Label error, errorText;
+    public GridPane reggrid; 
     @FXML
-    public TextField name,email,password;
+    public Label errorText,nameerror, mailerror,passerror,repasserror;
+    @FXML
+    public TextField name,email;
+    @FXML
+    public PasswordField password,repassword;
     @FXML
     public Label errorsalma;
     @FXML
     public void btnActionSignUp(){
+       //System.out.print("emo"+email.getText());
         user = new User(name.getText(),email.getText(),password.getText());
+            
         //create a new client and send the first request (register) in its constructor
         Client c = new Client(user , Setting.REG);
     }
@@ -46,27 +55,7 @@ public class RegisterController implements Initializable {
         }
     
     }
-//    @FXML
-//    public void fbLogin(){
-//       
-//    }
-//    
-//    @FXML
-//    public void fbReg(){
-    
-    
-//    @FXML
-//    public void fbReg(){
-//        FacebookApi facebookApi = new FacebookApi();
-//        
-//    }
-//    
-//    @FXML
-//    public void fbLogin(){
-//        FacebookApi facebookApi = new FacebookApi();
-//        
-//    }
-//    
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    

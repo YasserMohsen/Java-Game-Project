@@ -5,7 +5,6 @@
  */
 package clienttictactoe;
 
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+
 /**
  *
  * @author walid
@@ -39,7 +42,7 @@ public class ComputerWithGui extends Application {
     Board board = new Board();
     Turn boardTurn = new Turn();
     GridPane grid;
-    Label   cell1, cell2, cell3,
+    Label cell1, cell2, cell3,
             cell4, cell5, cell6,
             cell7, cell8, cell9;
     Label[] cells;
@@ -119,31 +122,42 @@ public class ComputerWithGui extends Application {
                             index = i;
                         }
                     }
-                    
+
                     board.placeAMove(new Point(index / 3, index % 3), 2);
-                    
+
                     board.displayBoard();
-                    
-                    
+
                     System.out.println("Placed a move at: (" + index / 3 + ", " + index % 3 + ")");
                     boolean mark = true;
                     int next = board.returnNextMove();
-                       cell.setUserData(mark);
-                    
-                        if (next != -1) {   //If the game isn't finished yet!   
-                          
-                            int indexCell = next;
-                        
-                            cells[indexCell].setGraphic(new ImageView(OPic));
-                            cells[indexCell].setUserData(mark); //Used!
+                    cell.setUserData(mark);
+                    if (next != -1) {   //If the game isn't finished yet!   
+                        int indexCell = next;
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        Platform.runLater(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                cells[indexCell].setGraphic(new ImageView(OPic));
+                                            }
 
-                            System.out.println("Computer has evaluated the next move! " + indexCell);
-                            board.placeAMove(new Point(indexCell / 3, indexCell % 3), 1);
-                            System.out.println("clienttictactoe.ComputerWithGui.start()");
-                 
-                            cell.setUserData(mark);
-                            System.out.println("clienttictactoe.ComputerWithGui.start()");
-                        }
+                                        });
+
+                                    }
+                                },
+                                1500
+                        );
+
+                        cells[indexCell].setUserData(mark); //Used!
+                        System.out.println("Computer has evaluated the next move! " + indexCell);
+                        board.placeAMove(new Point(indexCell / 3, indexCell % 3), 1);
+                        System.out.println("clienttictactoe.ComputerWithGui.start()");
+
+                        cell.setUserData(mark);
+                        System.out.println("clienttictactoe.ComputerWithGui.start()");
+                    }
 
                     if (board.isGameOver()) {
                         Stage stage2 = new Stage();
@@ -194,21 +208,12 @@ public class ComputerWithGui extends Application {
 
         //FirstWindow Action Listeners
         IWillPlay.setOnMouseClicked((event) -> {
-           
+
             boardTurn.next = Turn.NextMove.X;
             stage.close();
         });
 
         YouPlay.setOnMouseClicked((event) -> {
-            //stage.wait(1000);
-                            System.out.println("try to sleeeeeeeeeeeep");
-
-            try{
-            //Thread.sleep(1500);
-                System.out.println("sleeeeeeeeeeeep");
-            }catch(Exception e){
-                System.out.println("sleep exception");
-            }
             int index = new Random().nextInt(9);
             cells[index].setGraphic(new ImageView(OPic));
             cells[index].setUserData(new Boolean(true));
@@ -230,10 +235,6 @@ public class ComputerWithGui extends Application {
     }
 
 }
-
-
-
-
 
 class Point {
 
@@ -262,7 +263,7 @@ class PointAndScore {
 }
 
 class Board {
- 
+
     List<Point> availablePoints;
     Scanner scan = new Scanner(System.in);
     int[][] board = new int[3][3];
@@ -320,14 +321,14 @@ class Board {
 
     public void placeAMove(Point point, int player) {
         board[point.x][point.y] = player;   //player = 1 for X, 2 for O
-    } 
-    
+    }
+
     void takeHumanInput() {
         System.out.println("Your move: ");
         int x = scan.nextInt();
         int y = scan.nextInt();
         Point point = new Point(x, y);
-        placeAMove(point, 2); 
+        placeAMove(point, 2);
     }
 
     public void displayBoard() {
@@ -340,57 +341,83 @@ class Board {
             System.out.println();
 
         }
-    } 
-    
-    Point computersMove; 
-    
-    public int minimax(int depth, int turn) {  
-        
-        if (hasXWon()) return +1; 
-        if (hasOWon()) return -1;
+    }
+
+    Point computersMove;
+
+    public int minimax(int depth, int turn) {
+
+        if (hasXWon()) {
+            return +1;
+        }
+        if (hasOWon()) {
+            return -1;
+        }
 
         List<Point> pointsAvailable = getAvailableStates();
-        if (pointsAvailable.isEmpty()) return 0; 
- 
+        if (pointsAvailable.isEmpty()) {
+            return 0;
+        }
+
         int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
-         
-        for (int i = 0; i < pointsAvailable.size(); ++i) {  
-            Point point = pointsAvailable.get(i);   
-            
-            if (turn == 1) { 
-                
-                placeAMove(point, 1); 
+
+        for (int i = 0; i < pointsAvailable.size(); ++i) {
+            Point point = pointsAvailable.get(i);
+
+            if (turn == 1) {
+
+                placeAMove(point, 1);
                 int currentScore = minimax(depth + 1, 2);
                 max = Math.max(currentScore, max);
-                
-                if(depth == 0)System.out.println("Score for position "+(i+1)+" = "+currentScore);
-                if(currentScore >= 0){ if(depth == 0) computersMove = point;} 
-                if(currentScore == 1){board[point.x][point.y] = 0; break;} 
-                if(i == pointsAvailable.size()-1 && max < 0){if(depth == 0)computersMove = point;}
+
+                if (depth == 0) {
+                    System.out.println("Score for position " + (i + 1) + " = " + currentScore);
+                }
+                if (currentScore >= 0) {
+                    if (depth == 0) {
+                        computersMove = point;
+                    }
+                }
+                if (currentScore == 1) {
+                    board[point.x][point.y] = 0;
+                    break;
+                }
+                if (i == pointsAvailable.size() - 1 && max < 0) {
+                    if (depth == 0) {
+                        computersMove = point;
+                    }
+                }
             } else if (turn == 2) {
-                
-                placeAMove(point, 2); 
+
+                placeAMove(point, 2);
                 int currentScore = minimax(depth + 1, 1);
-                min = Math.min(currentScore, min); 
-                if(min == -1){board[point.x][point.y] = 0; break;}
+                min = Math.min(currentScore, min);
+                if (min == -1) {
+                    board[point.x][point.y] = 0;
+                    break;
+                }
             }
             board[point.x][point.y] = 0; //Reset this point
-        } 
-        return turn == 1?max:min;
-    }  
-    
+        }
+        return turn == 1 ? max : min;
+    }
+
     //Functions for GUI
     public int returnNextMove() {
-        
-        if (isGameOver()) return -1;
-        
-        minimax(0, 1); 
+
+        if (isGameOver()) {
+            return -1;
+        }
+
+        minimax(0, 1);
         return computersMove.x * 3 + computersMove.y;
     }
 
-    public void resetBoard(){
-        for(int i = 0;i<3;++i)
-            for(int j=0;j<3;++j)
+    public void resetBoard() {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
                 board[i][j] = 0;
+            }
+        }
     }
 }

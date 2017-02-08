@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package clienttictactoe;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,20 +15,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label ; 
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import model.FacebookApi;
-import model.User;
 /**
  *
  * @author salma
  */
-public class homeController implements Initializable{
-    
+public class HomeController implements Initializable{
+    public  LoginController loginController;
+    public RegisterController registerController;
     @FXML
     BorderPane border;
     
@@ -49,12 +46,7 @@ public class homeController implements Initializable{
     @FXML
     Button reg;
     
-    @FXML
-    Button fbLog;
-
-    User user;
-    
-    public homeController(){
+    public HomeController(){
         try {
             
            // ClientTicTacToe.replaceSceneContent("homepage.fxml", "homepage");
@@ -62,11 +54,20 @@ public class homeController implements Initializable{
             
             
         } catch (Exception ex) {
-            Logger.getLogger(homeController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+               
+        try {
+            FXMLLoader loader = new FXMLLoader(HomeController.class.getResource("register.fxml"));
+            Parent root = loader.load();
+            registerController = (RegisterController)loader.getController();
+        } catch (IOException ex) {
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
        // hover();
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -99,14 +100,14 @@ public class homeController implements Initializable{
             
             try {
             
-            FXMLLoader loader = new FXMLLoader(homeController.class.getResource("register.fxml"));
+            FXMLLoader loader = new FXMLLoader(HomeController.class.getResource("register.fxml"));
             Parent page = loader.load();
-            
+            registerController = (RegisterController)loader.getController();
             border.setCenter(null);
             border.setCenter(page);
             //ClientTicTacToe.replaceSceneContent("login.fxml", "login");
         } catch (IOException ex) {
-            Logger.getLogger(homeController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
 }
    public void loginBtn(){
@@ -120,14 +121,15 @@ public class homeController implements Initializable{
             off.getStyleClass().removeAll("unselected","selected");
             off.getStyleClass().add("unselected");
             
-            FXMLLoader loader = new FXMLLoader(homeController.class.getResource("login.fxml"));
+            FXMLLoader loader = new FXMLLoader(HomeController.class.getResource("login.fxml"));
             Parent page = loader.load();
+            loginController = (LoginController)loader.getController();
             
             border.setCenter(null);
             border.setCenter(page);
             //ClientTicTacToe.replaceSceneContent("login.fxml", "login");
         } catch (IOException ex) {
-            Logger.getLogger(homeController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
    
    }
@@ -136,20 +138,33 @@ public class homeController implements Initializable{
             
             off.getStyleClass().removeAll("unselected","selected");
             off.getStyleClass().add("selected");
+            
             log.getStyleClass().removeAll("unselected","selected");
             log.getStyleClass().add("unselected");
+            
             reg.getStyleClass().removeAll("unselected","selected");
             reg.getStyleClass().add("unselected");
-            FXMLLoader loader = new FXMLLoader(homeController.class.getResource("login.fxml"));
+            
+            FXMLLoader loader = new FXMLLoader(HomeController.class.getResource("login.fxml"));
             Parent page = loader.load();
+            
             border.setCenter(null);
             border.setCenter(page);
+//        WebView browser = new WebView();
+//        WebEngine webEngine = browser.getEngine();
+//        webEngine.load("https://playtictactoe.org/");
         } catch (IOException ex) {
-            Logger.getLogger(homeController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
    }
    
-   
+      /*
+   *facebook Login
+   */
+   public void fbLogin(){
+        FacebookApi facebookApi = new FacebookApi();        
+   }
+
     
 }
 

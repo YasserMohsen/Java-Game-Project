@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/control/DBConnection.java</file>
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/model/MyImage.java</file>
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/control/UserController.java</file>
@@ -10,5 +11,10 @@
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/servertictacserver/Setting.java</file>
             <file>file:/home/yasser/Java-Game-Project/ServerTicTacServer/src/servertictacserver/GameHandler.java</file>
         </group>
+=======
+            <file>file:/home/salma/Documents/iti/java/Java-Game-Project/ServerTicTacServer/src/control/DBConnection.java</file>
+            <file>file:/home/salma/Documents/iti/java/Java-Game-Project/ServerTicTacServer/src/servertictacserver/GameHandler.java</file>
+
+>>>>>>> 4fba787f2647bf921f088c379d77157717838905
     </open-files>
 </project-private>
