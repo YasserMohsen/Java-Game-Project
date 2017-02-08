@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -38,8 +39,9 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="LOGOUT" GridPane.halignment="CENTER" />
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="GO OFFLINE" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+
+                  <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="LOGOUT" GridPane.halignment="CENTER" />
+                  <Button fx:id="btnGoOffLine" mnemonicParsing="false" onAction="#playOff"  prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="GO OFFLINE" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                </children>
             </GridPane>
             <GridPane fx:id="gridPane" gridLinesVisible="true" prefHeight="454.0" prefWidth="473.0">
@@ -59,6 +61,7 @@
             <Pane prefHeight="88.0" prefWidth="157.0">
                <children>
                   <Label layoutX="9.0" layoutY="44.0" prefHeight="28.0" prefWidth="78.0" />
+                  <ImageView fx:id="profilePic" fitHeight="94.0" fitWidth="113.0" layoutX="9.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </Pane>
             <TextArea fx:id="chatArea" editable="false" prefHeight="455.0" prefWidth="233.0" />

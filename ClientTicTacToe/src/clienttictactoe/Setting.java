@@ -14,6 +14,7 @@ public class Setting {
     public static final int REG_OK = 2001;
     public static final int REG_NO = 2002;
     public static final int LOGIN = 1002;
+    public static final int FBLOG = 1003;
     public static final int LOGIN_OK = 2003;
     public static final int LOGIN_NO = 2004;   
     public static final int ADD_PLAYER_TO_AVAILABLE_LIST = 2005;
@@ -25,14 +26,22 @@ public class Setting {
 
     public static final int WINNER = 2011;
     public static final int LOSER = 2009;
+    public static final int DRAW = 2017;
+
     public static final String WIN_MSG = "ksebt ya m3allem :D";
     public static final String LOSE_MSG = "7azz sa3eed el marra el kadema :(";
+    public static final String DRAW_MSG = "draw ya m3allem :D";
+    
+    public static final String GOOFLINE = "go online";
+    public static final String GOONLINE = "go offline";
 
     public static final int ACCEPT_INVITATION = 2008;
     public static final int REFUSE_INVITATION = 2012;
 
     public static final int UPDATE_PLAYER_IN_PLAYER_LIST = 2013;
     public static final int UPDATE_2PLAYER_IN_PLAYER_LIST = 2014;
+    public static final int UPDATEPLAYER = 2015;
+
     public static final int MESSAGE = 2020;
     public static final int RECIEVE_MESSAGE = 2021;
     public static final int UPDATE_NEWS = 2000;

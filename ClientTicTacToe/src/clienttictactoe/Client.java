@@ -4,11 +4,6 @@
  * and open the template in the editor.
  */
 package clienttictactoe;
-
-//import com.restfb.DefaultFacebookClient;
-//import com.restfb.FacebookClient;
-//import com.restfb.Parameter;
-//import com.restfb.types.FacebookType;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,10 +20,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import static javafx.scene.paint.Color.color;
+import model.MyImage;
 import model.Request;
 import model.User;
-//import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  *
@@ -111,12 +105,16 @@ public class Client extends Thread {
                 //    if(flag){
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
+                User player = (User) objects[1];
                 Platform.runLater(() -> {
                     try {
 
                         MainController.availableUsers.addAll(availablePlayerList);
                         ClientTicTacToe.replaceSceneContent(ClientTicTacToe.main_XML, "Chat Menu");
-                        ClientTicTacToe.mainController.setPlayer((User) objects[1]);
+                        ClientTicTacToe.mainController.setPlayer(player);
+                        
+                        MyImage s = player.getSerializedImg();
+                        //ClientTicTacToe.mainController.setMyImage(s.getImage());
                     } catch (Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -233,22 +231,23 @@ public class Client extends Thread {
                         break;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.ACCEPT_INVITATION:
-                        System.out.println("ACCEPT_INVITATION Client");
-                        objects = (Object[]) request.getObject();
-                        remotePlayer = (User) objects[1];
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
-                                ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
-                                ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
-                                //  ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
-                            }
-                        });
-
-                        break;
+                            case Setting.ACCEPT_INVITATION:
+                                System.out.println("ACCEPT_INVITATION Client");
+                                objects = (Object[]) request.getObject();
+                                remotePlayer = (User) objects[1];
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        
+                                        ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
+                                        ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                        ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
+                                     //  ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                        ClientTicTacToe.mainController.playDisable = true;
+                                    }
+                                });
+                                
+                                break;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     case Setting.REFUSE_INVITATION:
@@ -315,48 +314,72 @@ public class Client extends Thread {
                         break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.UPDATE_PLAYER_IN_PLAYER_LIST:
-                        user = (User) request.getObject();
-                        Platform.runLater(new Runnable() {
-                            public void run() {
-                                try {
-                                    for (User u : MainController.availableUsers) {
-                                        if (u.getId() == user.getId()) {
-                                            u = user;
+
+                            case Setting.DRAW:
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            int result = ClientTicTacToe.mainController.showWinDialog(Setting.DRAW_MSG);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.UPDATE_PLAYER_IN_PLAYER_LIST:
+                                user = (User) request.getObject();
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            for (User u : ClientTicTacToe.mainController.availableUsers) {
+                                                if(u.getId() == user.getId())
+                                                    u.setStatus(user.getStatus());
+                                                    u.setScore(user.getScore());                                            
+                                            }
+                                            ClientTicTacToe.mainController.lv_players.refresh();
+                                            
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                                         }
                                     }
 
-                                } catch (Exception ex) {
-                                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-
-                            }
                         });
                         break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.UPDATE_2PLAYER_IN_PLAYER_LIST:
-                        objects = (Object[]) request.getObject();
-                        User player1 = (User) objects[0];
-                        User player2 = (User) objects[1];
-                        Platform.runLater(new Runnable() {
-                            public void run() {
-                                try {
-                                    for (User u : ClientTicTacToe.mainController.availableUsers) {
-                                        if (u.getId() == player1.getId()) {
-                                            u.setStatus(player1.getStatus());
-                                            u.setScore(player1.getScore());
-                                        } else if (u.getId() == player2.getId()) {
-                                            u.setStatus(player2.getStatus());
-                                            u.setScore(player2.getScore());
+                            case Setting.UPDATE_2PLAYER_IN_PLAYER_LIST:
+                                objects = (Object[]) request.getObject();
+                                User player1 = (User) objects[0];
+                                User player2 = (User) objects[1];
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            for (User u : ClientTicTacToe.mainController.availableUsers) {
+                                                if(u.getId() == player1.getId()){
+                                                    u.setStatus(player1.getStatus());
+                                                    u.setScore(player1.getScore());
+                                                }
+                                                else if (u.getId() == player2.getId()){
+                                                    u.setStatus(player2.getStatus());
+                                                    u.setScore(player2.getScore());
+                                                }
+                                            }
+                                            ClientTicTacToe.mainController.lv_players.refresh();
+//                                            for (User user : ClientTicTacToe.mainController.lv_players.getItems()) {
+//                                                System.out.println("playerId:"+user.getId());
+//                                                System.out.println("playername:"+user.getName());
+//                                                System.out.println("playerEmail:"+user.getEmail());
+//                                                System.out.println("playerStatus:"+user.getStatus());
+//                                                System.out.println("playerScore:"+user.getScore());
+//
+//                                            }
+                                            
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
                                         }
+
                                     }
-                                    ClientTicTacToe.mainController.lv_players.refresh();
-
-                                } catch (Exception ex) {
-                                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-
-                            }
                         });
                         break;
 //////////////////////////////////////////////////////////////////////////////////////////////////                                

@@ -45,13 +45,14 @@ ImageView imageView = new ImageView(image);
     
     HBox hbox = new HBox();
     Label label = new Label("(empty)");
+
     //Pane pane = new Pane();
     Circle cstatus = new Circle();
     Circle cimage = new Circle();
    // Button button = new Button("(>)");
     String lastItem;
     Label label2 = new Label(".");
-    
+
     public XCell() {
         super();
         String css = XCell.class.getResource("cell.css").toExternalForm();
@@ -75,6 +76,7 @@ ImageView imageView = new ImageView(image);
             lastItem = null;
             setGraphic(null);
         } else {
+
            
             lastItem = item.toString();
            // label2.setPrefSize(20, 20);
@@ -101,7 +103,9 @@ ImageView imageView = new ImageView(image);
            }
            //label.setTextFill(red);
            //label.setStyle("-fx-color: #BADA55;");
+
             label.setText(item.toString() != null ? item.toString() : "<null>");
+            
             setGraphic(hbox);
         }
     }

@@ -1,5 +1,6 @@
 package clienttictactoe;
 
+import com.restfb.types.ProfilePictureSource;
 import java.net.URL;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,26 +14,23 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
+import model.FacebookApi;
 import model.Request;
 import model.User;
 import util.XCell;
@@ -50,11 +48,12 @@ public class MainController implements Initializable {
     @FXML
     GridPane gridPane; 
     
+    
     @FXML
     public ListView<User> lv_players;
     
-//    @FXML
-//    public TableView<User> tv_Players;
+    @FXML
+    Button btnGoOffLine; 
 //    
 //    @FXML
 //    private TableColumn<User,String>tc_name;
@@ -68,17 +67,22 @@ public class MainController implements Initializable {
     @FXML
     TextArea news;
     
+    @FXML
+    public ImageView profilePic;
+    
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
 
-    private boolean playDisable = false;
+    boolean playDisable = false;
+    
     private Label[][] labels = new Label[3][3];
     /// init array of empty play board
     private int[] xo = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 
     private int counter = 0;
     private boolean isFinish = false;
-
+    private int status = Setting.AVAILABLE;
+    
     int playerChar_X_OR_O;
     Image OPic;
     Image XPic;
@@ -90,13 +94,18 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-          gridPane.setPrefHeight(454.0);
-       gridPane.setPrefWidth(473.0);
-       gridPane.setGridLinesVisible(true);
-       //gridPane
-        //gridPane.setStyle("-fx-background-color: white;");
+
+        gridPane.setPrefHeight(454.0);
+        gridPane.setPrefWidth(473.0);
+        gridPane.setGridLinesVisible(true);
+     //   gridPane.setStyle("-fx-background-color: white;");
+
+        
+
     OPic = new Image(getClass().getResourceAsStream("O.png"));
-    XPic = new Image(getClass().getResourceAsStream("X.png"));    
+    XPic = new Image(getClass().getResourceAsStream("X.png"));
+    
+    //profilePic.setImage(new Image(getClass().getResourceAsStream("male.jpg")));
 //        cell1 = new Label();
 //        cell2 = new Label();
 //        cell3 = new Label();
@@ -135,7 +144,6 @@ public class MainController implements Initializable {
                 int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
                 if (xo[position] == -1) {
-        //            System.out.print("ssssss"+playerChar_X_OR_O);
                     counter++;
                     if (!playDisable) {
                         xo[position] = playerChar_X_OR_O;
@@ -185,10 +193,17 @@ public class MainController implements Initializable {
             System.out.println("clicked");
 
             remotePlayer= lv_players.getSelectionModel().getSelectedItem();
+
+            System.out.println("not avai" + remotePlayer.getStatus());
+            System.out.println("playerId:"+remotePlayer.getId());
+            System.out.println("playername:"+remotePlayer.getName());
+            System.out.println("playerEmail:"+remotePlayer.getEmail());
+            System.out.println("playerStatus:"+remotePlayer.getStatus());
+            System.out.println("playerScore:"+remotePlayer.getScore());
+
  
                     if (remotePlayer.getStatus() != Setting.AVAILABLE)
                         return;
-            System.out.println("not avai");
 
                     Request request = new Request();
                     request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
@@ -200,8 +215,8 @@ public class MainController implements Initializable {
             
             
           });
-
         
+       
 //        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
 //        tv_Players.setOnMouseClicked(event -> {
 //                    remotePlayer= tv_Players.getSelectionModel().getSelectedItem();
@@ -244,10 +259,12 @@ public class MainController implements Initializable {
 //            return row ;
 //        });
 
-//        ////////////////set which property will be render in List View/////////////////////////////////
-//        lv_availableUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+        
+        ////////////////set which property will be render in List View/////////////////////////////////
+//        lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
 //            @Override
 //            public ListCell<User> call(ListView<User> lv) {
+//                ImageView imageView = new ImageView(); 
 //                return new ListCell<User>() {
 //                    @Override
 //                    public void updateItem(User user, boolean empty) {
@@ -256,14 +273,49 @@ public class MainController implements Initializable {
 //                            setText(null);
 //                        } else {
 //                            // assume MyDataType.getSomeProperty() returns a string
-//                            setText(user.getEmail());
+//                            Image image = new Image(user.getImg());
+//                            imageView.setImage(image);
 //                        }
 //                    }
 //                };
 //            }
 //        });
     }
+
                      
+
+//         if(playerChar_X_OR_O == 0){
+//                           ((Label) event.getSource()).setGraphic(new ImageView(OPic)); 
+//                        }
+//                        else{
+//                            ((Label) event.getSource()).setGraphic(new ImageView(XPic)); 
+//                        }
+
+    
+    
+//////////////////////////////////////////////////////////////////////////////////////////////
+    
+    public void playOff() {
+     
+        
+        new ComputerWithGui().start(ClientTicTacToe.getStage());
+    }   
+    
+    public void btnActionChangeStatus(){
+            
+            chatField.clear();
+            Request request = new Request();
+            request.setType(Setting.UPDATEPLAYER);
+            player.setStatus((player.getStatus()==Setting.AVAILABLE)? Setting.OFFLINE : Setting.AVAILABLE);
+            request.setObject(player);
+            Client.sendRequest(request);
+
+            btnGoOffLine.setText((player.getStatus()==Setting.AVAILABLE)? Setting.GOOFLINE : Setting.GOOFLINE);
+    
+    }
+ 
+    
+
     public void updateCell(int[] xo) {
         playDisable = false;
         for (int i = 0; i < 9; i++) {
@@ -281,7 +333,7 @@ public class MainController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Invitation Request");
         alert.setContentText(message);
-        alert.show();
+        alert.showAndWait();
 
     }
 
@@ -297,6 +349,9 @@ public class MainController implements Initializable {
         chatField.clear();
         chatArea.setDisable(bool);
         chatField.setDisable(bool);
+    }
+    public void setMyImage(Image i){
+        profilePic.setImage(i);
     }
     public void setPlayer(User player) {
         this.player = player;
@@ -333,39 +388,7 @@ public class MainController implements Initializable {
             if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeOne) {                
                 res = 1;
             } else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeTwo)  {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-
-                            ClientTicTacToe.replaceSceneContent("webView.fxml", "Chat Menu");
-                            String quote = getPlayer().getName()+" won in TicTacToe Game";
-                            WebViewController.engine.load("https://www.facebook.com/dialog/feed?app_id=385244185170219"
-                                    + "&display=popup&caption=hhhhhhhhhhh"
-                                    + "&link=developers.facebook.com/docs/graph-api/"
-                                    + "&quote="+quote
-                                    + "&name=ahlan"
-                                    + "&redirect_uri=http://dolnii.com/requires/index.html"
-                                    + "&description=ahlan%20desc");
-                            WebViewController.engine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
-                                if (Worker.State.SUCCEEDED.equals(newValue)) {
-
-                                    if (WebViewController.engine.getLocation().matches("http://dolnii.com/requires/index.html(.*)")) {
-                                        try {
-                                            ClientTicTacToe.replaceSceneContent(ClientTicTacToe.main_XML, "Chat Menu");
-                                        } catch (Exception ex) {
-                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-
-                                    }
-                                }
-                            });
-                        } catch (Exception ex) {
-                            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    }
-                });
+                FacebookApi.shareMSG("quote", "http://stackoverflow.com/questions/997482/does-java-support-default-parameter-values", "name", "desc", "caption", "popup", "https://scontent-cai1-1.xx.fbcdn.net/v/t1.0-9/282864_10200182327274552_1193770825_n.jpg?oh=76c7d186e66cbd88db52240420715116&oe=59111D89");
                 res = 2;
             }
             else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeCancel)  {

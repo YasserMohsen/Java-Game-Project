@@ -18,6 +18,10 @@ import javafx.stage.Stage;
 public class ClientTicTacToe extends Application {
 
     private static Stage stage;
+
+    public static Stage getStage() {
+        return stage;
+    }
     public static final String LOGIN_XML="login.fxml";
     public static final String MAIN_XML="main.fxml";
     public static final String main_XML="FXML.fxml";
