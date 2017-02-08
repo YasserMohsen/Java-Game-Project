@@ -16,6 +16,7 @@ import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -92,7 +93,8 @@ public class MainController implements Initializable {
           gridPane.setPrefHeight(454.0);
        gridPane.setPrefWidth(473.0);
        gridPane.setGridLinesVisible(true);
-        gridPane.setStyle("-fx-background-color: white;");
+       //gridPane
+        //gridPane.setStyle("-fx-background-color: white;");
     OPic = new Image(getClass().getResourceAsStream("O.png"));
     XPic = new Image(getClass().getResourceAsStream("X.png"));    
 //        cell1 = new Label();
@@ -116,7 +118,7 @@ public class MainController implements Initializable {
             //System.out.print("salmaa"+i%3);
             
                    labels[i / 3][i % 3].setPrefSize(160, 155);
-
+                   labels[i / 3][i % 3].setAlignment(Pos.CENTER);
             gridPane.add(labels[i / 3][i % 3], i % 3, i / 3);
             labels[i / 3][i % 3].setUserData(i);
             labels[i / 3][i % 3].setOnMouseClicked(event -> {
@@ -133,7 +135,7 @@ public class MainController implements Initializable {
                 int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
                 if (xo[position] == -1) {
-                    System.out.print("ssssss"+playerChar_X_OR_O);
+        //            System.out.print("ssssss"+playerChar_X_OR_O);
                     counter++;
                     if (!playDisable) {
                         xo[position] = playerChar_X_OR_O;
@@ -168,7 +170,7 @@ public class MainController implements Initializable {
        // bp_GameBoard.setCenter(gridPane);
 
         // TODO
-        
+       
         lv_players.setItems(availableUsers);        
         lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
             @Override
@@ -261,13 +263,7 @@ public class MainController implements Initializable {
 //            }
 //        });
     }
-//         if(playerChar_X_OR_O == 0){
-//                           ((Label) event.getSource()).setGraphic(new ImageView(OPic)); 
-//                        }
-//                        else{
-//                            ((Label) event.getSource()).setGraphic(new ImageView(XPic)); 
-//                        }
-
+                     
     public void updateCell(int[] xo) {
         playDisable = false;
         for (int i = 0; i < 9; i++) {
@@ -324,10 +320,9 @@ public class MainController implements Initializable {
     void resetGame() {
         for (int i = 0; i < xo.length; i++) {
             xo[i]=-1;
-            labels[i / 3][i % 3].setText("");
+            labels[i / 3][i % 3].setGraphic(null);
             
         }
-        
     }
 
     int showWinDialog(String m) {
@@ -373,9 +368,24 @@ public class MainController implements Initializable {
                 });
                 res = 2;
             }
+            else if (result.isPresent() && result.get() == ConfirmDialoge.buttonTypeCancel)  {
+//            getPlayer().setStatus(Setting.AVAILABLE);
+//            getRemotePlayer().setStatus(Setting.AVAILABLE);
+////            lv_players.refresh();
+//                lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+//            @Override
+//            public ListCell<User> call(ListView<User> param) {
+//                return new XCell();
+//            }
+//        });
+            }
+            
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
             ClientTicTacToe.mainController.setDisable_Enable_ChatView(true);
             ClientTicTacToe.mainController.resetGame();
+            
+       
+        
             remotePlayer= null;
             return res;
     }

@@ -233,8 +233,8 @@ class GameHandler extends Thread {
                             ((User) objects[1]).setStatus(Setting.BUSY);
                             ((User) objects[0]).setStatus(Setting.BUSY);
                             
-                            System.out.println("Busy ::" +((User) objects[0]).getStatus());
-                            System.out.println("Busy ::" +((User) objects[1]).getStatus());
+                          //  System.out.println("Busy ::" +((User) objects[0]).getStatus());
+                           // System.out.println("Busy ::" +((User) objects[1]).getStatus());
                             request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
                             brodCastAll(request);
                             

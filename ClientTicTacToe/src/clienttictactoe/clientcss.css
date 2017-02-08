@@ -25,6 +25,16 @@
         -fx-background-color: #1ab188;
 }
 
+
+/*#online {
+  border-radius: 10px;
+  background: #BADA55;
+}
+#offline {
+  border-radius: 10px;
+  border: 3px solid #BADA55;
+}*/
+
 .repasserror{
   color:red;  
 }

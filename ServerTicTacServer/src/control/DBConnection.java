@@ -13,7 +13,8 @@ import java.sql.* ;
  * @author yasser
  */
 public class DBConnection {
-    
+      
+
     public static Connection openConnection(){
         Connection con = null;
         try {

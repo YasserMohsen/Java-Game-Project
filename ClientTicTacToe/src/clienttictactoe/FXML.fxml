@@ -19,7 +19,7 @@
          <children>
             <TextArea fx:id="news" editable="false" prefHeight="169.0" prefWidth="284.0" />
             <ListView fx:id="lv_players" prefHeight="378.0" prefWidth="284.0" />
-            <TextField prefHeight="40.0" prefWidth="284.0" promptText="Search">
+            <TextField fx:id="search" prefHeight="40.0" prefWidth="284.0" promptText="Search">
                <VBox.margin>
                   <Insets />
                </VBox.margin></TextField>
