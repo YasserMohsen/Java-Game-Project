@@ -67,7 +67,7 @@ public class MainController implements Initializable {
     @FXML
     TextField chatField;
     @FXML
-    TextArea news;
+    ListView<Label> news;
 
     @FXML
     Label turnStatus;
@@ -81,7 +81,7 @@ public class MainController implements Initializable {
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
     ObservableList<Label> chatInstance = FXCollections.observableArrayList();
-
+    ObservableList<Label> newsInstance = FXCollections.observableArrayList();
     boolean playDisable = false;
     
     private Label[][] labels = new Label[3][3];
@@ -107,29 +107,10 @@ public class MainController implements Initializable {
         gridPane.setPrefHeight(454.0);
         gridPane.setPrefWidth(473.0);
         gridPane.setGridLinesVisible(true);
-     //   gridPane.setStyle("-fx-background-color: white;");
-
-        
 
     OPic = new Image(getClass().getResourceAsStream("O.png"));
 
     XPic = new Image(getClass().getResourceAsStream("X.png"));
-    
-    //profilePic.setImage(new Image(getClass().getResourceAsStream("male.jpg")));
-
-//        cell2 = new Label();
-//        cell3 = new Label();
-//        cell4 = new Label();
-//        cell5 = new Label();
-//        cell6 = new Label();
-//        cell7 = new Label();
-//        cell8 = new Label();
-//        cell9 = new Label();
-
-//        cells = new Label[]{cell1, cell2, cell3,
-//            cell4, cell5, cell6,
-//            cell7, cell8, cell9};
-        //GridPane gridPane = new GridPane();
 
         for (int i = 0; i < 9; i++) {
               labels[i / 3][i % 3] = new Label();
@@ -191,7 +172,9 @@ public class MainController implements Initializable {
 
         // TODO
         chatArea.setItems(chatInstance);
-        lv_players.setItems(availableUsers);        
+        lv_players.setItems(availableUsers); 
+        news.setItems(newsInstance);
+       // lv_players.setPrefHeight(50);
         lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
             @Override
             public ListCell<User> call(ListView<User> param) {
@@ -451,9 +434,7 @@ public class MainController implements Initializable {
     }
     
     public void selectUser(){
-        
-
-
+       
         
     }
     
