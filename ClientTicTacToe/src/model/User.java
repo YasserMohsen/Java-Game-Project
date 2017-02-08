@@ -130,6 +130,8 @@ public class User implements Serializable{
         return this.name ;
     }
     
-    
+    public void change(String img) {
+        this.img = img;
+    }
     
 }

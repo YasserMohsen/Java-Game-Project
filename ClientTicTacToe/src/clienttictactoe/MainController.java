@@ -67,7 +67,8 @@ public class MainController implements Initializable {
     TextField chatField;
     @FXML
     TextArea news;
-    
+    @FXML
+    Label turnStatus;
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
 
@@ -96,6 +97,7 @@ public class MainController implements Initializable {
         gridPane.setStyle("-fx-background-color: white;");
     OPic = new Image(getClass().getResourceAsStream("O.png"));
     XPic = new Image(getClass().getResourceAsStream("X.png"));    
+    
 //        cell1 = new Label();
 //        cell2 = new Label();
 //        cell3 = new Label();
@@ -152,7 +154,7 @@ public class MainController implements Initializable {
                    
                         
                         ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
-
+                     turnStatus.setText("Your Turn");
 ///////////////////////////////////////////////////////////////////////////////////////////////////
                     }
 //                        if (checkWins()){
@@ -161,6 +163,8 @@ public class MainController implements Initializable {
 //                        }                        
 
                     playDisable = true;
+                    turnStatus.setText("Your Opponent's Turn");
+                   
                 }
             });
             
@@ -273,6 +277,7 @@ public class MainController implements Initializable {
 
     public void updateCell(int[] xo) {
         playDisable = false;
+        turnStatus.setText("Your Turn");
         for (int i = 0; i < 9; i++) {
             this.xo[i] = (xo[i]);
             if (xo[i] == 1) {
@@ -354,7 +359,7 @@ public class MainController implements Initializable {
     @FXML
     public void sendBt(){
         String myText = chatField.getText();
-        if (myText != "" && remotePlayer != null){
+        if (myText != "" &&  remotePlayer!= null){
             chatField.clear();
             Request request = new Request();
             request.setType(Setting.MESSAGE);
@@ -371,6 +376,14 @@ public class MainController implements Initializable {
         
     }
     
-    
-
+  
+   public void changeTurnText(){
+      if(playDisable)
+      {turnStatus.setText("Your Opponent's Turn");}
+      
+      else{
+          turnStatus.setText("Your Turn");
+      }
+      
+    }  
 }
