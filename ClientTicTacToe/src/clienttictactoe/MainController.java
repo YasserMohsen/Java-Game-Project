@@ -13,20 +13,16 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
@@ -49,11 +45,12 @@ public class MainController implements Initializable {
     @FXML
     GridPane gridPane; 
     
+    
     @FXML
     public ListView<User> lv_players;
     
-//    @FXML
-//    public TableView<User> tv_Players;
+    @FXML
+    Button btnGoOffLine; 
 //    
 //    @FXML
 //    private TableColumn<User,String>tc_name;
@@ -70,14 +67,16 @@ public class MainController implements Initializable {
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
 
-    private boolean playDisable = false;
+    boolean playDisable = false;
+    
     private Label[][] labels = new Label[3][3];
     /// init array of empty play board
     private int[] xo = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 
     private int counter = 0;
     private boolean isFinish = false;
-
+    private int status = Setting.AVAILABLE;
+    
     int playerChar_X_OR_O;
     Image OPic;
     Image XPic;
@@ -89,12 +88,12 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-          gridPane.setPrefHeight(454.0);
-       gridPane.setPrefWidth(473.0);
-       gridPane.setGridLinesVisible(true);
+        gridPane.setPrefHeight(454.0);
+        gridPane.setPrefWidth(473.0);
+        gridPane.setGridLinesVisible(true);
         gridPane.setStyle("-fx-background-color: white;");
-    OPic = new Image(getClass().getResourceAsStream("O.png"));
-    XPic = new Image(getClass().getResourceAsStream("X.png"));    
+        OPic = new Image(getClass().getResourceAsStream("O.png"));
+        XPic = new Image(getClass().getResourceAsStream("X.png"));    
 //        cell1 = new Label();
 //        cell2 = new Label();
 //        cell3 = new Label();
@@ -133,7 +132,7 @@ public class MainController implements Initializable {
                 int position = Integer.parseInt(((Label) event.getSource()).getUserData().toString());
                 ///  click in an empty position 
                 if (xo[position] == -1) {
-                    System.out.print("ssssss"+playerChar_X_OR_O);
+                    System.out.print("ssssss"+playDisable);
                     counter++;
                     if (!playDisable) {
                         xo[position] = playerChar_X_OR_O;
@@ -183,10 +182,17 @@ public class MainController implements Initializable {
             System.out.println("clicked");
 
             remotePlayer= lv_players.getSelectionModel().getSelectedItem();
+
+            System.out.println("not avai" + remotePlayer.getStatus());
+            System.out.println("playerId:"+remotePlayer.getId());
+            System.out.println("playername:"+remotePlayer.getName());
+            System.out.println("playerEmail:"+remotePlayer.getEmail());
+            System.out.println("playerStatus:"+remotePlayer.getStatus());
+            System.out.println("playerScore:"+remotePlayer.getScore());
+
  
                     if (remotePlayer.getStatus() != Setting.AVAILABLE)
                         return;
-            System.out.println("not avai");
 
                     Request request = new Request();
                     request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
@@ -268,6 +274,25 @@ public class MainController implements Initializable {
 //                            ((Label) event.getSource()).setGraphic(new ImageView(XPic)); 
 //                        }
 
+    
+    
+//////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    public void btnActionChangeStatus(){
+            
+            chatField.clear();
+            Request request = new Request();
+            request.setType(Setting.UPDATEPLAYER);
+            player.setStatus((player.getStatus()==Setting.AVAILABLE)? Setting.OFFLINE : Setting.AVAILABLE);
+            request.setObject(player);
+            Client.sendRequest(request);
+
+            btnGoOffLine.setText((player.getStatus()==Setting.AVAILABLE)? Setting.GOOFLINE : Setting.GOOFLINE);
+    
+    }
+    
     public void updateCell(int[] xo) {
         playDisable = false;
         for (int i = 0; i < 9; i++) {
@@ -285,7 +310,7 @@ public class MainController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Invitation Request");
         alert.setContentText(message);
-        alert.show();
+        alert.showAndWait();
 
     }
 
@@ -324,7 +349,7 @@ public class MainController implements Initializable {
     void resetGame() {
         for (int i = 0; i < xo.length; i++) {
             xo[i]=-1;
-            labels[i / 3][i % 3].setText("");
+            labels[i / 3][i % 3].setGraphic(null);
             
         }
         

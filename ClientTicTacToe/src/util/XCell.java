@@ -23,7 +23,7 @@ public class XCell extends ListCell<User> {
     Label label = new Label("(empty)");
     Pane pane = new Pane();
     Button button = new Button("(>)");
-    String lastItem;
+    User lastItem;
 
     public XCell() {
         super();
@@ -40,8 +40,9 @@ public class XCell extends ListCell<User> {
             lastItem = null;
             setGraphic(null);
         } else {
-            lastItem = item.toString();
+            lastItem = item;
             label.setText(item.toString() != null ? item.toString() : "<null>");
+            
             setGraphic(hbox);
         }
     }

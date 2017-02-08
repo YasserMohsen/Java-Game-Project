@@ -217,6 +217,7 @@ public class Client extends Thread{
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                      //  ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                        ClientTicTacToe.mainController.playDisable = true;
                                     }
                                 });
                                 
@@ -285,15 +286,30 @@ public class Client extends Thread{
                                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            case Setting.DRAW:
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            int result = ClientTicTacToe.mainController.showWinDialog(Setting.DRAW_MSG);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             case Setting.UPDATE_PLAYER_IN_PLAYER_LIST:
                                 user = (User) request.getObject();
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         try {
-                                            for (User u : MainController.availableUsers) {
+                                            for (User u : ClientTicTacToe.mainController.availableUsers) {
                                                 if(u.getId() == user.getId())
-                                                    u = user;
+                                                    u.setStatus(user.getStatus());
+                                                    u.setScore(user.getScore());                                            
                                             }
+                                            ClientTicTacToe.mainController.lv_players.refresh();
                                             
                                         } catch (Exception ex) {
                                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -321,9 +337,17 @@ public class Client extends Thread{
                                                 }
                                             }
                                             ClientTicTacToe.mainController.lv_players.refresh();
+//                                            for (User user : ClientTicTacToe.mainController.lv_players.getItems()) {
+//                                                System.out.println("playerId:"+user.getId());
+//                                                System.out.println("playername:"+user.getName());
+//                                                System.out.println("playerEmail:"+user.getEmail());
+//                                                System.out.println("playerStatus:"+user.getStatus());
+//                                                System.out.println("playerScore:"+user.getScore());
+//
+//                                            }
                                             
                                         } catch (Exception ex) {
-                                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                            ex.printStackTrace();
                                         }
 
                                     }
