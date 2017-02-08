@@ -27,16 +27,17 @@ public class ClientTicTacToe extends Application {
     public static final String main_XML="FXML.fxml";
     
     
-    public static RegisterController registerController;
+    //public static RegisterController registerController;
     public static MainController mainController;
-    public static LoginController loginController;
-     public static homeController home;
+   //public static LoginController loginController;
+     public static HomeController home;
     public static OfflineController offlineController;
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource("homepage.fxml"));      
         Parent root = loader.load();
-        home = (homeController)loader.getController();
+        home = (HomeController)loader.getController();
+        
         //registerController.email.setText("lol");
 
         this.stage = stage;
@@ -66,19 +67,20 @@ public class ClientTicTacToe extends Application {
         String css = ClientTicTacToe.class.getResource("clientcss.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
-        if(fxml=="login.fxml")
-        {
-            loginController = (LoginController)loader.getController();
-            //stage.setTitle(loginController.user.getName());
-        }
+//        if(fxml=="login.fxml")
+//        {
+//            loginController = (LoginController)loader.getController();
+//            //stage.setTitle(loginController.user.getName());
+//        }
 
-        else if(fxml=="homepage.fxml")
+        if(fxml=="homepage.fxml")
         {
-            home = (homeController)loader.getController();
+            home = (HomeController)loader.getController();
         }
-        else if(fxml=="register.fxml"){
-            registerController = (RegisterController)loader.getController();
-        }
+//        else if(fxml=="register.fxml"){
+//            registerController = (RegisterController)loader.getController();
+//            
+//        }
         
         else if(fxml=="offline.fxml"){
           
@@ -86,6 +88,7 @@ public class ClientTicTacToe extends Application {
 
         else if(fxml==main_XML){
             mainController = (MainController)loader.getController();
+//            System.out.print("homeeeeeee"+registerController.email.getText());
         }
             //stage.setTitle(registerController.user.getName());
         

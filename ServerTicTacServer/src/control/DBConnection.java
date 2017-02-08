@@ -13,13 +13,14 @@ import java.sql.* ;
  * @author yasser
  */
 public class DBConnection {
-    
+      
+
     public static Connection openConnection(){
         Connection con = null;
         try {
             DriverManager.registerDriver(new Driver());
 
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","root", "terminator");
+             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","root", "terminator");
 
         } catch (SQLException ex) {
             System.out.println("Go to hell!");
