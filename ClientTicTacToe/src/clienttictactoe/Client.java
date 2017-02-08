@@ -224,6 +224,7 @@ public class Client extends Thread {
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                             ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                             ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                            
 
                                         } else {
                                             //////////////logic here///////////////////////
@@ -232,6 +233,7 @@ public class Client extends Thread {
                                             Client.sendRequest(request);
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         }
+                                        ClientTicTacToe.mainController.playDisable = true;
 
                             }
                         });
@@ -250,7 +252,7 @@ public class Client extends Thread {
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                        ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
-                                        ClientTicTacToe.mainController.playDisable = true;
+                                        ClientTicTacToe.mainController.playDisable = false;
                                     }
                                 });
                                 

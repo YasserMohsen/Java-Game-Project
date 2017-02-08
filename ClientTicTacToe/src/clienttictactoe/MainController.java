@@ -1,19 +1,14 @@
 package clienttictactoe;
 
-import com.restfb.types.ProfilePictureSource;
 import java.net.URL;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -98,6 +93,7 @@ public class MainController implements Initializable {
     private User player;
     private User remotePlayer;
 
+    ComputerWithGui computerWithGui = new ComputerWithGui();
     /**
      * Initializes the controller class.
      */
@@ -140,6 +136,7 @@ public class MainController implements Initializable {
                    labels[i / 3][i % 3].setAlignment(Pos.CENTER);
             gridPane.add(labels[i / 3][i % 3], i % 3, i / 3);
             labels[i / 3][i % 3].setUserData(i);
+            
             labels[i / 3][i % 3].setOnMouseClicked(event -> {
 //                if (isFinish) {
 //                    return;
@@ -167,6 +164,8 @@ public class MainController implements Initializable {
                         request.setObject(objects);
                         Client.sendRequest(request);
                         
+                    playDisable = true;
+                    turnStatus.setText(remotePlayer.getName()+"'s Turn");
                        
                    
                         
@@ -179,8 +178,6 @@ public class MainController implements Initializable {
 //                            System.out.println(" plyer number "+((playDisable)?" 1 ":" 2 ") +" win");
 //                        }                        
 
-                    playDisable = true;
-                    turnStatus.setText(remotePlayer.getName()+"'s Turn");
                    
                 }
             });
@@ -205,14 +202,6 @@ public class MainController implements Initializable {
             System.out.println("clicked");
 
             remotePlayer= lv_players.getSelectionModel().getSelectedItem();
-
-            System.out.println("not avai" + remotePlayer.getStatus());
-            System.out.println("playerId:"+remotePlayer.getId());
-            System.out.println("playername:"+remotePlayer.getName());
-            System.out.println("playerEmail:"+remotePlayer.getEmail());
-            System.out.println("playerStatus:"+remotePlayer.getStatus());
-            System.out.println("playerScore:"+remotePlayer.getScore());
-
  
                     if (remotePlayer.getStatus() != Setting.AVAILABLE)
                         return;
@@ -429,6 +418,7 @@ public class MainController implements Initializable {
        
         
             remotePlayer= null;
+            playDisable = true;
             return res;
     }
     
