@@ -64,6 +64,7 @@ public class HomeController implements Initializable{
             FXMLLoader loader = new FXMLLoader(HomeController.class.getResource("register.fxml"));
             Parent root = loader.load();
             registerController = (RegisterController)loader.getController();
+             border.setCenter(root);
         } catch (IOException ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }

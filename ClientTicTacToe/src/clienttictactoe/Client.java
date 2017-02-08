@@ -103,7 +103,7 @@ public class Client extends Thread {
 //                        flag=false;
 //                    }
                 //   }
-                //System.out.print("mailllllllll" + ClientTicTacToe.home.registerController.email.getText());
+                System.out.print("mailllllllll" + ClientTicTacToe.home.registerController.email.getText());
                 //    if(flag){
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
@@ -140,6 +140,7 @@ public class Client extends Thread {
                         //  ClientTicTacToe.home.registerController.password.setText("");
                         // ClientTicTacToe.home.registerController.repassword.setText("");
                         //ClientTicTacToe.home.registerController.name.setText("");
+                         ClientTicTacToe.home.registerController.mailerror.setText(myError);
 //                           ClientTicTacToe.home.registerController.mailerror.setTextFill(Color.RED);
 //                             l.setText(myError);
 //                             l.setPrefSize(316,36);
@@ -147,6 +148,7 @@ public class Client extends Thread {
 //                             ClientTicTacToe.home.registerController.reggrid.add(l,1,0);
 //<Label fx:id="mailerror" text="" prefHeight="36.0" prefWidth="316.0" visible="false" GridPane.columnIndex="2" GridPane.valignment="BOTTOM" />
                     } else {
+                       // System.out.print("mailllllllll" + ClientTicTacToe.home.loginController.email.getText());
                         ClientTicTacToe.home.loginController.errorsalma.setText(myError);
                         ClientTicTacToe.home.loginController.errorsalma.setVisible(true);
                     }
