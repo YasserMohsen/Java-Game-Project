@@ -6,9 +6,11 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
@@ -20,7 +22,7 @@
          <children>
             <TextArea fx:id="news" editable="false" prefHeight="169.0" prefWidth="284.0" />
             <ListView fx:id="lv_players" prefHeight="378.0" prefWidth="284.0" />
-            <TextField prefHeight="40.0" prefWidth="284.0" promptText="Search">
+            <TextField fx:id="search" prefHeight="40.0" prefWidth="284.0" promptText="Search">
                <VBox.margin>
                   <Insets />
                </VBox.margin></TextField>
@@ -39,16 +41,18 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="LOGOUT" GridPane.halignment="CENTER" />
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="GO OFFLINE" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+
+                  <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="LOGOUT" GridPane.halignment="CENTER" />
+                  <Button fx:id="btnGoOffLine" mnemonicParsing="false" onAction="#playOff" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="GO OFFLINE" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                </children>
             </GridPane>
             <GridPane fx:id="gridPane" gridLinesVisible="true" prefHeight="454.0" prefWidth="473.0">
               
             </GridPane>
+
             <Pane prefHeight="43.0" prefWidth="473.0">
                <children>
-                  <Button layoutX="22.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="70.0" styleClass="buttonsStyle" text="SEND" />
+                  <Button onAction="#sendBt" layoutX="22.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="70.0" styleClass="buttonsStyle" text="SEND" />
                   <Label fx:id="turnStatus" layoutX="124.0" prefHeight="42.0" prefWidth="331.0" textFill="#24d0ca">
                      <font>
                         <Font size="24.0" />
@@ -62,13 +66,26 @@
    <left>
       <VBox prefHeight="585.0" prefWidth="233.0" BorderPane.alignment="CENTER">
          <children>
-            <Pane prefHeight="88.0" prefWidth="157.0">
+            <HBox prefHeight="140.0" prefWidth="157.0">
                <children>
-                  <Label layoutX="9.0" layoutY="44.0" prefHeight="28.0" prefWidth="78.0" />
+                  <ImageView fx:id="profilePic" fitHeight="141.0" fitWidth="113.0" layoutX="9.0" layoutY="-5.0" onMouseClicked="#changePic" pickOnBounds="true" preserveRatio="true" />
+                  <VBox prefHeight="141.0" prefWidth="56.0">
+                      <Label prefHeight="40.0" prefWidth="126.0" text="Name: " />
+                     <Label prefHeight="40.0" prefWidth="121.0" text="Score:" />
+                     <Label prefHeight="40.0" prefWidth="121.0" />
+                  </VBox>
+                  <VBox layoutX="123.0" layoutY="10.0" prefHeight="141.0" prefWidth="66.0">
+                     <children>
+                        <Label fx:id="playerName" prefHeight="40.0" prefWidth="126.0" />
+                        <Label fx:id="playerScore" prefHeight="40.0" prefWidth="121.0" />
+                        <Label prefHeight="40.0" prefWidth="121.0" />
+                     </children>
+                  </VBox>
                </children>
-            </Pane>
-            <TextArea fx:id="chatArea" editable="false" prefHeight="455.0" prefWidth="233.0" />
-            <TextField fx:id="chatField" prefHeight="40.0" prefWidth="157.0" promptText="write a message" />
+            </HBox>
+            <ListView fx:id="chatArea" disable="true" editable="false" prefHeight="404.0" prefWidth="233.0">
+            </ListView>
+            <TextField fx:id="chatField" disable="true" prefHeight="40.0" prefWidth="157.0" promptText="write" />
          </children>
       </VBox>
    </left>

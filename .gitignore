@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 /ServerTicTacServer/build/
 /ServerTicTacServer/dist/
 /ClientTicTacToe/dist/
 /ClientTicTacToe/build/
+=======
+/ClientTicTacToe/build/
+/ClientTicTacToe/dist/
+/ServerTicTacServer/build/
+/ServerTicTacServer/dist/
+>>>>>>> dec8f825286675021ea1eb3fa2dd6fdf220221e7

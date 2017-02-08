@@ -22,6 +22,8 @@ public class User implements Serializable{
     long fbId;
     String img;
     
+    MyImage serializedImg;
+    String imgLink;
     /*
     *constructor for regestration;
     */
@@ -130,8 +132,25 @@ public class User implements Serializable{
         return this.name ;
     }
     
+
     public void change(String img) {
         this.img = img;
+    }
+    public String getImgLink() {
+        return imgLink;
+    }
+
+    public void setImgLink(String imgLink) {
+        this.imgLink = imgLink;
+    }
+
+    public MyImage getSerializedImg() {
+        return serializedImg;
+    }
+
+    public void setSerializedImg(MyImage serializedImg) {
+        this.serializedImg = serializedImg;
+
     }
     
 }
