@@ -136,16 +136,12 @@ public class homeController implements Initializable{
             
             off.getStyleClass().removeAll("unselected","selected");
             off.getStyleClass().add("selected");
-            
             log.getStyleClass().removeAll("unselected","selected");
             log.getStyleClass().add("unselected");
-            
             reg.getStyleClass().removeAll("unselected","selected");
             reg.getStyleClass().add("unselected");
-            
             FXMLLoader loader = new FXMLLoader(homeController.class.getResource("login.fxml"));
             Parent page = loader.load();
-            
             border.setCenter(null);
             border.setCenter(page);
         } catch (IOException ex) {

@@ -1,5 +1,6 @@
 package clienttictactoe;
 
+import com.restfb.types.ProfilePictureSource;
 import java.net.URL;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -68,6 +69,9 @@ public class MainController implements Initializable {
     @FXML
     TextArea news;
     
+    @FXML
+    public ImageView profilePic;
+    
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
 
@@ -94,8 +98,11 @@ public class MainController implements Initializable {
        gridPane.setPrefWidth(473.0);
        gridPane.setGridLinesVisible(true);
         gridPane.setStyle("-fx-background-color: white;");
+        
     OPic = new Image(getClass().getResourceAsStream("O.png"));
-    XPic = new Image(getClass().getResourceAsStream("X.png"));    
+    XPic = new Image(getClass().getResourceAsStream("X.png"));
+    
+    //profilePic.setImage(new Image(getClass().getResourceAsStream("male.jpg")));
 //        cell1 = new Label();
 //        cell2 = new Label();
 //        cell3 = new Label();
@@ -199,8 +206,8 @@ public class MainController implements Initializable {
             
             
           });
-
         
+       
 //        tc_name.setCellValueFactory(new PropertyValueFactory("name"));
 //        tv_Players.setOnMouseClicked(event -> {
 //                    remotePlayer= tv_Players.getSelectionModel().getSelectedItem();
@@ -243,6 +250,7 @@ public class MainController implements Initializable {
 //            return row ;
 //        });
 
+        
         ////////////////set which property will be render in List View/////////////////////////////////
 //        lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
 //            @Override
@@ -271,6 +279,12 @@ public class MainController implements Initializable {
 //                            ((Label) event.getSource()).setGraphic(new ImageView(XPic)); 
 //                        }
 
+    public void playOff() {
+     
+        
+        new ComputerWithGui().start(ClientTicTacToe.getStage());
+    }
+    
     public void updateCell(int[] xo) {
         playDisable = false;
         for (int i = 0; i < 9; i++) {
@@ -304,6 +318,9 @@ public class MainController implements Initializable {
         chatField.clear();
         chatArea.setDisable(bool);
         chatField.setDisable(bool);
+    }
+    public void setMyImage(Image i){
+        profilePic.setImage(i);
     }
     public void setPlayer(User player) {
         this.player = player;
