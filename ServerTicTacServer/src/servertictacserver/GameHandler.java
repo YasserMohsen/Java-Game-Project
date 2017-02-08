@@ -36,9 +36,18 @@ class GameHandler extends Thread {
             ois = new ObjectInputStream(cs.getInputStream());
             try {
                 Request request = (Request) ois.readObject();
-                if (request.getType() == Setting.REG || request.getType() == Setting.LOGIN){
+                if (request.getType() == Setting.REG || request.getType() == Setting.LOGIN || request.getType() == Setting.FBLOG ){
                     user = (User) request.getObject();
-                    user = (request.getType()==Setting.LOGIN)?UserController.login(user):UserController.register(user);
+                    if (request.getType()==Setting.LOGIN) {
+                        user = UserController.login(user);
+                    }
+                    else if(request.getType()==Setting.REG){
+                        user = UserController.register(user);
+                    }
+                    else if(request.getType()==Setting.FBLOG){
+                        user = UserController.fbLogin(user);
+                    }
+                    
                     if(user.getId() != 0){
                         clientsVector.add(this);
                         // if register or login is ok send list off available players to client                                
@@ -46,7 +55,7 @@ class GameHandler extends Thread {
                         this.ous.reset();
                         user.setStatus(Setting.AVAILABLE);
                         request.setType(Setting.REG_OK);  
-
+                        
                         List availablePlayerList = new ArrayList<User>();                                
                         for (GameHandler gameHandler : clientsVector){
                             if(gameHandler.user != null && gameHandler.user.getId()!=user.getId())

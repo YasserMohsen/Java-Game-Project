@@ -4,11 +4,6 @@
  * and open the template in the editor.
  */
 package clienttictactoe;
-
-//import com.restfb.DefaultFacebookClient;
-//import com.restfb.FacebookClient;
-//import com.restfb.Parameter;
-//import com.restfb.types.FacebookType;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,10 +17,9 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import model.MyImage;
 import model.Request;
 import model.User;
-//import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  *
@@ -92,12 +86,16 @@ public class Client extends Thread{
             if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK){
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
+                User player = (User) objects[1];
                 Platform.runLater(() -> {
                     try {
                             
                         MainController.availableUsers.addAll(availablePlayerList);
                         ClientTicTacToe.replaceSceneContent(ClientTicTacToe.main_XML, "Chat Menu");
-                        ClientTicTacToe.mainController.setPlayer((User) objects[1]);
+                        ClientTicTacToe.mainController.setPlayer(player);
+                        
+                        MyImage s = player.getSerializedImg();
+                        //ClientTicTacToe.mainController.setMyImage(s.getImage());
                     } catch (Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                     }

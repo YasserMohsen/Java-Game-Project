@@ -1,6 +1,4 @@
-
-/*
-/*/
-!/ServerTicTacServer/src
-!/ClientTicTacToe/src
-!/ClientTicTacToe/libs
+/ClientTicTacToe/build/
+/ClientTicTacToe/dist/
+/ServerTicTacServer/build/
+/ServerTicTacServer/dist/
