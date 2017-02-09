@@ -92,7 +92,7 @@ public class Client extends Thread {
 
         try {
             boolean flag=true;
-            mySocket = new Socket("192.168.1.4", 5005);
+            mySocket = new Socket("127.0.0.1", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
             conn = true;
@@ -114,6 +114,7 @@ public class Client extends Thread {
                         MyImage s = player.getSerializedImg();
                         ClientTicTacToe.mainController.setMyImage(s.getImage());
                         ClientTicTacToe.mainController.setMyName(player.getName());
+                        System.out.println(player.getScore());
                         ClientTicTacToe.mainController.setMyScore(player.getScore());
                     } catch (Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -126,13 +127,7 @@ public class Client extends Thread {
                 Platform.runLater(() -> {
                     String myError = (String) request.getObject();
                     if (request.getType() == Setting.REG_NO) {
-                    
-                           ClientTicTacToe.home.registerController.mailerror.setText(myError);
-                           ClientTicTacToe.home.registerController.mailerror.setTextFill(Color.RED);
-                           ClientTicTacToe.home.registerController.mailerror.setVisible(true);
-                           ClientTicTacToe.home.registerController.email.setText("");
-                            // ClientTicTacToe.home.registerController.mailerror.setPrefSize(316,36);
-//                         
+
 //                             ClientTicTacToe.home.registerController.reggrid.add(l,1,0);
 //<Label fx:id="mailerror" text="" prefHeight="36.0" prefWidth="316.0" visible="false" GridPane.columnIndex="2" GridPane.valignment="BOTTOM" />
                     } else {
@@ -151,14 +146,14 @@ public class Client extends Thread {
 
         } catch (IOException ex) {
             System.out.println("my IOException");
-//            if (ClientTicTacToe.registerController != null) {
-//                ClientTicTacToe.registerController.errorText.setVisible(true);
-//                ClientTicTacToe.registerController.errorText.setText("Server DOWN! :( come back later");
+//            if (ClientTicTacToe.home.registerController != null) {
+//                ClientTicTacToe.home.registerController.errorText.setVisible(true);
+//                ClientTicTacToe.home.registerController.errorText.setText("Server DOWN! :( come back later");
 //            }
-//            if (ClientTicTacToe.loginController != null) {
-//                ClientTicTacToe.loginController.errorsalma.setVisible(true);
-//                ClientTicTacToe.loginController.errorsalma.setText("Server DOWN! :( come back later");
-//            }
+            if (ClientTicTacToe.home.loginController != null) {
+                ClientTicTacToe.home.loginController.errorsalma.setVisible(true);
+                ClientTicTacToe.home.loginController.errorsalma.setText("Server DOWN! :( come back later");
+            }
             //ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
             System.out.println("my ClassNotFoundException");
@@ -287,11 +282,13 @@ public class Client extends Thread {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 try {
+                                    Object[] obj = (Object[]) request.getObject();
+                                    User winner = (User) obj[0];
                                         ad.play();
                                         ae.play();
                                     int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
-                                    ClientTicTacToe.mainController.setMyScore(ClientTicTacToe.mainController.getPlayer().getScore());
-                                    
+                                    ClientTicTacToe.mainController.setMyScore(winner.getScore());
+                                    System.out.println(ClientTicTacToe.mainController.getPlayer().getScore());    
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -340,7 +337,8 @@ public class Client extends Thread {
                                             for (User u : ClientTicTacToe.mainController.availableUsers) {
                                                 if(u.getId() == user.getId())
                                                     u.setStatus(user.getStatus());
-                                                    u.setScore(user.getScore());                                            
+                                                    u.setScore(user.getScore());
+
                                             }
                                             ClientTicTacToe.mainController.lv_players.refresh();
                                             

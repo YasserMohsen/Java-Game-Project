@@ -53,5 +53,4 @@ public class Setting {
     public static final int BUSY = 3002;
     public static final int OUT = 3000;
     public static final int OFFLINE = 3003;
-    
 }

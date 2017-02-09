@@ -64,7 +64,7 @@ ImageView imageView = new ImageView(image);
         hbox.getChildren().addAll(cstatus, cimage,label);
         hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.setSpacing(10);
-        hbox.setStyle("-fx-background-color:paleturquoise;-fx-background-radius:20;-fx-padding:3");
+        hbox.setStyle("-fx-background-color:paleturquoise;-fx-background-radius:20;-fx-padding:3;");
         HBox.setHgrow(label, Priority.ALWAYS);
 
     }
