@@ -92,7 +92,7 @@ public class Client extends Thread {
 
         try {
             boolean flag=true;
-            mySocket = new Socket("127.0.0.1", 5005);
+            mySocket = new Socket("192.168.1.4", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
             conn = true;

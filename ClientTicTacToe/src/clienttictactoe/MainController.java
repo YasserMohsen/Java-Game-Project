@@ -1,11 +1,14 @@
 package clienttictactoe;
 
+import java.io.IOException;
 import java.net.URL;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,6 +56,9 @@ public class MainController implements Initializable {
     
     @FXML
     Button btnGoOffLine; 
+    
+    @FXML
+    Button btnLogout; 
     
     boolean offLineMode = false;
 //    
@@ -432,6 +438,27 @@ public class MainController implements Initializable {
             Object[] objects = {player, remotePlayer, myText};
             request.setObject(objects);
             Client.sendRequest(request);
+        }
+    }
+    
+    
+    @FXML
+    public void btnLogout() {
+        System.out.println("logout");
+        try {
+            if (Client.conn) {
+                Client.ous.close();
+                Client.ois.close();
+            }
+            try {
+                ClientTicTacToe.replaceSceneContent("homepage.fxml", "Chat Menu");
+            } catch (Exception ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
+        } catch (IOException ex) {
+        
         }
     }
     

@@ -41,7 +41,7 @@
               </rowConstraints>
                <children>
 
-                  <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="LOGOUT" GridPane.halignment="CENTER" />
+                  <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#btnLogout"  prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="LOGOUT" GridPane.halignment="CENTER" />
                   <Button fx:id="btnGoOffLine" mnemonicParsing="false" onAction="#playOff" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="GO OFFLINE" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                </children>
             </GridPane>

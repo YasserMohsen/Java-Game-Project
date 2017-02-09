@@ -353,6 +353,7 @@ class GameHandler extends Thread {
                     ois.close();
                     Request request1 = new Request();
                     request1.setType(Setting.DELETE_PLAYER_FROM_AVAILABLE_LIST);
+                    this.user.setStatus(Setting.OUT);
                     request1.setObject(this.user);
                     brodCast(request1);
                     System.out.println(" hash map :" + playersHashMap.size());

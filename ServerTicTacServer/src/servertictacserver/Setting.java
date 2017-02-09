@@ -22,6 +22,8 @@ public class Setting {
     public static final int AVAILABLE = 3001;
     public static final int BUSY = 3002;
     public static final int OFFLINE = 3003;
+    public static final int OUT = 3000;
+
 
     
     public static final int SELECT_PLAYER_FROM_AVAILABLE_LIST = 2006;
