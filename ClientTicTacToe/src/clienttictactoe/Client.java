@@ -20,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import static javafx.scene.paint.Color.color;
 import model.MyImage;
@@ -37,7 +38,9 @@ public class Client extends Thread {
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
-    //  boolean flag=true;
+    final AudioClip ad = new AudioClip(MainController.class.getResource("game-over.wav").toString());
+    final AudioClip ae = new AudioClip(MainController.class.getResource("game-over-tie.wav").toString());
+//  boolean flag=true;
 
     public static void sendRequest(User user, int type) {
 
@@ -84,27 +87,15 @@ public class Client extends Thread {
     public Client(User u, int t) {
 
         try {
-
+            boolean flag=true;
             mySocket = new Socket("127.0.0.1", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
             this.sendRequest(u, t);
             Request request = (Request) ois.readObject();
             if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK) {
-
-                //  System.out.print(request.getType());
-                //  if(request.getType()==Setting.REG_OK)
-                //{
-                //  System.out.print(ClientTicTacToe.registerController.password.getText());
-//                    if(!ClientTicTacToe.registerController.password.getText().equals(ClientTicTacToe.registerController.repassword.getText()))
-//                    {
-//                        ClientTicTacToe.registerController.repasserror.setVisible(true);
-//                        ClientTicTacToe.registerController.repasserror.setText("Passwords must be the same");
-//                        flag=false;
-//                    }
-                //   }
-                //System.out.print("mailllllllll" + ClientTicTacToe.home.registerController.email.getText());
-                //    if(flag){
+              
+                   // if(flag){
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
                 User player = (User) objects[1];
@@ -126,30 +117,20 @@ public class Client extends Thread {
                 });
                 start();
 
-                //  }
+              //    }
             } else if (request.getType() == Setting.REG_NO || request.getType() == Setting.LOGIN_NO) {
                 Platform.runLater(() -> {
                     String myError = (String) request.getObject();
                     if (request.getType() == Setting.REG_NO) {
-                        // Label l=new Label();
-//                          // System.out.print("salma"+myError);
-                        //ClientTicTacToe.home.registerController.email.setText("dsds");
-                        
-                        System.out.print("mailllllllll" +ClientTicTacToe.home.registerController.email.getText());
-                        
-                        //   ClientTicTacToe.home.registerController.email.setText("");
-                        //  ClientTicTacToe.home.registerController.password.setText("");
-                        // ClientTicTacToe.home.registerController.repassword.setText("");
-                        //ClientTicTacToe.home.registerController.name.setText("");
-//                           ClientTicTacToe.home.registerController.mailerror.setTextFill(Color.RED);
-//                             l.setText(myError);
-//                             l.setPrefSize(316,36);
-//                             l.setTextFill(Color.RED);
+
 //                             ClientTicTacToe.home.registerController.reggrid.add(l,1,0);
 //<Label fx:id="mailerror" text="" prefHeight="36.0" prefWidth="316.0" visible="false" GridPane.columnIndex="2" GridPane.valignment="BOTTOM" />
                     } else {
                         ClientTicTacToe.home.loginController.errorsalma.setText(myError);
                         ClientTicTacToe.home.loginController.errorsalma.setVisible(true);
+                        ClientTicTacToe.home.loginController.errorsalma.setTextFill(Color.RED);
+                        ClientTicTacToe.home.loginController.email.setText("");
+                        ClientTicTacToe.home.loginController.password.setText("");
                     }
 
                 });
@@ -225,6 +206,7 @@ public class Client extends Thread {
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                             ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                             ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                            
 
                                         } else {
                                             //////////////logic here///////////////////////
@@ -233,6 +215,7 @@ public class Client extends Thread {
                                             Client.sendRequest(request);
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         }
+                                        ClientTicTacToe.mainController.playDisable = true;
 
                             }
                         });
@@ -251,7 +234,7 @@ public class Client extends Thread {
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                        ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
-                                        ClientTicTacToe.mainController.playDisable = true;
+                                        ClientTicTacToe.mainController.playDisable = false;
                                     }
                                 });
                                 
@@ -296,6 +279,8 @@ public class Client extends Thread {
                                 try {
                                     Object[] obj = (Object[]) request.getObject();
                                     User winner = (User) obj[0];
+                                        ad.play();
+                                        ae.play();
                                     int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
                                     ClientTicTacToe.mainController.setMyScore(winner.getScore());
                                     System.out.println(ClientTicTacToe.mainController.getPlayer().getScore());    
@@ -432,7 +417,14 @@ public class Client extends Thread {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 try {
-                                    ClientTicTacToe.mainController.news.appendText(myNew);
+                                    Label l = new Label();
+                                    l.setText(myNew);
+                                        
+                              //-fx-background-color:lightblue; 
+                                    l.setStyle("-fx--moz-border-radius:4px;-fx-font-weight:bold;-fx--webkit-border-radius: 4px;display:block;");
+                                    //l.setStyle("-fx-border-style: solid; -fx--moz-border-radius: 4px; -fx-color: #468847;-fx--webkit-border-radius: 4px; -fx-font-size: 14; background-color: #dff0d8;");
+                                    l.setTextFill(Color.LIGHTSEAGREEN);
+                                    ClientTicTacToe.mainController.newsInstance.add(l);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

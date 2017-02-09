@@ -150,6 +150,16 @@ public class homeController implements Initializable{
    }
    
    
+
+   /*
+   *facebook Login
+   */
+   public void fbLogin(){
+        FacebookApi facebookApi = new FacebookApi();        
+   }
+   
+   
+   
     
 }
 

@@ -76,7 +76,7 @@ public class ComputerWithGui extends Application {
         });
 
         //Board scene
-        GridPane grid = new GridPane();
+        grid = new GridPane();
         cell1 = new Label();
         cell2 = new Label();
         cell3 = new Label();
@@ -125,7 +125,7 @@ public class ComputerWithGui extends Application {
 
                     board.placeAMove(new Point(index / 3, index % 3), 2);
 
-                    board.displayBoard();
+                    board.displayBoard();/// print to console
 
                     System.out.println("Placed a move at: (" + index / 3 + ", " + index % 3 + ")");
                     boolean mark = true;
@@ -147,7 +147,7 @@ public class ComputerWithGui extends Application {
 
                                     }
                                 },
-                                1500
+                                1000
                         );
 
                         cells[indexCell].setUserData(mark); //Used!

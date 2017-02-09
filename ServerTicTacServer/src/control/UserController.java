@@ -34,12 +34,12 @@ public class UserController {
             
             Connection con = DBConnection.openConnection();
             con.setAutoCommit(false);
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO user (name,email,password,score) VALUES(?,?,?,0);", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO user (name,email,password,score,image) VALUES(?,?,?,0,?);", Statement.RETURN_GENERATED_KEYS);
             
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
-            
+            stmt.setString(4, Setting.DEFAULT_IMAGE);
             stmt.executeUpdate();
             con.commit();
             ResultSet rs = stmt.getGeneratedKeys();

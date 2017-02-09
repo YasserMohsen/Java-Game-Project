@@ -21,6 +21,7 @@ public class ConfirmDialoge extends Alert{
 
     public ConfirmDialoge(AlertType alertType) {
         super(alertType);
+        
     }
 
     public static Alert createCustomDialog(String title , String headerText , String contentText) {
@@ -32,7 +33,7 @@ public class ConfirmDialoge extends Alert{
         // Create the custom dialog.
 
         alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
-
+      
         return alert;
 
     }

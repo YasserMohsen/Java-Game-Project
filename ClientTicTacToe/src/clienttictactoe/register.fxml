@@ -21,23 +21,23 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="72.0" minWidth="10.0" prefWidth="52.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="187.0" minHeight="10.0" prefHeight="179.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="79.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="116.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="146.0" minHeight="10.0" prefHeight="77.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="236.0" minHeight="0.0" prefHeight="190.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="214.0" minHeight="10.0" prefHeight="214.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="87.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="116.0" minHeight="10.0" prefHeight="86.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="146.0" minHeight="10.0" prefHeight="91.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="236.0" minHeight="0.0" prefHeight="109.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
      
 
 
-            <TextField fx:id="name" prefHeight="42.0" prefWidth="316.0" promptText="Name" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+            <TextField fx:id="name" onInputMethodTextChanged="#erasename" prefHeight="42.0" prefWidth="316.0" promptText="Name" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets bottom="10.0" />
                </GridPane.margin></TextField>
-            <TextField fx:id="email" prefHeight="42.0" prefWidth="316.0" promptText="Email Address" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-            <PasswordField fx:id="password" prefHeight="42.0" prefWidth="316.0" promptText="Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-            <PasswordField fx:id="repassword" prefHeight="42.0" prefWidth="316.0" promptText="Re-type Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+            <TextField fx:id="email" onInputMethodTextChanged="#erasemail" prefHeight="42.0" prefWidth="316.0" promptText="Email Address" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+            <PasswordField fx:id="password" onInputMethodTextChanged="#erasepass" prefHeight="42.0" prefWidth="316.0" promptText="Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+            <PasswordField fx:id="repassword" onInputMethodTextChanged="#eraserepass" prefHeight="42.0" prefWidth="316.0" promptText="Re-type Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP" />
             <Button fx:id="signup" mnemonicParsing="false" onAction="#btnActionSignUp" prefHeight="60.0" prefWidth="300.0" styleClass="buttonsStyle" text="GET STARTED" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="TOP">
                <font>
                   <Font name="Jet" size="24.0" />
@@ -45,10 +45,10 @@
                <GridPane.margin>
                   <Insets top="30.0" />
                </GridPane.margin></Button>
-            <Label fx:id="nameerror" text="" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="37.0" prefWidth="316.0" textAlignment="CENTER" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" />
-            <Label fx:id="mailerror" text="" prefHeight="36.0" prefWidth="316.0" visible="false" GridPane.columnIndex="2" GridPane.valignment="BOTTOM" />
-            <Label fx:id="passerror" text="" prefHeight="35.0" prefWidth="318.0" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
-            <Label fx:id="repasserror" text="" prefHeight="39.0" prefWidth="317.0" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+            <Label fx:id="repasserror" contentDisplay="TOP" prefHeight="42.0" prefWidth="316.0" text="" visible="false" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" />
+            <Label fx:id="nameerror" prefHeight="36.0" prefWidth="316.0" text="" visible="false" GridPane.columnIndex="2" GridPane.valignment="BOTTOM" />
+            <Label fx:id="mailerror" prefHeight="41.0" prefWidth="316.0" text="" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+            <Label fx:id="passerror" prefHeight="38.0" prefWidth="316.0" text="" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
 
 
          </children>

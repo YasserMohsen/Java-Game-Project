@@ -8,6 +8,8 @@ package servertictacserver;
 
 import control.UserController;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +24,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.Reflection;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
@@ -39,6 +42,7 @@ import utilServer.YCell;
  * @author kazafy
  */
 public class ServerTicTacServer extends Application {
+
     Server s;
      int flag = 0;
      static ObservableList<User> items = FXCollections.observableArrayList ();
@@ -60,15 +64,20 @@ public class ServerTicTacServer extends Application {
         ScrollPane pane = new ScrollPane();
         root.setId("pane");
         
+
         usersList=new ListView<>();
         UserController.loadUsers(items);
         usersList.setItems(items);    
         usersList.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
             @Override
             public ListCell<User> call(ListView<User> param) {
+                
                 return new YCell();
             }
         });
+        Collections.sort(items, Comparator.comparing(s -> s.getScore()));
+        final AudioClip ac = new AudioClip(ServerTicTacServer.class.getResource("btnclick.wav").toString());
+
         
         
         
@@ -104,7 +113,10 @@ public class ServerTicTacServer extends Application {
 
         @Override
         public void handle(ActionEvent event) {
-                if(flag == 0){
+            
+            ac.play();
+            
+            if(flag == 0){
                     s = new Server();
                     s.start();
                     flag = 1;
@@ -120,7 +132,10 @@ public class ServerTicTacServer extends Application {
 
         @Override
         public void handle(ActionEvent event) {
-                if(flag == 1){
+            
+            ac.play();
+            
+            if(flag == 1){
                     try {
                         s.serverSocket.close();
                         s.stop();

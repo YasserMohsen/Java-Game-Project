@@ -7,6 +7,7 @@ package util;
 
 import clienttictactoe.ClientTicTacToe;
 import clienttictactoe.Setting;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -20,6 +21,7 @@ import static javafx.scene.paint.Color.color;
 import static javafx.scene.paint.Color.color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import model.MyImage;
 import model.User;
 
 /**
@@ -40,7 +42,7 @@ rekt.setFill(imagePattern);
 
 ImageView imageView = new ImageView(image);
     */
-    Image image = new Image(getClass().getResourceAsStream("MyImage.png"));
+    //Image image = new Image(getClass().getResourceAsStream("MyImage.png"));
     //ImageView img=new ImageView(image);
     
     HBox hbox = new HBox();
@@ -58,12 +60,11 @@ ImageView imageView = new ImageView(image);
         String css = XCell.class.getResource("cell.css").toExternalForm();
         hbox.getStylesheets().add(css);
         hbox.setId("cellinfo");
-        
-        
-       // c.applyCss();
-        //System.out.print("styleeee"+hbox.getStylesheets());
+        hbox.setPrefHeight(30);
         hbox.getChildren().addAll(cstatus, cimage,label);
-        //HBox.set
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        hbox.setSpacing(10);
+        hbox.setStyle("-fx-background-color:paleturquoise;-fx-background-radius:20;-fx-padding:3;");
         HBox.setHgrow(label, Priority.ALWAYS);
 
     }
@@ -75,23 +76,18 @@ ImageView imageView = new ImageView(image);
         if (empty) {
             lastItem = null;
             setGraphic(null);
-        } else {
-
-           
+        } else {    
             lastItem = item.toString();
-           // label2.setPrefSize(20, 20);
-           // c.fillProperty(color.white);
             cstatus.setRadius(5);
-            cimage.setRadius(10);
-            cimage.setFill(new ImagePattern(image));
+            
+            cimage.setRadius(15);
+             MyImage i = item.getSerializedImg();
+          //   Image ii = i.getImage();
+          cimage.setFill(new ImagePattern(i.getImage()));
+          //cimage.setFill(new ImagePattern(image));
+          
            if(item.getStatus()==Setting.AVAILABLE){
                cstatus.setFill(Color.CHARTREUSE);
-            // c.getStyle().add();
-           //  c.setId("online");
-          // c.setStyle("-fx-background-color: #BADA55;");
-          // setStyle("-fx-background-color: #ccc;");
-           //System.out.print("stylee"+c.getStyle());
-           //  c.setStyle("-fx-border-radius: 10px; -fx-background: #BADA55;");
            }
            else if(item.getStatus()==Setting.BUSY){
                cstatus.setFill(Color.DARKORANGE);
@@ -101,11 +97,9 @@ ImageView imageView = new ImageView(image);
            {
                cstatus.setFill(Color.DARKGREY);
            }
-           //label.setTextFill(red);
-           //label.setStyle("-fx-color: #BADA55;");
 
-            label.setText(item.getName() != null ? item.getName() : "<null>");
-            
+            label.setText(item.toString() != null ? item.toString() : "<null>");
+            label.setStyle("-fx-font-weight: bold;");
             setGraphic(hbox);
         }
     }
