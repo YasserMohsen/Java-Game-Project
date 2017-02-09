@@ -20,6 +20,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -104,16 +105,22 @@ public class Client extends Thread {
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
                 User player = (User) objects[1];
+                System.out.println("ppppppppppppppppppp: "+player.getName());
+                System.out.println("ppppppppppppppppppp: "+player.getImg());
                 Platform.runLater(() -> {
                     try {
 
                         MainController.availableUsers.addAll(availablePlayerList);
                         ClientTicTacToe.replaceSceneContent(ClientTicTacToe.main_XML, "Chat Menu");
                         ClientTicTacToe.mainController.setPlayer(player);
-                        
-                        MyImage s = player.getSerializedImg();
-                        ClientTicTacToe.mainController.setMyImage(s.getImage());
                         ClientTicTacToe.mainController.setMyName(player.getName());
+                        try {
+                            MyImage s = player.getSerializedImg();
+                            ClientTicTacToe.mainController.setMyImage(s.getImage());
+                        } catch (Exception e) {
+                          ClientTicTacToe.mainController.profilePic.setImage(new Image(player.getImg()));
+                        }
+                        
                         System.out.println(player.getScore());
                         ClientTicTacToe.mainController.setMyScore(player.getScore());
                     } catch (Exception ex) {

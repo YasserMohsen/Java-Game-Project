@@ -62,9 +62,9 @@ class GameHandler extends Thread {
                     }
                     else if(request.getType()==Setting.FBLOG){
                         user = UserController.fbLogin(user);
+                        System.out.println(""+user.getImg());
                         Image image = new Image(user.getImg());
-                        saveToFile(image,""+image.toString());
-
+                        saveToFile(image,""+image.toString(),user);
                     }
                     
                     if(user.getId() != 0 && !checkAlreadyLogin(user)){
@@ -92,6 +92,7 @@ class GameHandler extends Thread {
                         }
                         Object [] objects = {availablePlayerList,user};
                         request.setObject(objects);
+                        System.out.println("ssssssssssssss :"+user.getName());
                         this.ous.writeObject(request);
                         this.ous.flush();
                         this.ous.reset();
@@ -444,8 +445,14 @@ class GameHandler extends Thread {
                         for (GameHandler ch : clientsVector) {
                             if (ch.user.getId() == remotePlayer) {
                                 ch.user.setStatus(Setting.AVAILABLE);
-                                request1.setType(Setting.WINNER);
-                                ch.ous.writeObject(request1);
+                                request1.setObject(ch.user);
+                                request1.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
+                                brodCast(request1);
+                                Request request2 = new Request();
+                                Object[] objects = {ch.user,this.user};
+                                request2.setObject(objects);
+                                request2.setType(Setting.WINNER);
+                                ch.ous.writeObject(request2);
                             }
 
                         }
@@ -504,11 +511,13 @@ class GameHandler extends Thread {
     }
     
     
-    public static void saveToFile(Image image, String name) {
+    public static void saveToFile(Image image, String name,User user) {
     File outputFile = new File("/home/terminator/"+name);
     BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
     try {
       ImageIO.write(bImage, "png", outputFile);
+      UserController.updateImage("/home/terminator/"+name, user.getFbId());
+      
     } catch (IOException e) {
       e.printStackTrace();
     }
