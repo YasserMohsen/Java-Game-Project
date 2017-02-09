@@ -285,24 +285,17 @@ public class MainController implements Initializable {
         offLineMode = !offLineMode;
         resetGame();
         btnGoOffLine.setText((offLineMode)?"GO ONLINE":"GO OFFLINE");
-        if (timer != null)
-            timer.cancel();
+        Request request = new Request();
+        request.setType(Setting.UPDATEPLAYER);
+        player.setStatus((player.getStatus()==Setting.AVAILABLE)? Setting.OFFLINE : Setting.AVAILABLE);
+        request.setObject(player);
+        Client.sendRequest(request);
+        
+        lv_players.setDisable(offLineMode);
+        btnGoOffLine.setText((player.getStatus()==Setting.AVAILABLE)? Setting.GOOFLINE : Setting.GOOFLINE);
+        
     }   
-    
-    public void btnActionChangeStatus(){
-            
-            chatField.clear();
-            Request request = new Request();
-            request.setType(Setting.UPDATEPLAYER);
-            player.setStatus((player.getStatus()==Setting.AVAILABLE)? Setting.OFFLINE : Setting.AVAILABLE);
-            request.setObject(player);
-            Client.sendRequest(request);
-
-            btnGoOffLine.setText((player.getStatus()==Setting.AVAILABLE)? Setting.GOOFLINE : Setting.GOOFLINE);
-    
-    }
- 
-    
+        
 
     public void updateCell(int[] xo) {
         playDisable = false;
