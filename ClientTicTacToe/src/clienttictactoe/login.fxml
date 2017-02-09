@@ -17,7 +17,7 @@
     <children>
       <BorderPane layoutX="25.0" layoutY="7.0" prefHeight="600.0" prefWidth="800.0">
          <center>
-            <GridPane prefHeight="300.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <GridPane prefHeight="531.0" prefWidth="800.0" BorderPane.alignment="CENTER">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.0" minWidth="0.0" prefWidth="36.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="601.0" minWidth="0.0" prefWidth="177.0" />

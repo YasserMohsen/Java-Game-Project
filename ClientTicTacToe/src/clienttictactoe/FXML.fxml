@@ -41,7 +41,7 @@
               </rowConstraints>
                <children>
 
-                  <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#btnLogout"  prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="LOGOUT" GridPane.halignment="CENTER" />
+                  <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#btnLogout" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="LOGOUT" GridPane.halignment="CENTER" />
                   <Button fx:id="btnGoOffLine" mnemonicParsing="false" onAction="#playOff" prefHeight="40.0" prefWidth="100.0" styleClass="buttonsStyle" text="GO OFFLINE" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                </children>
             </GridPane>
@@ -67,13 +67,13 @@
          <children>
             <HBox prefHeight="140.0" prefWidth="157.0">
                <children>
-                  <ImageView fx:id="profilePic" fitHeight="86.0" fitWidth="113.0" layoutX="9.0" layoutY="-5.0" onMouseClicked="#changePic" pickOnBounds="true" preserveRatio="true" />
-                  <VBox prefHeight="141.0" prefWidth="107.0">
-                      <Label id="name" fx:id="name" prefHeight="40.0" prefWidth="126.0" text="   Name: " textFill="#23a8bf">
+                  <ImageView fx:id="profilePic" fitHeight="86.0" fitWidth="100.0" layoutX="9.0" layoutY="-5.0" onMouseClicked="#changePic" pickOnBounds="true" preserveRatio="true" />
+                  <VBox prefHeight="141.0" prefWidth="63.0">
+                      <Label id="name" fx:id="name" prefHeight="40.0" prefWidth="126.0" text=" Name: " textFill="#23a8bf">
                         <font>
                            <Font name="System Bold" size="14.0" />
                         </font></Label>
-                     <Label id="score" fx:id="score" prefHeight="40.0" prefWidth="121.0" text="   Score:" textFill="#23a8bf">
+                     <Label id="score" fx:id="score" prefHeight="40.0" prefWidth="121.0" text=" Score:" textFill="#23a8bf">
                         <font>
                            <Font name="System Bold" size="14.0" />
                         </font></Label>
@@ -81,13 +81,13 @@
                   </VBox>
                   <VBox layoutX="123.0" layoutY="10.0" prefHeight="141.0" prefWidth="66.0">
                      <children>
-                        <Label fx:id="playerName" prefHeight="38.0" prefWidth="40.0" text="hgh" textFill="#f2eded52">
+                        <Label fx:id="playerName" prefHeight="38.0" prefWidth="70.0" textFill="#ffffff52">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="System Bold" size="14.0" />
                            </font></Label>
-                        <Label fx:id="playerScore" prefHeight="36.0" prefWidth="40.0" text="gg" textFill="#f2eded52">
+                        <Label fx:id="playerScore" prefHeight="36.0" prefWidth="71.0" textFill="#f2eded52">
                            <font>
-                              <Font size="12.0" />
+                              <Font name="System Bold" size="14.0" />
                            </font></Label>
                      </children>
                   </VBox>

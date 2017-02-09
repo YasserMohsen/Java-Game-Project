@@ -81,6 +81,7 @@ class GameHandler extends Thread {
                         if (request.getType() == Setting.LOGIN){
                             ServerTicTacServer.updateServerList(user);
                         }
+                        ServerTicTacServer.usersList.refresh();
                         ////////////////////////////////////////////////
                         request.setType(Setting.REG_OK);  
                         
@@ -168,6 +169,7 @@ class GameHandler extends Thread {
                                 if (ch.user.getId() == senderPlayer.getId() || ch.user.getId() == receiverPlayer.getId()) {
                                     ch.user.setStatus(Setting.AVAILABLE);
                                     ServerTicTacServer.updateServerList(ch.user);
+                                    ServerTicTacServer.usersList.refresh();
                                     
                                     if (ch.user.getId() == receiverPlayer.getId()) {
                                         request.setType((win)?Setting.LOSER:Setting.DRAW);
@@ -181,6 +183,8 @@ class GameHandler extends Thread {
                                             ch.user.setScore((win)?ch.user.getScore()+Setting.POINTS:ch.user.getScore());
                                             UserController.saveScore(ch.user);
                                             objects[0] = ch.user;
+                                            ServerTicTacServer.updateServerListScore(ch.user);
+                                            ServerTicTacServer.usersList.refresh();
                                         }
                                         
                                     }
@@ -306,6 +310,7 @@ class GameHandler extends Thread {
                             receiverPlayer.setStatus(Setting.BUSY);
                             ServerTicTacServer.updateServerList(senderPlayer);
                             ServerTicTacServer.updateServerList(receiverPlayer);
+                            ServerTicTacServer.usersList.refresh();
                             ///////////////// update server list /////////////////
 //                            for (User u : ServerTicTacServer.items){
 //                                if (senderPlayer.getId() == u.getId() || receiverPlayer.getId() == u.getId()){
@@ -346,6 +351,7 @@ class GameHandler extends Thread {
                             senderPlayer = (User) request.getObject();
                             this.user.setStatus(senderPlayer.getStatus());
                             ServerTicTacServer.updateServerList(senderPlayer);
+                            ServerTicTacServer.usersList.refresh();
                             request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
                             brodCast(request);
                             break;
@@ -404,6 +410,8 @@ class GameHandler extends Thread {
                     Request request1 = new Request();
                     request1.setType(Setting.DELETE_PLAYER_FROM_AVAILABLE_LIST);
                     this.user.setStatus(Setting.OUT);
+                    ServerTicTacServer.updateServerList(this.user);
+                    ServerTicTacServer.usersList.refresh();
                     request1.setObject(this.user);
                     brodCast(request1);
                     System.out.println(" hash map :" + playersHashMap.size());

@@ -28,6 +28,7 @@ public class LoginController implements Initializable {
     public Label errorsalma;
     @FXML
     public void loginBt(){
+        ClientTicTacToe.home.loginController.errorsalma.setVisible(false);
         user = new User(email.getText(), password.getText());
         //create a new client and send the first request (login) in its constructor
         Client c = new Client(user , Setting.LOGIN);       
