@@ -172,9 +172,9 @@ class GameHandler extends Thread {
                             //update news field
                             request.setType(Setting.UPDATE_NEWS);
                             if(win)
-                                request.setObject("**" + senderPlayer.getName() + " WINS " + receiverPlayer.getName() + "\n ================= \n");
+                                request.setObject(senderPlayer.getName() + " WINS " + receiverPlayer.getName());
                             else
-                                request.setObject("**" + senderPlayer.getName() + " draw " + receiverPlayer.getName()+"\n ================= \n");
+                                request.setObject(senderPlayer.getName() + " draw " + receiverPlayer.getName());
                             brodCastAll(request);
                         } else if(checkDraw(xo)){
                             
