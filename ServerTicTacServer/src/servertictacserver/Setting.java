@@ -26,23 +26,21 @@ public class Setting {
     
     public static final int SELECT_PLAYER_FROM_AVAILABLE_LIST = 2006;
     public static final int SEND_INVITATION_FOR_PLAYING = 2007;
-
     public static final int WINNER = 2011;
     public static final int LOSER = 2009;
     public static final int DRAW = 2017;
+    public static final int WIN_BY_WITHDRAWS = 2018;
     public static final int MOVE = 2016;
     public static final int MOVEBACK = 2010;
-
     public static final int ACCEPT_INVITATION = 2008;
     public static final int REFUSE_INVITATION = 2012;
     public static final int UPDATE_PLAYER_IN_PLAYER_LIST = 2013;
     public static final int UPDATE_2PLAYER_IN_PLAYER_LIST = 2014;
-
+    public static final int UPDATEPLAYER = 2015;
+    public static final int DELETE_PLAYER_FROM_AVAILABLE_LIST = 2016;
     public static final int MESSAGE = 2020;
     public static final int RECIEVE_MESSAGE = 2021;
     public static final int UPDATE_NEWS = 2000;
-    
     public static final String DEFAULT_IMAGE = "male.jpg";
-    public static final int UPDATEPLAYER = 2015;
     public static final int POINTS = 3;    
 }

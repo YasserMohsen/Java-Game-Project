@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -38,6 +39,9 @@ public class Client extends Thread {
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
+    //boolean flag=true;
+    static boolean conn=false;
+
     final AudioClip ad = new AudioClip(MainController.class.getResource("game-over.wav").toString());
     final AudioClip ae = new AudioClip(MainController.class.getResource("game-over-tie.wav").toString());
 //  boolean flag=true;
@@ -91,6 +95,7 @@ public class Client extends Thread {
             mySocket = new Socket("127.0.0.1", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
+            conn = true;
             this.sendRequest(u, t);
             Request request = (Request) ois.readObject();
             if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK) {
@@ -431,7 +436,30 @@ public class Client extends Thread {
                             }
                         });
                         break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+                    case Setting.DELETE_PLAYER_FROM_AVAILABLE_LIST:
+                        user = (User) request.getObject();
+                        System.out.println("hi :"+user.getName());
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                try {
+                                    
+                                    for (Iterator<User> iterator = ClientTicTacToe.mainController.availableUsers.iterator(); iterator.hasNext();) {
+                                        User nextUser = iterator.next();
+                                        if (nextUser.getId() == user.getId()) {
+                                            ClientTicTacToe.mainController.availableUsers.remove(nextUser);
+                                        }
+                                    }
+                                    ClientTicTacToe.mainController.lv_players.refresh();
+                                } catch (Exception ex) {
+                                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                            }
+                        });
+                        break;
                 }
+                
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
 

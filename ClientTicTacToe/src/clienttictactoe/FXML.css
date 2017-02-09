@@ -15,6 +15,11 @@
         linear-gradient(#20262b, #191d22),
         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
 }*/
+
+#name{
+    -fx-font-style: bold;
+}
+
 .root{
         -fx-background-color:#4f5b66;
 

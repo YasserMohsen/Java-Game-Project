@@ -27,7 +27,8 @@ public class Setting {
     public static final int WINNER = 2011;
     public static final int LOSER = 2009;
     public static final int DRAW = 2017;
-
+    public static final int WIN_BY_WITHDRAWS = 2018;
+    
     public static final String WIN_MSG = "ksebt ya m3allem :D";
     public static final String LOSE_MSG = "7azz sa3eed el marra el kadema :(";
     public static final String DRAW_MSG = "draw ya m3allem :D";
@@ -41,6 +42,8 @@ public class Setting {
     public static final int UPDATE_PLAYER_IN_PLAYER_LIST = 2013;
     public static final int UPDATE_2PLAYER_IN_PLAYER_LIST = 2014;
     public static final int UPDATEPLAYER = 2015;
+    public static final int DELETE_PLAYER_FROM_AVAILABLE_LIST = 2016;
+
 
     public static final int MESSAGE = 2020;
     public static final int RECIEVE_MESSAGE = 2021;

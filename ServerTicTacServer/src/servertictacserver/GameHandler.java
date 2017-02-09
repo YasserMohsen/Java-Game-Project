@@ -11,8 +11,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Request;
 import model.User;
 
@@ -24,7 +30,7 @@ class GameHandler extends Thread {
     ObjectInputStream ois;
     ObjectOutputStream ous;
     User user = null;
-
+    static HashMap<Integer, Integer> playersHashMap = new HashMap<>();
     static Vector<GameHandler> clientsVector = new Vector<>();
     //construct the gamehandler by checking the coming request (login or register)
     //check with database
@@ -269,7 +275,10 @@ class GameHandler extends Thread {
                             objects = (Object[]) request.getObject();
                             senderPlayer = (User) objects[1];
                             receiverPlayer = (User) objects[0];
-                            
+                            System.out.print("keyid  "+senderPlayer.getId()+" name :" + senderPlayer.getName());
+                            System.out.print("valueid  "+receiverPlayer.getId()+" name :" + receiverPlayer.getName());
+
+                            playersHashMap.put(senderPlayer.getId(), receiverPlayer.getId());
                             for (GameHandler ch : clientsVector) {
                                 if(ch.user.getId() == receiverPlayer.getId())
                                 {
@@ -299,8 +308,7 @@ class GameHandler extends Thread {
                           //  System.out.println("Busy ::" +((User) objects[0]).getStatus());
                            // System.out.println("Busy ::" +((User) objects[1]).getStatus());
                             request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
-                            brodCastAll(request);
-                            
+                            brodCastAll(request);       
                             break;
                             
 
@@ -332,6 +340,34 @@ class GameHandler extends Thread {
                             request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
                             brodCast(request);
                             break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                            case Setting.WIN_BY_WITHDRAWS:
+//                            System.out.println("WIN_BY_WITHDRAWS");
+//                            objects = (Object[]) request.getObject();
+//                            User winner = (User) objects[0];
+//                            User looser = (User) objects[1];
+//                            for (GameHandler ch : clientsVector) {
+//                                if(ch.user.getId() == winner.getId())
+//                                {
+//                                    ch.user.setStatus(Setting.AVAILABLE);
+//                                    request.setType(Setting.WINNER);
+//                                    request.setObject(winner);
+//                                    winner = (User) request.getObject();
+//                                    System.out.println("WIN :" +request.getType());
+//                                    ch.ous.writeObject(request);                          
+//                                }
+//                                
+//                                if(ch.user.getId() == looser.getId())
+//                                {
+//                                    looser = (User) request.getObject();
+//                                    System.out.println("looser  :" +request.getType());
+//                                    clientsVector.remove(ch);
+////                                    ch.ous.close();
+////                                    ch.ois.close();
+//                                } 
+//                            }
+//                            break;
                             
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,14 +390,56 @@ class GameHandler extends Thread {
             } catch (Exception ex) {
                 try {
                     clientsVector.remove(this);
-                    System.out.println(" this :" + clientsVector.size());
                     ous.close();
                     ois.close();
-                    //ex.printStackTrace();
+                    Request request1 = new Request();
+                    request1.setType(Setting.DELETE_PLAYER_FROM_AVAILABLE_LIST);
+                    request1.setObject(this.user);
+                    brodCast(request1);
+                    System.out.println(" hash map :" + playersHashMap.size());
+                    System.out.println("deleted user : "+this.user.getName() +""+ this.user.getId());
+                    System.out.println("player user : " + playersHashMap.get(this.user.getId()));
+                    int remotePlayer = 0;
+                    try {
+                        if (playersHashMap.get(this.user.getId()) == (int) playersHashMap.get(this.user.getId())) {
+                            remotePlayer = playersHashMap.get(this.user.getId());
+                            playersHashMap.remove(remotePlayer);
+                        }
+                    } catch (Exception e) {
+                        Set set = playersHashMap.entrySet();
+                        Iterator i = set.iterator();
+                        while (i.hasNext()) {
+                            Map.Entry me = (Map.Entry) i.next();
+                            System.out.print( me.getKey() + ": ");
+                            System.out.println("" +  me.getValue());
+                            System.out.print( me.getKey().toString() + ": ");
+                            System.out.println("" +  me.getValue().toString());
+                            if (Integer.parseInt(me.getValue().toString()) == this.user.getId()) {
+                                remotePlayer = Integer.parseInt(me.getKey().toString());
+                                playersHashMap.remove(Integer.parseInt(me.getKey().toString()));
+                            }
+                        }
+                        System.out.println(" hash map :" + playersHashMap.size());
+                    }
+          
+                    if (remotePlayer != 0) {
+                        for (GameHandler ch : clientsVector) {
+                            if (ch.user.getId() == remotePlayer) {
+                                ch.user.setStatus(Setting.AVAILABLE);
+                                request1.setType(Setting.WINNER);
+                                ch.ous.writeObject(request1);
+                            }
+
+                        }
+
+                    }
+                   
+                    System.out.println(" this :" + clientsVector.size());
                     break;
+                    //ex.printStackTrace();
                 } catch (IOException ex1) {
-                    System.out.println("try to close failed");
                     ex1.printStackTrace();
+                    Logger.getLogger(GameHandler.class.getName()).log(Level.SEVERE, null, ex1);
                 }
             }
         }

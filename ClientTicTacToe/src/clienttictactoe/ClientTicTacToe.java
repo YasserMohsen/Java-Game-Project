@@ -5,11 +5,17 @@
  */
 package clienttictactoe;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import model.Request;
 
 /**
  *
@@ -37,7 +43,7 @@ public class ClientTicTacToe extends Application {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource("homepage.fxml"));      
         Parent root = loader.load();
         home = (HomeController)loader.getController();
-        
+        stage.setResizable(false);
         //registerController.email.setText("lol");
 
         this.stage = stage;
@@ -49,6 +55,20 @@ public class ClientTicTacToe extends Application {
         this.stage.setScene(scene);
         this.stage.hide();
         this.stage.show();
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+          public void handle(WindowEvent we) {
+              try {
+                  if (Client.conn) {
+                    Client.ous.close();
+                    Client.ois.close();
+                  }
+          
+              } catch (IOException ex) {
+                  stage.close();
+              }
+          }
+      }); 
         
     }
 
@@ -106,6 +126,8 @@ public class ClientTicTacToe extends Application {
 
         return page;
     }
+    
+    
         
         
 

@@ -34,9 +34,12 @@
                   <TextField fx:id="email" prefHeight="50.0" prefWidth="337.0" promptText="Email Address" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <PasswordField fx:id="password" prefHeight="50.0" prefWidth="35.0" promptText="Password" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                <BorderPane prefHeight="121.0" prefWidth="557.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
-                     <center>
-                        <Label fx:id="errorsalma" prefHeight="34.0" prefWidth="76.0" text="salma" visible="false" BorderPane.alignment="CENTER" />
-                     </center>
+                     <left>
+                        <Label fx:id="errorsalma" prefHeight="34.0" prefWidth="243.0" text="salma" visible="false" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets left="60.0" />
+                           </BorderPane.margin></Label>
+                     </left>
                   </BorderPane>
                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="741.0" textFill="WHITE" GridPane.columnIndex="2">
                         <text>Welcome Back!</text>
