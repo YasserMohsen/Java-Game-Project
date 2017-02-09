@@ -55,10 +55,8 @@ public class MainController implements Initializable {
     public ListView<User> lv_players;
     
     @FXML
-    Button btnGoOffLine; 
+    Button btnGoOffLine,btnLogout; 
     
-    @FXML
-    Button btnLogout; 
     
     boolean offLineMode = false;
 //    
@@ -317,8 +315,10 @@ public class MainController implements Initializable {
         request.setObject(player);
         Client.sendRequest(request);
         
+        playerChar_X_OR_O = 0;
+        playDisable = false;
         lv_players.setDisable(offLineMode);
-        btnGoOffLine.setText((player.getStatus()==Setting.AVAILABLE)? Setting.GOOFLINE : Setting.GOOFLINE);
+        btnGoOffLine.setText((player.getStatus()==Setting.AVAILABLE)? Setting.GOONLINE : Setting.GOOFLINE);
         
     }   
         
@@ -421,7 +421,9 @@ public class MainController implements Initializable {
             ClientTicTacToe.mainController.setDisable_Enable_ListView(false);
             ClientTicTacToe.mainController.setDisable_Enable_ChatView(true);
             ClientTicTacToe.mainController.resetGame();
-            
+            ClientTicTacToe.mainController.btnGoOffLine.setDisable(false);
+            ClientTicTacToe.mainController.btnLogout.setDisable(false);
+
        
         
             remotePlayer= null;

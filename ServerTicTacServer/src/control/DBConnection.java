@@ -23,6 +23,7 @@ public class DBConnection {
              con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","root", "terminator");
 
 
+
         } catch (SQLException ex) {
             System.out.println("Go to hell!");
         }

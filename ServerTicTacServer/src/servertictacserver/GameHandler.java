@@ -6,6 +6,8 @@
 package servertictacserver;
 
 import control.UserController;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,7 +21,11 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 import model.Request;
+
 import model.User;
 
 /**
@@ -56,6 +62,9 @@ class GameHandler extends Thread {
                     }
                     else if(request.getType()==Setting.FBLOG){
                         user = UserController.fbLogin(user);
+                        Image image = new Image(user.getImg());
+                        saveToFile(image,""+image.toString());
+
                     }
                     
                     if(user.getId() != 0 && !checkAlreadyLogin(user)){
@@ -485,6 +494,20 @@ class GameHandler extends Thread {
     
         return draw;
     }
+    
+    
+    public static void saveToFile(Image image, String name) {
+    File outputFile = new File("/home/terminator/"+name);
+    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+    try {
+      ImageIO.write(bImage, "png", outputFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+    
+    
+
     private boolean checkAlreadyLogin(User u){
         for (GameHandler gameHandler : clientsVector) {
             if (gameHandler.user.getId() == u.getId()){

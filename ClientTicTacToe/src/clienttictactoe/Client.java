@@ -211,6 +211,8 @@ public class Client extends Thread {
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                             ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                             ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                            ClientTicTacToe.mainController.btnGoOffLine.setDisable(true);
+                                            ClientTicTacToe.mainController.btnLogout.setDisable(true);
                                             
 
                                         } else {
@@ -238,8 +240,10 @@ public class Client extends Thread {
                                         ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
-                                       ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                        ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
                                         ClientTicTacToe.mainController.playDisable = false;
+                                        ClientTicTacToe.mainController.btnGoOffLine.setDisable(true);
+                                        ClientTicTacToe.mainController.btnLogout.setDisable(true);
                                     }
                                 });
                                 
