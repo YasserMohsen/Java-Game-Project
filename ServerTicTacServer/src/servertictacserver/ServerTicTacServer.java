@@ -6,6 +6,7 @@
 package servertictacserver;
 
 
+import control.UserController;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -15,6 +16,7 @@ import javafx.event.EventHandler;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.Reflection;
@@ -28,6 +30,9 @@ import javafx.scene.text.Text;
 
 
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import model.User;
+import utilServer.YCell;
 
 /**
  *
@@ -35,7 +40,10 @@ import javafx.stage.Stage;
  */
 public class ServerTicTacServer extends Application {
     Server s;
-     int flag=0;
+     int flag = 0;
+     static ObservableList<User> items = FXCollections.observableArrayList ();
+     
+     static ListView<User> usersList;
     @Override
     public void start(Stage stage) throws Exception {
        // Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
@@ -52,16 +60,21 @@ public class ServerTicTacServer extends Application {
         ScrollPane pane = new ScrollPane();
         root.setId("pane");
         
-        ListView<String> list = new ListView<String>();
-        ObservableList<String> items =FXCollections.observableArrayList (
-        "sada","jlkjlk" , "uiooij","fdsf", "sdfsfs", "fdsfs","sada", "fdsf", "sdfsfs", "fdsfs","sada", "fdsf", "sdfsfs", "fdsfs","sada", "fdsf", "sdfsfs", "fdsfs");
-        list.setItems(items);
+        usersList=new ListView<>();
+        UserController.loadUsers(items);
+        usersList.setItems(items);    
+        usersList.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+            @Override
+            public ListCell<User> call(ListView<User> param) {
+                return new YCell();
+            }
+        });
         
         
         
-        pane.prefWidthProperty().bind(list.widthProperty());
-        pane.prefHeightProperty().bind(list.heightProperty());
-        pane.setContent(list);
+        pane.prefWidthProperty().bind(usersList.widthProperty());
+        pane.prefHeightProperty().bind(usersList.heightProperty());
+        pane.setContent(usersList);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         
         r.setFill(lg1);
@@ -78,7 +91,7 @@ public class ServerTicTacServer extends Application {
         
         pane.setLayoutX(100);
         pane.setLayoutY(110);
-        list.setMinSize(600, 80);
+        usersList.setMinSize(600, 80);
         
         start.setLayoutX(265);
         start.setLayoutY(50);
@@ -133,13 +146,20 @@ public class ServerTicTacServer extends Application {
         
         
         
-        root.getChildren().addAll(start, stop, t, show, list, pane);
+        root.getChildren().addAll(start, stop, t, show, usersList, pane);
         Scene scene = new Scene(root, 800, 520);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }
-
+    public static void updateServerList(User user){
+        for (User u : items){
+            if (user.getId() == u.getId()){
+                u.setStatus(user.getStatus());
+                u.setScore(user.getScore());
+            }                                   
+        }
+    }
     /**
      * @param args the command line arguments
      */

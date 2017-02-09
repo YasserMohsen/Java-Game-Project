@@ -3,31 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util;
+package utilServer;
 
-import clienttictactoe.ClientTicTacToe;
-import clienttictactoe.Setting;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
-import static javafx.scene.paint.Color.color;
-import static javafx.scene.paint.Color.color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import model.User;
+import servertictacserver.Setting;
 
 /**
  *
- * @author kazafy
+ * @author yasser
  */
-public class XCell extends ListCell<User> {
-
+public class YCell extends ListCell<User>{
     /*
     
     
@@ -53,9 +46,9 @@ ImageView imageView = new ImageView(image);
     String lastItem;
     Label label2 = new Label(".");
 
-    public XCell() {
+    public YCell() {
         super();
-        String css = XCell.class.getResource("cell.css").toExternalForm();
+        String css = YCell.class.getResource("cell.css").toExternalForm();
         hbox.getStylesheets().add(css);
         hbox.setId("cellinfo");
         
@@ -85,6 +78,7 @@ ImageView imageView = new ImageView(image);
             cimage.setRadius(10);
             cimage.setFill(new ImagePattern(image));
            if(item.getStatus()==Setting.AVAILABLE){
+               cstatus.setVisible(true);
                cstatus.setFill(Color.CHARTREUSE);
             // c.getStyle().add();
            //  c.setId("online");
@@ -94,12 +88,17 @@ ImageView imageView = new ImageView(image);
            //  c.setStyle("-fx-border-radius: 10px; -fx-background: #BADA55;");
            }
            else if(item.getStatus()==Setting.BUSY){
+               cstatus.setVisible(true);
                cstatus.setFill(Color.DARKORANGE);
                //c.setId("offline");
            }
            else if(item.getStatus()==Setting.OFFLINE)
            {
+               cstatus.setVisible(true);
                cstatus.setFill(Color.DARKGREY);
+           }
+           else if(item.getStatus()==Setting.OUT){
+               cstatus.setVisible(false);
            }
            //label.setTextFill(red);
            //label.setStyle("-fx-color: #BADA55;");

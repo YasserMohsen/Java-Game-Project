@@ -118,6 +118,7 @@ public class Client extends Thread {
                         MyImage s = player.getSerializedImg();
                         ClientTicTacToe.mainController.setMyImage(s.getImage());
                         ClientTicTacToe.mainController.setMyName(player.getName());
+                        System.out.println(player.getScore());
                         ClientTicTacToe.mainController.setMyScore(player.getScore());
                     } catch (Exception ex) {
                         Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,7 +135,7 @@ public class Client extends Thread {
 //                          // System.out.print("salma"+myError);
                         //ClientTicTacToe.home.registerController.email.setText("dsds");
                         
-                        System.out.print("mailllllllll" + ClientTicTacToe.home.registerController.email.getText());
+                        System.out.print("mailllllllll" +ClientTicTacToe.home.registerController.email.getText());
                         
                         //   ClientTicTacToe.home.registerController.email.setText("");
                         //  ClientTicTacToe.home.registerController.password.setText("");
@@ -159,14 +160,14 @@ public class Client extends Thread {
 
         } catch (IOException ex) {
             System.out.println("my IOException");
-//            if (ClientTicTacToe.registerController != null) {
-//                ClientTicTacToe.registerController.errorText.setVisible(true);
-//                ClientTicTacToe.registerController.errorText.setText("Server DOWN! :( come back later");
+//            if (ClientTicTacToe.home.registerController != null) {
+//                ClientTicTacToe.home.registerController.errorText.setVisible(true);
+//                ClientTicTacToe.home.registerController.errorText.setText("Server DOWN! :( come back later");
 //            }
-//            if (ClientTicTacToe.loginController != null) {
-//                ClientTicTacToe.loginController.errorsalma.setVisible(true);
-//                ClientTicTacToe.loginController.errorsalma.setText("Server DOWN! :( come back later");
-//            }
+            if (ClientTicTacToe.home.loginController != null) {
+                ClientTicTacToe.home.loginController.errorsalma.setVisible(true);
+                ClientTicTacToe.home.loginController.errorsalma.setText("Server DOWN! :( come back later");
+            }
             //ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
             System.out.println("my ClassNotFoundException");
@@ -293,9 +294,11 @@ public class Client extends Thread {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 try {
+                                    Object[] obj = (Object[]) request.getObject();
+                                    User winner = (User) obj[0];
                                     int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
-                                    ClientTicTacToe.mainController.setMyScore(ClientTicTacToe.mainController.getPlayer().getScore());
-                                    
+                                    ClientTicTacToe.mainController.setMyScore(winner.getScore());
+                                    System.out.println(ClientTicTacToe.mainController.getPlayer().getScore());    
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -344,7 +347,8 @@ public class Client extends Thread {
                                             for (User u : ClientTicTacToe.mainController.availableUsers) {
                                                 if(u.getId() == user.getId())
                                                     u.setStatus(user.getStatus());
-                                                    u.setScore(user.getScore());                                            
+                                                    u.setScore(user.getScore());
+
                                             }
                                             ClientTicTacToe.mainController.lv_players.refresh();
                                             

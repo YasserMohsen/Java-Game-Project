@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import model.MyImage;
 import model.User;
@@ -47,7 +48,7 @@ public class UserController {
                 id =rs.getInt(1);
                 user.setId(id);
 
-//              user.setScore(rs.getInt(5));
+                
                 user.setImgLink(Setting.DEFAULT_IMAGE);
                 
                 MyImage s = new MyImage();
@@ -71,7 +72,6 @@ public class UserController {
     public static User login(User user){
         int id = 0;
         String name = "";
-        
         String imgLink = Setting.DEFAULT_IMAGE;
         try {
             Connection con = DBConnection.openConnection();
@@ -88,6 +88,7 @@ public class UserController {
                 name = rs.getString(2);
                 user.setName(name);
                 
+                user.setScore(rs.getInt(5));
                 if (rs.getString(6) != null){
                     imgLink = rs.getString(6);
                 }
@@ -171,4 +172,31 @@ public class UserController {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
    }
+    public static void loadUsers(ObservableList<User> ol){
+        try {
+            ol.clear();
+            //User u = new User();
+            Connection con = DBConnection.openConnection();
+            System.out.println("Connected for loading users in server");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM user;");
+            ResultSet rs = stmt.executeQuery();
+            //con.close();
+            while (rs.next()){
+                User u = new User();
+                u.setName(rs.getString(2));
+                u.setId(rs.getInt(1));
+                u.setEmail(rs.getString(3));
+                u.setScore(rs.getInt(5));
+                u.setImgLink(rs.getString(6));
+                u.setStatus(Setting.OUT);
+                ol.add(u);
+                
+            }
+            con.close();
+        } catch (SQLException ex) {
+            int error = ex.getErrorCode();
+            System.out.println("error in login code number :" + error);
+            
+        }
+    }
 }

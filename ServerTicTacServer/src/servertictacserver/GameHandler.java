@@ -40,20 +40,33 @@ class GameHandler extends Thread {
                     user = (User) request.getObject();
                     if (request.getType()==Setting.LOGIN) {
                         user = UserController.login(user);
+                        
+                        
                     }
                     else if(request.getType()==Setting.REG){
                         user = UserController.register(user);
+                        
+                        
                     }
                     else if(request.getType()==Setting.FBLOG){
                         user = UserController.fbLogin(user);
                     }
                     
-                    if(user.getId() != 0){
+                    if(user.getId() != 0 && !checkAlreadyLogin(user)){
+                        
                         clientsVector.add(this);
                         // if register or login is ok send list off available players to client                                
                         this.ous.flush();
                         this.ous.reset();
                         user.setStatus(Setting.AVAILABLE);
+                        //////////// Update server list ////////////////
+                        if (request.getType() == Setting.REG){
+                            ServerTicTacServer.items.add(user);
+                        }
+                        if (request.getType() == Setting.LOGIN){
+                            ServerTicTacServer.updateServerList(user);
+                        }
+                        ////////////////////////////////////////////////
                         request.setType(Setting.REG_OK);  
                         
                         List availablePlayerList = new ArrayList<User>();                                
@@ -79,11 +92,16 @@ class GameHandler extends Thread {
                         request.setType(Setting.REG_NO);                                    
                         request.setObject("email already exist");
                         }
+                        else if(checkAlreadyLogin(user)){
+                           request.setType(Setting.LOGIN_NO);
+                           request.setObject("That account is already login"); 
+                        }
                         else if(request.getType()== Setting.LOGIN){
                         request.setType(Setting.LOGIN_NO);
                         request.setObject("incorrect username or passsword");
 
                         }
+                        
                         this.ous.writeObject(request);
                         this.ous.flush();
                         this.ous.reset();
@@ -130,10 +148,12 @@ class GameHandler extends Thread {
                         }
                         
                         if (win || draw) {
-
+                            
                             for (GameHandler ch : clientsVector) {
                                 if (ch.user.getId() == senderPlayer.getId() || ch.user.getId() == receiverPlayer.getId()) {
                                     ch.user.setStatus(Setting.AVAILABLE);
+                                    ServerTicTacServer.updateServerList(ch.user);
+                                    
                                     if (ch.user.getId() == receiverPlayer.getId()) {
                                         request.setType((win)?Setting.LOSER:Setting.DRAW);
                                         request.setObject(xo);
@@ -141,17 +161,26 @@ class GameHandler extends Thread {
                                         ch.ous.flush();
                                         ch.ous.reset();
                                     }
+                                    if (ch.user.getId() == senderPlayer.getId()){
+                                        if (win){
+                                            ch.user.setScore((win)?ch.user.getScore()+Setting.POINTS:ch.user.getScore());
+                                            UserController.saveScore(ch.user);
+                                            objects[0] = ch.user;
+                                        }
+                                        
+                                    }
 
                                 }
                             }
+                            //senderPlayer.setScore((win)?senderPlayer.getScore()+Setting.POINTS:senderPlayer.getScore());
+                            //UserController.saveScore(senderPlayer);
+                            request.setObject(objects);
                             request.setType((win)?Setting.WINNER:Setting.DRAW);
                             this.ous.writeObject(request);
                             this.ous.flush();
                             this.ous.reset();
 
-                            senderPlayer.setScore((win)?senderPlayer.getScore()+Setting.POINTS:senderPlayer.getScore());
-
-                            UserController.saveScore(senderPlayer);
+                            
                             
                             request.setObject(senderPlayer);
                             request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);                            
@@ -255,7 +284,18 @@ class GameHandler extends Thread {
                             }
                             ((User) objects[1]).setStatus(Setting.BUSY);
                             ((User) objects[0]).setStatus(Setting.BUSY);
+                            senderPlayer.setStatus(Setting.BUSY);
+                            receiverPlayer.setStatus(Setting.BUSY);
+                            ServerTicTacServer.updateServerList(senderPlayer);
+                            ServerTicTacServer.updateServerList(receiverPlayer);
+                            ///////////////// update server list /////////////////
+//                            for (User u : ServerTicTacServer.items){
+//                                if (senderPlayer.getId() == u.getId() || receiverPlayer.getId() == u.getId()){
+//                                    u.setStatus(Setting.BUSY);
+//                                }                                   
+//                            }
                             
+                            //////////////////////////////////////////////////////
                           //  System.out.println("Busy ::" +((User) objects[0]).getStatus());
                            // System.out.println("Busy ::" +((User) objects[1]).getStatus());
                             request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
@@ -288,6 +328,7 @@ class GameHandler extends Thread {
                             case Setting.UPDATEPLAYER:
                             senderPlayer = (User) request.getObject();
                             this.user.setStatus(senderPlayer.getStatus());
+                            ServerTicTacServer.updateServerList(senderPlayer);
                             request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
                             brodCast(request);
                             break;
@@ -365,5 +406,13 @@ class GameHandler extends Thread {
     
         return draw;
     }
-    
+    private boolean checkAlreadyLogin(User u){
+        for (GameHandler gameHandler : clientsVector) {
+            if (gameHandler.user.getId() == u.getId()){
+                return true;
+            }
+        }
+        return false;
+    }
 }
+

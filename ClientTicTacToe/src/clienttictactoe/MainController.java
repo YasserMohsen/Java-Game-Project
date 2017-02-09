@@ -285,16 +285,6 @@ public class MainController implements Initializable {
 //            }
 //        });
     }
-
-                     
-
-//         if(playerChar_X_OR_O == 0){
-//                           ((Label) event.getSource()).setGraphic(new ImageView(OPic)); 
-//                        }
-//                        else{
-//                            ((Label) event.getSource()).setGraphic(new ImageView(XPic)); 
-//                        }
-
     
     
 //////////////////////////////////////////////////////////////////////////////////////////////
