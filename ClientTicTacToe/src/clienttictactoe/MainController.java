@@ -65,7 +65,7 @@ public class MainController implements Initializable {
     @FXML
     TextField chatField;
     @FXML
-    TextArea news;
+    ListView<Label> news;
 
     @FXML
     Label turnStatus;
@@ -83,7 +83,7 @@ public class MainController implements Initializable {
     
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
     ObservableList<Label> chatInstance = FXCollections.observableArrayList();
-
+    ObservableList<Label> newsInstance = FXCollections.observableArrayList();
     boolean playDisable = false;
     
     private Label[][] labels = new Label[3][3];
@@ -112,14 +112,11 @@ public class MainController implements Initializable {
         gridPane.setPrefHeight(454.0);
         gridPane.setPrefWidth(473.0);
         gridPane.setGridLinesVisible(true);
-     //   gridPane.setStyle("-fx-background-color: white;");
-
-        
 
     OPic = new Image(getClass().getResourceAsStream("O.png"));
 
     XPic = new Image(getClass().getResourceAsStream("X.png"));
-    
+
 
         for (int i = 0; i < 9; i++) {
               labels[i / 3][i % 3] = new Label();
@@ -255,7 +252,9 @@ public class MainController implements Initializable {
 
         // TODO
         chatArea.setItems(chatInstance);
-        lv_players.setItems(availableUsers);        
+        lv_players.setItems(availableUsers); 
+        news.setItems(newsInstance);
+       // lv_players.setPrefHeight(50);
         lv_players.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
             @Override
             public ListCell<User> call(ListView<User> param) {
@@ -436,9 +435,7 @@ public class MainController implements Initializable {
     }
     
     public void selectUser(){
-        
-
-
+       
         
     }
     
