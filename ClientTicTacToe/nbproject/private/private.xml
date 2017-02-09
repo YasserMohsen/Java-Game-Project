@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/LoginController.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/Client.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/model/User.java</file>
@@ -18,6 +19,14 @@
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/clienttictactoe/ComputerWithGui.java</file>
             <file>file:/home/kazafy/TicTac/Java-Game-Project/ClientTicTacToe/src/model/MyImage.java</file>
+=======
+            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/model/FacebookApi.java</file>
+            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/MainController.java</file>
+            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/model/User.java</file>
+            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/util/XCell.java</file>
+            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/ClientTicTacToe.java</file>
+            <file>file:/home/terminator/tictactoe/ClientTicTacToe/src/clienttictactoe/Client.java</file>
+>>>>>>> 0e5c5d79ce6754b6d191a48dafe25725aa5fd2ff
         </group>
     </open-files>
 </project-private>

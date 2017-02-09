@@ -175,6 +175,24 @@ public class UserController {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
    }
+    
+    public static void updateImage(String url, long fb_id) {
+        try {
+            Connection con = DBConnection.openConnection();
+            PreparedStatement stmt = con.prepareStatement("UPDATE user SET img=? WHERE fb_id=?;");
+            stmt.setString(1, url);
+            stmt.setLong(2, fb_id);
+            stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    
+    
+    
     public static void loadUsers(ObservableList<User> ol){
         try {
             ol.clear();

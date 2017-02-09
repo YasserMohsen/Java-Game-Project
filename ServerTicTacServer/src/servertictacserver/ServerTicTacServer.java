@@ -60,7 +60,8 @@ public class ServerTicTacServer extends Application {
         Text show=new Text("Waiting For Choice");
         Button start = new Button("Start The Server");
         Button stop = new Button("Stop The Server");
-        Button sort = new Button("sort players");
+        Button sort = new Button("sort scores");
+        Button sort2 = new Button("sort status");
         Pane root = new Pane();
         ScrollPane pane = new ScrollPane();
         root.setId("pane");
@@ -105,7 +106,8 @@ public class ServerTicTacServer extends Application {
         stop.setLayoutY(50);
         sort.setLayoutX(605);
         sort.setLayoutY(50);
-         
+         sort2.setLayoutX(100);
+         sort2.setLayoutY(50);
         
         
         
@@ -116,7 +118,16 @@ public class ServerTicTacServer extends Application {
             public void handle(ActionEvent event) {
 
                 Collections.sort(items, Comparator.comparing(s -> s.getScore()));
+                Collections.reverse(items);
+            }
+        });
+        sort2.setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent event) {
+
+                Collections.sort(items, Comparator.comparing(s -> s.getStatus()));
+                Collections.reverse(items);
             }
         });
 
@@ -151,6 +162,9 @@ public class ServerTicTacServer extends Application {
                         s.serverSocket.close();
                         s.stop();
                         for (GameHandler ch : GameHandler.clientsVector) {
+                            ch.user.setStatus(Setting.OUT);
+                            ServerTicTacServer.updateServerList(ch.user);
+                            ServerTicTacServer.usersList.refresh();
                             ch.ois.close();
                             ch.ous.close();
                             ch.stop();
@@ -172,7 +186,7 @@ public class ServerTicTacServer extends Application {
         
         
         
-        root.getChildren().addAll(start, stop,sort, t, show, usersList, pane);
+        root.getChildren().addAll(start, stop,sort,sort2, t, show, usersList, pane);
         Scene scene = new Scene(root, 800, 520);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);
@@ -182,6 +196,14 @@ public class ServerTicTacServer extends Application {
         for (User u : items){
             if (user.getId() == u.getId()){
                 u.setStatus(user.getStatus());
+                //u.setScore(user.getScore());
+            }                                   
+        }
+    }
+    public static void updateServerListScore(User user){
+        for (User u : items){
+            if (user.getId() == u.getId()){
+                //u.setStatus(user.getStatus());
                 u.setScore(user.getScore());
             }                                   
         }

@@ -60,9 +60,9 @@ class GameHandler extends Thread {
 
                     } else if (request.getType() == Setting.FBLOG) {
                         user = UserController.fbLogin(user);
+                        System.out.println("" + user.getImg());
                         Image image = new Image(user.getImg());
-                        saveToFile(image, "" + image.toString());
-
+                        saveToFile(image, "" + image.toString(), user);
                     }
 
                     if (user.getId() != 0 && !checkAlreadyLogin(user)) {
@@ -86,6 +86,7 @@ class GameHandler extends Thread {
                         if (request.getType() == Setting.LOGIN) {
                             ServerTicTacServer.updateServerList(user);
                         }
+                        ServerTicTacServer.usersList.refresh();
                         ////////////////////////////////////////////////
                         request.setType(Setting.REG_OK);
 
@@ -97,6 +98,7 @@ class GameHandler extends Thread {
                         }
                         Object[] objects = {availablePlayerList, user};
                         request.setObject(objects);
+                        System.out.println("ssssssssssssss :" + user.getName());
                         this.ous.writeObject(request);
                         this.ous.flush();
                         this.ous.reset();
@@ -172,6 +174,7 @@ class GameHandler extends Thread {
                                     ch.user.setStatus(Setting.AVAILABLE);
                                     ServerTicTacServer.updateServerList(ch.user);
 
+                                    ServerTicTacServer.usersList.refresh();
                                     if (ch.user.getId() == receiverPlayer.getId()) {
                                         request.setType((win) ? Setting.LOSER : Setting.DRAW);
                                         request.setObject(xo);
@@ -184,6 +187,8 @@ class GameHandler extends Thread {
                                             ch.user.setScore((win) ? ch.user.getScore() + Setting.POINTS : ch.user.getScore());
                                             UserController.saveScore(ch.user);
                                             objects[0] = ch.user;
+                                            ServerTicTacServer.updateServerListScore(ch.user);
+                                            ServerTicTacServer.usersList.refresh();
                                         }
 
                                     }
@@ -296,30 +301,33 @@ class GameHandler extends Thread {
                             } else if (ch.user.getId() == senderPlayer.getId()) {
                                 ch.user.setStatus(Setting.BUSY); /// update player status in vector
                             }
-                        }
-                        ((User) objects[1]).setStatus(Setting.BUSY);
-                        ((User) objects[0]).setStatus(Setting.BUSY);
-                        senderPlayer.setStatus(Setting.BUSY);
-                        receiverPlayer.setStatus(Setting.BUSY);
-                        ServerTicTacServer.updateServerList(senderPlayer);
-                        ServerTicTacServer.updateServerList(receiverPlayer);
-                        ///////////////// update server list /////////////////
+
+                            ((User) objects[1]).setStatus(Setting.BUSY);
+                            ((User) objects[0]).setStatus(Setting.BUSY);
+                            senderPlayer.setStatus(Setting.BUSY);
+                            receiverPlayer.setStatus(Setting.BUSY);
+                            ServerTicTacServer.updateServerList(senderPlayer);
+                            ServerTicTacServer.updateServerList(receiverPlayer);
+                            ServerTicTacServer.usersList.refresh();
+                            ///////////////// update server list /////////////////
 //                            for (User u : ServerTicTacServer.items){
 //                                if (senderPlayer.getId() == u.getId() || receiverPlayer.getId() == u.getId()){
 //                                    u.setStatus(Setting.BUSY);
 //                                }                                   
 //                            }
 
-                        //////////////////////////////////////////////////////
-                        //  System.out.println("Busy ::" +((User) objects[0]).getStatus());
-                        // System.out.println("Busy ::" +((User) objects[1]).getStatus());
-                        request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
-                        brodCastAll(request);
-                        break;
+                            //////////////////////////////////////////////////////
+                            //  System.out.println("Busy ::" +((User) objects[0]).getStatus());
+                            // System.out.println("Busy ::" +((User) objects[1]).getStatus());
+                            request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
+                            brodCastAll(request);
+                        }
+                            break;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.REFUSE_INVITATION:
+                        
+                        case Setting.REFUSE_INVITATION:
 
                         System.out.println("REFUSE_INVITATION");
                         objects = (Object[]) request.getObject();
@@ -336,13 +344,15 @@ class GameHandler extends Thread {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    case Setting.UPDATEPLAYER:
-                        senderPlayer = (User) request.getObject();
-                        this.user.setStatus(senderPlayer.getStatus());
-                        ServerTicTacServer.updateServerList(senderPlayer);
-                        request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
-                        brodCast(request);
-                        break;
+
+                            case Setting.UPDATEPLAYER:
+                            senderPlayer = (User) request.getObject();
+                            this.user.setStatus(senderPlayer.getStatus());
+                            ServerTicTacServer.updateServerList(senderPlayer);
+                            ServerTicTacServer.usersList.refresh();
+                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
+                            brodCast(request);
+                            break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                            case Setting.WIN_BY_WITHDRAWS:
@@ -381,15 +391,15 @@ class GameHandler extends Thread {
 
                 if (request == null) {
 
-                    clientsVector.remove(this);
-                    System.out.println("null this :" + clientsVector.size());
-                    ous.close();
-                    ois.close();
-                    break;
+                            clientsVector.remove(this);
+                            System.out.println("null this :" + clientsVector.size());
+                            ous.close();
+                            ois.close();
+                            break;
 
-                }
+                        }
 //                    sendMessageToAll(request);      
-            } catch (Exception ex) {
+                }catch (Exception ex) {
                 try {
                     clientsVector.remove(this);
                     ous.close();
@@ -397,6 +407,8 @@ class GameHandler extends Thread {
                     Request request1 = new Request();
                     request1.setType(Setting.DELETE_PLAYER_FROM_AVAILABLE_LIST);
                     this.user.setStatus(Setting.OUT);
+                    ServerTicTacServer.updateServerList(this.user);
+                    ServerTicTacServer.usersList.refresh();
                     request1.setObject(this.user);
                     brodCast(request1);
                     System.out.println(" hash map :" + playersHashMap.size());
@@ -429,8 +441,14 @@ class GameHandler extends Thread {
                         for (GameHandler ch : clientsVector) {
                             if (ch.user.getId() == remotePlayer) {
                                 ch.user.setStatus(Setting.AVAILABLE);
-                                request1.setType(Setting.WINNER);
-                                ch.ous.writeObject(request1);
+                                request1.setObject(ch.user);
+                                request1.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
+                                brodCast(request1);
+                                Request request2 = new Request();
+                                Object[] objects = {ch.user,this.user};
+                                request2.setObject(objects);
+                                request2.setType(Setting.WINNER);
+                                ch.ous.writeObject(request2);
                             }
 
                         }
@@ -445,26 +463,30 @@ class GameHandler extends Thread {
                     Logger.getLogger(GameHandler.class.getName()).log(Level.SEVERE, null, ex1);
                 }
             }
+            }
         }
-    }
 
-    void brodCast(Request request) throws IOException {
-        for (GameHandler ch : clientsVector) {
-            if (ch.user.getId() != ((User) request.getObject()).getId()) {
+        void brodCast
+        (Request request) throws IOException {
+            for (GameHandler ch : clientsVector) {
+                if (ch.user.getId() != ((User) request.getObject()).getId()) {
+                    ch.ous.writeObject(request);
+                    ch.ous.flush();
+                    ch.ous.reset();
+                }
+            }
+        }
+
+        void brodCastAll
+        (Request request) throws IOException {
+            for (GameHandler ch : clientsVector) {
                 ch.ous.writeObject(request);
                 ch.ous.flush();
                 ch.ous.reset();
             }
         }
-    }
 
-    void brodCastAll(Request request) throws IOException {
-        for (GameHandler ch : clientsVector) {
-            ch.ous.writeObject(request);
-            ch.ous.flush();
-            ch.ous.reset();
-        }
-    }
+    
 
     private boolean checkWins(int[] x) {
 
@@ -489,14 +511,18 @@ class GameHandler extends Thread {
         return draw;
     }
 
-    public static void saveToFile(Image image, String name) {
-        File outputFile = new File("/home/terminator/" + name);
+
+    public static void saveToFile(Image image, String name, User user) {
+        File outputFile = new File("/home/kazafy/" + name);
         BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
         try {
             ImageIO.write(bImage, "png", outputFile);
+            UserController.updateImage("/home/kazafy/" + name, user.getFbId());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private boolean checkAlreadyLogin(User u) {
@@ -508,3 +534,4 @@ class GameHandler extends Thread {
         return false;
     }
 }
+

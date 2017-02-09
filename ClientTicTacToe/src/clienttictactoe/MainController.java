@@ -442,6 +442,8 @@ public class MainController implements Initializable {
     }
     public void setMyName(String name){
         playerName.setText(name);
+        System.err.println("jjjj ::: "+name);
+        player.setName(name);
     }
     public void setMyScore(int score){
         playerScore.setText(score + "");

@@ -42,6 +42,10 @@ public class RegisterController implements Initializable {
     @FXML
     public void btnActionSignUp(){
        //System.out.print("emo"+email.getText());
+        ClientTicTacToe.home.registerController.repasserror.setVisible(false);
+         ClientTicTacToe.home.registerController.passerror.setVisible(false);
+          ClientTicTacToe.home.registerController.mailerror.setVisible(false);
+           ClientTicTacToe.home.registerController.nameerror.setVisible(false);
        if(!password.getText().equals(repassword.getText())){
            ClientTicTacToe.home.registerController.repasserror.setVisible(true);
                         repasserror.setTextFill(Color.RED);

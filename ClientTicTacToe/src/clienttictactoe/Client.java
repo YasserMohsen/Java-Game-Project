@@ -21,6 +21,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -106,16 +107,22 @@ public class Client extends Thread {
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
                 User player = (User) objects[1];
+                System.out.println("ppppppppppppppppppp: "+player.getName());
+                System.out.println("ppppppppppppppppppp: "+player.getImg());
                 Platform.runLater(() -> {
                     try {
 
                         MainController.availableUsers.addAll(availablePlayerList);
                         ClientTicTacToe.replaceSceneContent(ClientTicTacToe.main_XML, "Chat Menu");
                         ClientTicTacToe.mainController.setPlayer(player);
-                        
-                        MyImage s = player.getSerializedImg();
-                        ClientTicTacToe.mainController.setMyImage(s.getImage());
                         ClientTicTacToe.mainController.setMyName(player.getName());
+                        try {
+                            MyImage s = player.getSerializedImg();
+                            ClientTicTacToe.mainController.setMyImage(s.getImage());
+                        } catch (Exception e) {
+                          ClientTicTacToe.mainController.profilePic.setImage(new Image(player.getImg()));
+                        }
+                        
                         System.out.println(player.getScore());
                         ClientTicTacToe.mainController.setMyScore(player.getScore());
                     } catch (Exception ex) {
@@ -129,7 +136,10 @@ public class Client extends Thread {
                 Platform.runLater(() -> {
                     String myError = (String) request.getObject();
                     if (request.getType() == Setting.REG_NO) {
-
+                        
+                        ClientTicTacToe.home.registerController.mailerror.setText(myError);
+                        ClientTicTacToe.home.registerController.mailerror.setVisible(true);
+                        ClientTicTacToe.home.registerController.mailerror.setTextFill(Color.RED);
 //                             ClientTicTacToe.home.registerController.reggrid.add(l,1,0);
 //<Label fx:id="mailerror" text="" prefHeight="36.0" prefWidth="316.0" visible="false" GridPane.columnIndex="2" GridPane.valignment="BOTTOM" />
                     } else {
@@ -148,12 +158,14 @@ public class Client extends Thread {
 
         } catch (IOException ex) {
             System.out.println("my IOException");
-//            if (ClientTicTacToe.home.registerController != null) {
-//                ClientTicTacToe.home.registerController.errorText.setVisible(true);
-//                ClientTicTacToe.home.registerController.errorText.setText("Server DOWN! :( come back later");
-//            }
+            if (ClientTicTacToe.home.registerController != null) {
+                ClientTicTacToe.home.registerController.repasserror.setVisible(true);
+                ClientTicTacToe.home.registerController.repasserror.setTextFill(Color.RED);
+                ClientTicTacToe.home.registerController.repasserror.setText("Server DOWN! :( come back later");
+            }
             if (ClientTicTacToe.home.loginController != null) {
                 ClientTicTacToe.home.loginController.errorsalma.setVisible(true);
+                ClientTicTacToe.home.loginController.errorsalma.setTextFill(Color.RED);
                 ClientTicTacToe.home.loginController.errorsalma.setText("Server DOWN! :( come back later");
             }
             //ex.printStackTrace();
