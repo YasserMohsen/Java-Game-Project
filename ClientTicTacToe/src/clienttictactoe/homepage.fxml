@@ -33,7 +33,7 @@
         -->
     </center>
    <bottom>
-         <Button fx:id="fbLog" styleClass="buttonsStyle" textFill="WHITE" mnemonicParsing="false" onAction="#fbLogin" prefHeight="60.0" prefWidth="300.0" text="Register with Facebook" BorderPane.alignment="CENTER">
+         <Button fx:id="fbLog" visible="false" styleClass="buttonsStyle" textFill="WHITE" mnemonicParsing="false" onAction="#fbLogin" prefHeight="60.0" prefWidth="300.0" text="Register with Facebook" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="50.0" />
          </BorderPane.margin>

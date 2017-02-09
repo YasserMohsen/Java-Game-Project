@@ -122,7 +122,7 @@ public class ComputerWithGui extends Application {
 
                     board.placeAMove(new Point(index / 3, index % 3), 2);
 
-//                    board.displayBoard();/// print to console
+                    board.displayBoard();/// print to console
 
                     System.out.println("Placed a move at: (" + index / 3 + ", " + index % 3 + ")");
                     boolean mark = true;
@@ -144,7 +144,7 @@ public class ComputerWithGui extends Application {
 
                                     }
                                 },
-                                1500
+                                1000
                         );
 
                         cells[indexCell].setUserData(mark); //Used!
@@ -156,43 +156,43 @@ public class ComputerWithGui extends Application {
                         System.out.println("clienttictactoe.ComputerWithGui.start()");
                     }
 
-//                    if (board.isGameOver()) {
-//                        Stage stage2 = new Stage();
-//                        GridPane g2 = new GridPane();
-//                        g2.setPadding(new Insets(20, 20, 20, 20));
-//                        g2.setVgap(20);
-//                        g2.setHgap(20);
-//                        Label label2 = new Label();
-//                        if (board.hasXWon()) {
-//                            label2.setText("3la meen da e7na m3lmeen");
-//                            stage2.setTitle("5asart ya zboon");
-//                        } else {
-//                            label2.setText("ensa yaba");
-//                            stage2.setTitle("ta3adol");
-//                        }
-//                        g2.add(label2, 0, 0, 2, 1);
-//                        Button onceMore = new Button("5aleeni al3ab tani");
-//                        Button quit = new Button("la 5alas zhe2t");
-//                        g2.add(onceMore, 1, 1, 1, 1);
-//                        g2.add(quit, 2, 1, 1, 1);
-//                        onceMore.setOnMouseClicked(q -> {
-//                            primaryStage.close();
-//                            stage2.close();
-//                            board.resetBoard();
-//                            start(new Stage());
-//                        });
-//
-//                        quit.setOnMouseClicked(q -> {
-//                            System.exit(0);
-//                        });
-//                        Scene scene = new Scene(g2);
-//                        scene.getStylesheets().addAll(this.getClass().getResource("result.css").toExternalForm());
-//                        stage2.setScene(scene);
-//                        stage2.setOnCloseRequest(q -> {
-//                            primaryStage.close();
-//                        });
-//                        stage2.show();
-//                    }
+                    if (board.isGameOver()) {
+                        Stage stage2 = new Stage();
+                        GridPane g2 = new GridPane();
+                        g2.setPadding(new Insets(20, 20, 20, 20));
+                        g2.setVgap(20);
+                        g2.setHgap(20);
+                        Label label2 = new Label();
+                        if (board.hasXWon()) {
+                            label2.setText("3la meen da e7na m3lmeen");
+                            stage2.setTitle("5asart ya zboon");
+                        } else {
+                            label2.setText("ensa yaba");
+                            stage2.setTitle("ta3adol");
+                        }
+                        g2.add(label2, 0, 0, 2, 1);
+                        Button onceMore = new Button("5aleeni al3ab tani");
+                        Button quit = new Button("la 5alas zhe2t");
+                        g2.add(onceMore, 1, 1, 1, 1);
+                        g2.add(quit, 2, 1, 1, 1);
+                        onceMore.setOnMouseClicked(q -> {
+                            primaryStage.close();
+                            stage2.close();
+                            board.resetBoard();
+                            start(new Stage());
+                        });
+
+                        quit.setOnMouseClicked(q -> {
+                            System.exit(0);
+                        });
+                        Scene scene = new Scene(g2);
+                        scene.getStylesheets().addAll(this.getClass().getResource("result.css").toExternalForm());
+                        stage2.setScene(scene);
+                        stage2.setOnCloseRequest(q -> {
+                            primaryStage.close();
+                        });
+                        stage2.show();
+                    }
                 }
             });
         };
