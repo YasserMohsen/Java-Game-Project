@@ -6,6 +6,8 @@
 package servertictacserver;
 
 import control.UserController;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,6 +15,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 import model.Request;
 import model.User;
 
@@ -46,6 +51,9 @@ class GameHandler extends Thread {
                     }
                     else if(request.getType()==Setting.FBLOG){
                         user = UserController.fbLogin(user);
+                        Image image = new Image(user.getImg());
+                        saveToFile(image);
+
                     }
                     
                     if(user.getId() != 0){
@@ -365,5 +373,17 @@ class GameHandler extends Thread {
     
         return draw;
     }
+    
+    
+    public static void saveToFile(Image image, String name) {
+    File outputFile = new File("/home/kazafy/"+name);
+    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+    try {
+      ImageIO.write(bImage, "png", outputFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+    
     
 }

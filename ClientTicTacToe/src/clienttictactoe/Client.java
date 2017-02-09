@@ -88,7 +88,7 @@ public class Client extends Thread {
 
         try {
             boolean flag=true;
-            mySocket = new Socket("127.0.0.1", 5005);
+            mySocket = new Socket("192.168.1.4", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
             this.sendRequest(u, t);
@@ -211,6 +211,8 @@ public class Client extends Thread {
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                             ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                             ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                            ClientTicTacToe.mainController.btnGoOffLine.setDisable(true);
+                                            ClientTicTacToe.mainController.btnLogout.setDisable(true);
                                             
 
                                         } else {
@@ -238,8 +240,10 @@ public class Client extends Thread {
                                         ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
-                                       ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                        ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
                                         ClientTicTacToe.mainController.playDisable = false;
+                                        ClientTicTacToe.mainController.btnGoOffLine.setDisable(true);
+                                        ClientTicTacToe.mainController.btnLogout.setDisable(true);
                                     }
                                 });
                                 
