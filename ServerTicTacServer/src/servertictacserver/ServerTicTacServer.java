@@ -20,6 +20,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.Reflection;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
@@ -34,7 +35,7 @@ import javafx.stage.Stage;
  * @author kazafy
  */
 public class ServerTicTacServer extends Application {
-    Server s;
+     Server s;
      int flag=0;
     @Override
     public void start(Stage stage) throws Exception {
@@ -51,6 +52,8 @@ public class ServerTicTacServer extends Application {
         Pane root = new Pane();
         ScrollPane pane = new ScrollPane();
         root.setId("pane");
+        
+        final AudioClip ac = new AudioClip(ServerTicTacServer.class.getResource("btnclick.wav").toString());
         
         ListView<String> list = new ListView<String>();
         ObservableList<String> items =FXCollections.observableArrayList (
@@ -91,7 +94,10 @@ public class ServerTicTacServer extends Application {
 
         @Override
         public void handle(ActionEvent event) {
-                if(flag == 0){
+            
+            ac.play();
+            
+            if(flag == 0){
                     s = new Server();
                     s.start();
                     flag = 1;
@@ -107,7 +113,10 @@ public class ServerTicTacServer extends Application {
 
         @Override
         public void handle(ActionEvent event) {
-                if(flag == 1){
+            
+            ac.play();
+            
+            if(flag == 1){
                     try {
                         s.serverSocket.close();
                         s.stop();

@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import javafx.application.Platform;
-
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.AudioClip;
 import javafx.util.Callback;
 import model.FacebookApi;
 import model.Request;
@@ -77,7 +76,11 @@ public class MainController implements Initializable {
     @FXML 
     Label playerName, playerScore;
 
-
+    final AudioClip ac = new AudioClip(MainController.class.getResource("note-high.wav").toString());
+    final AudioClip ab = new AudioClip(MainController.class.getResource("note-low.wav").toString());
+    final AudioClip ad = new AudioClip(MainController.class.getResource("game-over.wav").toString());
+    final AudioClip ae = new AudioClip(MainController.class.getResource("game-over-tie.wav").toString());
+    
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
     ObservableList<Label> chatInstance = FXCollections.observableArrayList();
 
@@ -152,7 +155,7 @@ public class MainController implements Initializable {
                         if (next != -1) {   //If the game isn't finished yet!   
                             int indexCell = next;
                             xo[indexCell] = 1;
-
+                            ac.play();
                             Timer timer = new Timer();
                             timer.schedule(
                                     new java.util.TimerTask() {
@@ -166,6 +169,7 @@ public class MainController implements Initializable {
                                                         labels[indexCell/3][indexCell%3].setGraphic(new ImageView(XPic));
     //                                                    ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
                                                         playDisable = false;
+                                                        ab.play();
                                                         turnStatus.setText("your Turn");
                                                     }
                                                 }
@@ -185,7 +189,9 @@ public class MainController implements Initializable {
                         }
                         
                         if (board.isGameOver()) {
-                        
+                             
+                            ad.play();
+                            ae.play();
                             if (board.hasXWon()) {
                                 showDialog(Setting.LOSE_MSG);
                             }else {
@@ -219,7 +225,7 @@ public class MainController implements Initializable {
                     counter++;
                     if (!playDisable) {
                         xo[position] = playerChar_X_OR_O;
-
+                        
 ///////////////////////////////////////// prepare move request ///////////////////////////////// 
                         Request request = new Request();
                         request.setType(Setting.MOVE);
@@ -228,7 +234,8 @@ public class MainController implements Initializable {
                         System.out.println(" id n :" + remotePlayer.toString());
                         request.setObject(objects);
                         Client.sendRequest(request);
-                        
+                        ac.play();
+                        ab.play();
                     playDisable = true;
                     turnStatus.setText(remotePlayer.getName()+"'s Turn");
                        

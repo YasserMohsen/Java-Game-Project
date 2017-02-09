@@ -20,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import static javafx.scene.paint.Color.color;
 import model.MyImage;
@@ -37,7 +38,9 @@ public class Client extends Thread {
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
-    //  boolean flag=true;
+    final AudioClip ad = new AudioClip(MainController.class.getResource("game-over.wav").toString());
+    final AudioClip ae = new AudioClip(MainController.class.getResource("game-over-tie.wav").toString());
+//  boolean flag=true;
 
     public static void sendRequest(User user, int type) {
 
@@ -297,6 +300,8 @@ public class Client extends Thread {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 try {
+                                        ad.play();
+                                        ae.play();
                                     int result = ClientTicTacToe.mainController.showWinDialog(Setting.WIN_MSG);
                                     ClientTicTacToe.mainController.setMyScore(ClientTicTacToe.mainController.getPlayer().getScore());
                                     
