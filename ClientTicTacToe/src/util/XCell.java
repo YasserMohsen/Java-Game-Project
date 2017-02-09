@@ -5,8 +5,11 @@
  */
 package util;
 
+import clienttictactoe.Client;
 import clienttictactoe.ClientTicTacToe;
 import clienttictactoe.Setting;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -79,11 +82,19 @@ ImageView imageView = new ImageView(image);
         } else {    
             lastItem = item.toString();
             cstatus.setRadius(5);
-            
-            cimage.setRadius(15);
-             MyImage i = item.getSerializedImg();
-          //   Image ii = i.getImage();
-          cimage.setFill(new ImagePattern(i.getImage()));
+        
+            try {
+                cimage.setRadius(15);
+                MyImage i = item.getSerializedImg();
+                //   Image ii = i.getImage();
+                cimage.setFill(new ImagePattern(i.getImage()));
+
+            } catch (Exception ex) {
+                System.out.println("uuuuuuuuuuuuuuuuuuuuuuuu "+item.getImg());
+                cimage.setFill(new ImagePattern(new Image(item.getImg())));
+
+            }
+
           //cimage.setFill(new ImagePattern(image));
           
            if(item.getStatus()==Setting.AVAILABLE){
