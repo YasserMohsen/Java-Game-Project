@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -37,7 +38,8 @@ public class Client extends Thread {
     static ObjectInputStream ois;
     static PrintStream ps;
     static Request request = new Request();
-    //  boolean flag=true;
+    //boolean flag=true;
+    static boolean conn=false;
 
     public static void sendRequest(User user, int type) {
 
@@ -88,6 +90,7 @@ public class Client extends Thread {
             mySocket = new Socket("127.0.0.1", 5005);
             ois = new ObjectInputStream(mySocket.getInputStream());
             ous = new ObjectOutputStream(mySocket.getOutputStream());
+            conn = true;
             this.sendRequest(u, t);
             Request request = (Request) ois.readObject();
             if (request.getType() == Setting.REG_OK || request.getType() == Setting.LOGIN_OK) {
@@ -103,7 +106,7 @@ public class Client extends Thread {
 //                        flag=false;
 //                    }
                 //   }
-                //System.out.print("mailllllllll" + ClientTicTacToe.home.registerController.email.getText());
+                System.out.print("mailllllllll" + ClientTicTacToe.home.registerController.email.getText());
                 //    if(flag){
                 Object[] objects = (Object[]) request.getObject();
                 List<User> availablePlayerList = (ArrayList) objects[0];
@@ -140,6 +143,7 @@ public class Client extends Thread {
                         //  ClientTicTacToe.home.registerController.password.setText("");
                         // ClientTicTacToe.home.registerController.repassword.setText("");
                         //ClientTicTacToe.home.registerController.name.setText("");
+                         ClientTicTacToe.home.registerController.mailerror.setText(myError);
 //                           ClientTicTacToe.home.registerController.mailerror.setTextFill(Color.RED);
 //                             l.setText(myError);
 //                             l.setPrefSize(316,36);
@@ -147,6 +151,7 @@ public class Client extends Thread {
 //                             ClientTicTacToe.home.registerController.reggrid.add(l,1,0);
 //<Label fx:id="mailerror" text="" prefHeight="36.0" prefWidth="316.0" visible="false" GridPane.columnIndex="2" GridPane.valignment="BOTTOM" />
                     } else {
+                       // System.out.print("mailllllllll" + ClientTicTacToe.home.loginController.email.getText());
                         ClientTicTacToe.home.loginController.errorsalma.setText(myError);
                         ClientTicTacToe.home.loginController.errorsalma.setVisible(true);
                     }
@@ -224,6 +229,7 @@ public class Client extends Thread {
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                             ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                             ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
+                                            
 
                                         } else {
                                             //////////////logic here///////////////////////
@@ -232,6 +238,7 @@ public class Client extends Thread {
                                             Client.sendRequest(request);
                                             ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         }
+                                        ClientTicTacToe.mainController.playDisable = true;
 
                             }
                         });
@@ -250,7 +257,7 @@ public class Client extends Thread {
                                         ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
                                         ClientTicTacToe.mainController.setDisable_Enable_ListView(true);
                                        ClientTicTacToe.mainController.setDisable_Enable_ChatView(false);
-                                        ClientTicTacToe.mainController.playDisable = true;
+                                        ClientTicTacToe.mainController.playDisable = false;
                                     }
                                 });
                                 
@@ -435,7 +442,30 @@ public class Client extends Thread {
                             }
                         });
                         break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+                    case Setting.DELETE_PLAYER_FROM_AVAILABLE_LIST:
+                        user = (User) request.getObject();
+                        System.out.println("hi :"+user.getName());
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                try {
+                                    
+                                    for (Iterator<User> iterator = ClientTicTacToe.mainController.availableUsers.iterator(); iterator.hasNext();) {
+                                        User nextUser = iterator.next();
+                                        if (nextUser.getId() == user.getId()) {
+                                            ClientTicTacToe.mainController.availableUsers.remove(nextUser);
+                                        }
+                                    }
+                                    ClientTicTacToe.mainController.lv_players.refresh();
+                                } catch (Exception ex) {
+                                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                            }
+                        });
+                        break;
                 }
+                
 /////////////////////////////////// end switch ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
 

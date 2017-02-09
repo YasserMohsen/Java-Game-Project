@@ -132,6 +132,10 @@ public class User implements Serializable{
         return this.name ;
     }
     
+
+    public void change(String img) {
+        this.img = img;
+    }
     public String getImgLink() {
         return imgLink;
     }
@@ -146,6 +150,7 @@ public class User implements Serializable{
 
     public void setSerializedImg(MyImage serializedImg) {
         this.serializedImg = serializedImg;
+
     }
     
 }

@@ -1,19 +1,14 @@
 package clienttictactoe;
 
-import com.restfb.types.ProfilePictureSource;
 import java.net.URL;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -68,11 +63,16 @@ public class MainController implements Initializable {
     TextField chatField;
     @FXML
     TextArea news;
+
+    @FXML
+    Label turnStatus;
+
     
     @FXML
     ImageView profilePic;
     @FXML 
     Label playerName, playerScore;
+
 
     public static ObservableList<User> availableUsers = FXCollections.observableArrayList();
     ObservableList<Label> chatInstance = FXCollections.observableArrayList();
@@ -93,6 +93,7 @@ public class MainController implements Initializable {
     private User player;
     private User remotePlayer;
 
+    ComputerWithGui computerWithGui = new ComputerWithGui();
     /**
      * Initializes the controller class.
      */
@@ -107,10 +108,11 @@ public class MainController implements Initializable {
         
 
     OPic = new Image(getClass().getResourceAsStream("O.png"));
+
     XPic = new Image(getClass().getResourceAsStream("X.png"));
     
     //profilePic.setImage(new Image(getClass().getResourceAsStream("male.jpg")));
-//        cell1 = new Label();
+
 //        cell2 = new Label();
 //        cell3 = new Label();
 //        cell4 = new Label();
@@ -134,6 +136,7 @@ public class MainController implements Initializable {
                    labels[i / 3][i % 3].setAlignment(Pos.CENTER);
             gridPane.add(labels[i / 3][i % 3], i % 3, i / 3);
             labels[i / 3][i % 3].setUserData(i);
+            
             labels[i / 3][i % 3].setOnMouseClicked(event -> {
 //                if (isFinish) {
 //                    return;
@@ -161,11 +164,13 @@ public class MainController implements Initializable {
                         request.setObject(objects);
                         Client.sendRequest(request);
                         
+                    playDisable = true;
+                    turnStatus.setText(remotePlayer.getName()+"'s Turn");
                        
                    
                         
                         ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
-
+                     //turnStatus.setText("Your Turn");
 ///////////////////////////////////////////////////////////////////////////////////////////////////
                     }
 //                        if (checkWins()){
@@ -173,7 +178,7 @@ public class MainController implements Initializable {
 //                            System.out.println(" plyer number "+((playDisable)?" 1 ":" 2 ") +" win");
 //                        }                        
 
-                    playDisable = true;
+                   
                 }
             });
             
@@ -197,14 +202,6 @@ public class MainController implements Initializable {
             System.out.println("clicked");
 
             remotePlayer= lv_players.getSelectionModel().getSelectedItem();
-
-            System.out.println("not avai" + remotePlayer.getStatus());
-            System.out.println("playerId:"+remotePlayer.getId());
-            System.out.println("playername:"+remotePlayer.getName());
-            System.out.println("playerEmail:"+remotePlayer.getEmail());
-            System.out.println("playerStatus:"+remotePlayer.getStatus());
-            System.out.println("playerScore:"+remotePlayer.getScore());
-
  
                     if (remotePlayer.getStatus() != Setting.AVAILABLE)
                         return;
@@ -322,6 +319,7 @@ public class MainController implements Initializable {
 
     public void updateCell(int[] xo) {
         playDisable = false;
+        turnStatus.setText("Your Turn");
         for (int i = 0; i < 9; i++) {
             this.xo[i] = (xo[i]);
             if (xo[i] == 1) {
@@ -420,13 +418,14 @@ public class MainController implements Initializable {
        
         
             remotePlayer= null;
+            playDisable = true;
             return res;
     }
     
     @FXML
     public void sendBt(){
         String myText = chatField.getText();
-        if (myText != "" && remotePlayer != null){
+        if (myText != "" &&  remotePlayer!= null){
             chatField.clear();
             Request request = new Request();
             request.setType(Setting.MESSAGE);
@@ -448,6 +447,6 @@ public class MainController implements Initializable {
         
     }
     
-    
-
+  
+   
 }
