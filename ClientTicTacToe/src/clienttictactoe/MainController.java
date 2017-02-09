@@ -22,6 +22,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.media.AudioClip;
@@ -69,13 +72,23 @@ public class MainController implements Initializable {
 
     @FXML
     Label turnStatus;
-
+     
+    @FXML
+    Label name;
+    
+    @FXML
+    Label score;
     
     @FXML
     ImageView profilePic;
     @FXML 
     Label playerName, playerScore;
 
+   
+  
+
+    
+    
     final AudioClip ac = new AudioClip(MainController.class.getResource("note-high.wav").toString());
     final AudioClip ab = new AudioClip(MainController.class.getResource("note-low.wav").toString());
     final AudioClip ad = new AudioClip(MainController.class.getResource("game-over.wav").toString());

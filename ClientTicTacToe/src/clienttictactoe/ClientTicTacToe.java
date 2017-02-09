@@ -37,7 +37,7 @@ public class ClientTicTacToe extends Application {
         FXMLLoader loader = new FXMLLoader(ClientTicTacToe.class.getResource("homepage.fxml"));      
         Parent root = loader.load();
         home = (HomeController)loader.getController();
-        
+        stage.setResizable(false);
         //registerController.email.setText("lol");
 
         this.stage = stage;
