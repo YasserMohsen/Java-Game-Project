@@ -19,11 +19,8 @@ public class DBConnection {
         Connection con = null;
         try {
             DriverManager.registerDriver(new Driver());
-
-
              con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","kazafy", "");
 
- 
 
         } catch (SQLException ex) {
             System.out.println("Go to hell!");

@@ -42,7 +42,9 @@ public class User implements Serializable{
         this.password = password;
         this.score = score;
     }
-
+    public User(){
+        
+    }
     public int getScore() {
         return score;
     }
