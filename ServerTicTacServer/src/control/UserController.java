@@ -36,6 +36,9 @@ public class UserController {
             con.setAutoCommit(false);
             PreparedStatement stmt = con.prepareStatement("INSERT INTO user (name,email,password,score,image) VALUES(?,?,?,0,?);", Statement.RETURN_GENERATED_KEYS);
             
+            System.out.println(" l :"+user.getName());
+            System.out.println(" l :"+user.getEmail());
+            System.out.println(" l :"+user.getPassword());
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());

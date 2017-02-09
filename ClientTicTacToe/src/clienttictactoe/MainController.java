@@ -59,6 +59,7 @@ public class MainController implements Initializable {
     
     
     boolean offLineMode = false;
+    boolean timeOut = false;
 //    
 //    @FXML
 //    private TableColumn<User,String>tc_name;
@@ -116,7 +117,7 @@ public class MainController implements Initializable {
     Image XPic;
     private User player;
     private User remotePlayer;
-    Timer timer;
+    Timer timer = new Timer();
     ComputerWithGui computerWithGui = new ComputerWithGui();
     Board board = new Board();
 
@@ -170,8 +171,7 @@ public class MainController implements Initializable {
                             int indexCell = next;
                             xo[indexCell] = 1;
                             ac.play();
-                            Timer timer = new Timer();
-                            timer.schedule(
+                            new Timer().schedule(
                                     new java.util.TimerTask() {
                                         @Override
                                         public void run() {
@@ -252,10 +252,48 @@ public class MainController implements Initializable {
                         ab.play();
                     playDisable = true;
                     turnStatus.setText(remotePlayer.getName()+"'s Turn");
-                       
-                   
-                        
                         ((Label) event.getSource()).setGraphic((playerChar_X_OR_O == 0) ? new ImageView(OPic) : new ImageView(XPic));
+                        
+                        //add Timer for response
+                        timeOut = true;
+                        timer = new Timer();
+                            timer.schedule(
+                                    new java.util.TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if(timeOut){
+                                                        // if remote player did not response
+                                                        // cancel request
+                                                        // send prodcast to all to change my status
+                                                        System.out.println("request time out ");
+                                                        Request request = new Request();
+                                                        request.setType(Setting.UPDATEPLAYER);
+                                                        player.setStatus(Setting.AVAILABLE);
+                                                        request.setObject(player);
+                                                        Client.sendRequest(request);
+
+                                                        /// cancel request in the rempteplayer
+                                                        //  send him lose message
+                                                        if(remotePlayer != null){
+                                                        
+                                                        }
+
+                                                        
+                                                    }
+                                                }
+
+                                            });
+
+                                        }
+                                    },
+                                    3000
+                            );
+                        
+                        
+                        
                     }
 
                    
@@ -286,8 +324,8 @@ public class MainController implements Initializable {
 
             remotePlayer= lv_players.getSelectionModel().getSelectedItem();
  
-                    if (remotePlayer.getStatus() != Setting.AVAILABLE)
-                        return;
+                if (remotePlayer.getStatus() != Setting.AVAILABLE)
+                    return;
 
                     Request request = new Request();
                     request.setType(Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST);
@@ -296,7 +334,48 @@ public class MainController implements Initializable {
                     Client.sendRequest(request);
                     bp_GameBoard.setDisable(true);
                     playerChar_X_OR_O = 1;
-            
+ 
+//                    timeOut = true;
+//                    timer = new Timer();
+//                        timer.schedule(
+//                                new java.util.TimerTask() {
+//                                        @Override
+//                                        public void run() {
+//                                            Platform.runLater(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    if(timeOut){
+//                                                        // if remote player did not response
+//                                                        // cancel request
+//                                                        // send prodcast to all to change my status
+//                                                        System.out.println("request time out ");
+//                                                        Request request = new Request();
+//                                                        request.setType(Setting.UPDATEPLAYER);
+//                                                        player.setStatus(Setting.AVAILABLE);
+//                                                        request.setObject(player);
+//                                                        Client.sendRequest(request);
+//
+//                                                        /// cancel request in the rempteplayer
+//                                                        //  send him lose message
+//                                                        if(remotePlayer != null){
+//                                                        
+//                                                        }
+//
+//                                                        
+//                                                    }
+//                                                }
+//
+//                                            });
+//
+//                                        }
+//                                    },
+//                                    5000
+//                            );
+                        
+                     
+                    
+                    
+                    
             
           });
        

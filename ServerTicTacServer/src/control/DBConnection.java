@@ -5,28 +5,36 @@
  */
 package control;
 
-import com.mysql.jdbc.Driver;
+
 import java.sql.* ;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.sqlite.SQLiteConfig;
 
 /**
  *
  * @author yasser
  */
 public class DBConnection {
+
+    
+    public static final String DB_URL = "jdbc:sqlite:Tic.db";  
+    public static final String DRIVER = "org.sqlite.JDBC"; 
       
 
     public static Connection openConnection(){
-        Connection con = null;
-        try {
-            DriverManager.registerDriver(new Driver());
-
-             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/TicTac","root", "terminator");
-
-
-
-        } catch (SQLException ex) {
-            System.out.println("Go to hell!");
-        }
-        return con;
-    }
+        
+    Connection connection = null;
+    try { 
+    Class.forName(DRIVER);  
+ 
+        SQLiteConfig config = new SQLiteConfig();  
+        config.enforceForeignKeys(true);  
+         connection = DriverManager.getConnection(DB_URL,config.toProperties());  
+        } 
+    catch (SQLException | ClassNotFoundException ex) {  
+        Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+    }  
+    return connection; 
+}
 }

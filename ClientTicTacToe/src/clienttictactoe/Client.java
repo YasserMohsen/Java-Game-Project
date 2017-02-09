@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -41,6 +42,7 @@ public class Client extends Thread {
     static Request request = new Request();
     //boolean flag=true;
     static boolean conn=false;
+    private boolean responseToDialogTimeOut = false;
 
     final AudioClip ad = new AudioClip(MainController.class.getResource("game-over.wav").toString());
     final AudioClip ae = new AudioClip(MainController.class.getResource("game-over-tie.wav").toString());
@@ -196,13 +198,48 @@ public class Client extends Thread {
                                 ClientTicTacToe.mainController.setRemotePlayer(remotePlayer);
                                 ClientTicTacToe.mainController.setDisable_Enable_MainView(true);
 
+                                
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                
+                                responseToDialogTimeOut =true;
+                                new Timer().schedule(
+                                    new java.util.TimerTask() {
+                                            @Override
+                                        public void run() {
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if(responseToDialogTimeOut){
+                                                        alert.close();
+                                                        request.setObject(objects);
+                                                        request.setType(Setting.REFUSE_INVITATION);
+                                                        Client.sendRequest(request);
+                                                        ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                                        ClientTicTacToe.mainController.playDisable = true;
+                                                        System.out.println(" lolldskjfhds dsjfhds ");
+                                                    }
+                                                }
+
+                                            });
+
+                                        }
+                                    },
+                                    5000
+                            );
+                                
+                                
                                 alert.setTitle("Invitation Request");
                                 alert.setContentText("اسطى " + remotePlayer.getName() + " عايز يلعب معاك");
                                 Optional<ButtonType> result = alert.showAndWait();
+                                
+                                
+
+                                
+                                
 
 
                                         if (result.isPresent() && result.get() == ButtonType.OK) {
+                                            responseToDialogTimeOut = false;
                                             request.setObject(objects);
                                             request.setType(Setting.ACCEPT_INVITATION);
                                             Client.sendRequest(request);
@@ -216,6 +253,8 @@ public class Client extends Thread {
                                             
 
                                         } else {
+                                            
+                                            responseToDialogTimeOut = false;
                                             //////////////logic here///////////////////////
                                             request.setObject(objects);
                                             request.setType(Setting.REFUSE_INVITATION);
@@ -244,6 +283,7 @@ public class Client extends Thread {
                                         ClientTicTacToe.mainController.playDisable = false;
                                         ClientTicTacToe.mainController.btnGoOffLine.setDisable(true);
                                         ClientTicTacToe.mainController.btnLogout.setDisable(true);
+                                        ClientTicTacToe.mainController.timer.cancel();
                                     }
                                 });
                                 
@@ -260,6 +300,7 @@ public class Client extends Thread {
                                 String refuseMessage = "معلش يابرنس " + remotePlayer.getName() + " فكسلك :( ";
                                 ClientTicTacToe.mainController.showDialog(refuseMessage);
                                 ClientTicTacToe.mainController.setDisable_Enable_MainView(false);
+                                ClientTicTacToe.mainController.timer.cancel();
 
                             }
                         });
@@ -272,6 +313,7 @@ public class Client extends Thread {
                             public void run() {
                                 try {
                                     ClientTicTacToe.mainController.updateCell(xo);
+                                    ClientTicTacToe.mainController.timer.cancel();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

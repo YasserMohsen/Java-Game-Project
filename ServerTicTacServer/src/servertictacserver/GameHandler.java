@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
@@ -38,6 +39,7 @@ class GameHandler extends Thread {
     User user = null;
     static HashMap<Integer, Integer> playersHashMap = new HashMap<>();
     static Vector<GameHandler> clientsVector = new Vector<>();
+
     //construct the gamehandler by checking the coming request (login or register)
     //check with database
     //if it succeded, add the client to the available list and start the thread to handle the coming requests
@@ -48,48 +50,52 @@ class GameHandler extends Thread {
             ois = new ObjectInputStream(cs.getInputStream());
             try {
                 Request request = (Request) ois.readObject();
-                if (request.getType() == Setting.REG || request.getType() == Setting.LOGIN || request.getType() == Setting.FBLOG ){
+                if (request.getType() == Setting.REG || request.getType() == Setting.LOGIN || request.getType() == Setting.FBLOG) {
                     user = (User) request.getObject();
-                    if (request.getType()==Setting.LOGIN) {
+                    if (request.getType() == Setting.LOGIN) {
                         user = UserController.login(user);
-                        
-                        
-                    }
-                    else if(request.getType()==Setting.REG){
+
+                    } else if (request.getType() == Setting.REG) {
                         user = UserController.register(user);
-                        
-                        
-                    }
-                    else if(request.getType()==Setting.FBLOG){
+
+                    } else if (request.getType() == Setting.FBLOG) {
                         user = UserController.fbLogin(user);
                         Image image = new Image(user.getImg());
-                        saveToFile(image,""+image.toString());
+                        saveToFile(image, "" + image.toString());
 
                     }
-                    
-                    if(user.getId() != 0 && !checkAlreadyLogin(user)){
-                        
+
+                    if (user.getId() != 0 && !checkAlreadyLogin(user)) {
+
                         clientsVector.add(this);
                         // if register or login is ok send list off available players to client                                
                         this.ous.flush();
                         this.ous.reset();
                         user.setStatus(Setting.AVAILABLE);
                         //////////// Update server list ////////////////
-                        if (request.getType() == Setting.REG){
-                            ServerTicTacServer.items.add(user);
+                        if (request.getType() == Setting.REG) {
+                            Platform.runLater(() -> {
+                                try {
+                                    ServerTicTacServer.items.add(user);
+                                } catch (Exception e) {
+                                    System.out.println("servertictacserver items ");
+                                    e.printStackTrace();
+                                }
+                            });
                         }
-                        if (request.getType() == Setting.LOGIN){
+                        if (request.getType() == Setting.LOGIN) {
                             ServerTicTacServer.updateServerList(user);
                         }
                         ////////////////////////////////////////////////
-                        request.setType(Setting.REG_OK);  
-                        
-                        List availablePlayerList = new ArrayList<User>();                                
-                        for (GameHandler gameHandler : clientsVector){
-                            if(gameHandler.user != null && gameHandler.user.getId()!=user.getId())
+                        request.setType(Setting.REG_OK);
+
+                        List availablePlayerList = new ArrayList<User>();
+                        for (GameHandler gameHandler : clientsVector) {
+                            if (gameHandler.user != null && gameHandler.user.getId() != user.getId()) {
                                 availablePlayerList.add(gameHandler.user);
+                            }
                         }
-                        Object [] objects = {availablePlayerList,user};
+                        Object[] objects = {availablePlayerList, user};
                         request.setObject(objects);
                         this.ous.writeObject(request);
                         this.ous.flush();
@@ -98,25 +104,22 @@ class GameHandler extends Thread {
                         request.setObject(user);
                         brodCast(request);
                         start();
-                    } 
-                    else{
+                    } else {
 
                         // error in registration or login >> send to client error message
-                        if(request.getType()== Setting.REG){
-                            
-                        request.setType(Setting.REG_NO);                                    
-                        request.setObject("email already exist");
-                        }
-                        else if(checkAlreadyLogin(user)){
-                           request.setType(Setting.LOGIN_NO);
-                           request.setObject("That account is already login"); 
-                        }
-                        else if(request.getType()== Setting.LOGIN){
-                        request.setType(Setting.LOGIN_NO);
-                        request.setObject("incorrect username or passsword");
+                        if (request.getType() == Setting.REG) {
+
+                            request.setType(Setting.REG_NO);
+                            request.setObject("email already exist");
+                        } else if (checkAlreadyLogin(user)) {
+                            request.setType(Setting.LOGIN_NO);
+                            request.setObject("That account is already login");
+                        } else if (request.getType() == Setting.LOGIN) {
+                            request.setType(Setting.LOGIN_NO);
+                            request.setObject("incorrect username or passsword");
 
                         }
-                        
+
                         this.ous.writeObject(request);
                         this.ous.flush();
                         this.ous.reset();
@@ -129,7 +132,7 @@ class GameHandler extends Thread {
                 System.out.println("construct gamehandler exception");
                 //Logger.getLogger(GameHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -141,7 +144,7 @@ class GameHandler extends Thread {
             Request request;
             try {
                 request = (Request) ois.readObject();
-                System.out.println("my type is : "+ request.getType());
+                System.out.println("my type is : " + request.getType());
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// switch ////////////////////////////////////////////////
                 switch (request.getType()) {
@@ -150,39 +153,39 @@ class GameHandler extends Thread {
                         Object[] objects = (Object[]) request.getObject();
                         User senderPlayer = (User) objects[0];
                         User receiverPlayer = (User) objects[1];
-                        System.out.println("s id "+senderPlayer.getId());
-                        System.out.println("r id "+receiverPlayer.getId());
-                        int []xo =  (int[]) objects[2];
-                        boolean win  = false;
+                        System.out.println("s id " + senderPlayer.getId());
+                        System.out.println("r id " + receiverPlayer.getId());
+                        int[] xo = (int[]) objects[2];
+                        boolean win = false;
                         boolean draw = false;
-                        
-                        if(checkWins(xo)){
+
+                        if (checkWins(xo)) {
                             win = true;
-                        }else if(checkDraw(xo)){
+                        } else if (checkDraw(xo)) {
                             draw = true;
                         }
-                        
+
                         if (win || draw) {
-                            
+
                             for (GameHandler ch : clientsVector) {
                                 if (ch.user.getId() == senderPlayer.getId() || ch.user.getId() == receiverPlayer.getId()) {
                                     ch.user.setStatus(Setting.AVAILABLE);
                                     ServerTicTacServer.updateServerList(ch.user);
-                                    
+
                                     if (ch.user.getId() == receiverPlayer.getId()) {
-                                        request.setType((win)?Setting.LOSER:Setting.DRAW);
+                                        request.setType((win) ? Setting.LOSER : Setting.DRAW);
                                         request.setObject(xo);
                                         ch.ous.writeObject(request);
                                         ch.ous.flush();
                                         ch.ous.reset();
                                     }
-                                    if (ch.user.getId() == senderPlayer.getId()){
-                                        if (win){
-                                            ch.user.setScore((win)?ch.user.getScore()+Setting.POINTS:ch.user.getScore());
+                                    if (ch.user.getId() == senderPlayer.getId()) {
+                                        if (win) {
+                                            ch.user.setScore((win) ? ch.user.getScore() + Setting.POINTS : ch.user.getScore());
                                             UserController.saveScore(ch.user);
                                             objects[0] = ch.user;
                                         }
-                                        
+
                                     }
 
                                 }
@@ -190,22 +193,19 @@ class GameHandler extends Thread {
                             //senderPlayer.setScore((win)?senderPlayer.getScore()+Setting.POINTS:senderPlayer.getScore());
                             //UserController.saveScore(senderPlayer);
                             request.setObject(objects);
-                            request.setType((win)?Setting.WINNER:Setting.DRAW);
+                            request.setType((win) ? Setting.WINNER : Setting.DRAW);
                             this.ous.writeObject(request);
                             this.ous.flush();
                             this.ous.reset();
 
-                            
-                            
                             request.setObject(senderPlayer);
-                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);                            
-                            
+                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
+
                             brodCast(request);
-                            
-                            
+
                             this.ous.flush();
                             this.ous.reset();
-                            
+
                             request.setObject(receiverPlayer);
                             request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
                             brodCast(request);
@@ -215,37 +215,37 @@ class GameHandler extends Thread {
                             //////////////////////////////////////////////
                             //update news field
                             request.setType(Setting.UPDATE_NEWS);
-                            if(win)
+                            if (win) {
                                 request.setObject(senderPlayer.getName() + " WINS " + receiverPlayer.getName());
-                            else
+                            } else {
                                 request.setObject(senderPlayer.getName() + " draw " + receiverPlayer.getName());
-                            brodCastAll(request);
-                        } else if(checkDraw(xo)){
-                            
-                            // draw
                             }
-                        else{
-                            
+                            brodCastAll(request);
+                        } else if (checkDraw(xo)) {
+
+                            // draw
+                        } else {
+
                             request.setType(Setting.MOVEBACK);
                             request.setObject(xo);
 
-                                for (GameHandler ch : clientsVector) {
-                                   if (ch.user.getId() == receiverPlayer.getId()) {
-                                        ch.ous.writeObject(request);
-                                        ch.ous.flush();
-                                        ch.ous.reset();
+                            for (GameHandler ch : clientsVector) {
+                                if (ch.user.getId() == receiverPlayer.getId()) {
+                                    ch.ous.writeObject(request);
+                                    ch.ous.flush();
+                                    ch.ous.reset();
                                 }
                             }
                         }
 
-                            break;
+                        break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
                     case Setting.MESSAGE:
                         objects = (Object[]) request.getObject();
                         senderPlayer = (User) objects[0];
                         receiverPlayer = (User) objects[1];
                         String message = (String) objects[2];
-                        
+
                         request.setType(Setting.RECIEVE_MESSAGE);
                         Object[] obj = {senderPlayer, message};
                         request.setObject(obj);
@@ -256,99 +256,93 @@ class GameHandler extends Thread {
                         }
                         break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                        case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
-                            
-                            System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");
-                            
-                            objects = (Object[]) request.getObject();
-                            senderPlayer = (User) objects[0];
-                            receiverPlayer = (User) objects[1];
-                            
-                            request.setType(Setting.SEND_INVITATION_FOR_PLAYING);
-//                            User user = (User)request.getObject();
-                          
-                            
-                            for (GameHandler ch : clientsVector) {
-                                if(ch.user.getId()== receiverPlayer.getId())
-                                {
-                                    System.out.print("hi from  "+receiverPlayer.getName());
-                                    ch.ous.writeObject(request);
-                                }         
-                            }
-                            break;
-                            
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.ACCEPT_INVITATION:
-                            
-                            System.out.println("ACCEPT_INVITATION");
-                            objects = (Object[]) request.getObject();
-                            senderPlayer = (User) objects[1];
-                            receiverPlayer = (User) objects[0];
-                            System.out.print("keyid  "+senderPlayer.getId()+" name :" + senderPlayer.getName());
-                            System.out.print("valueid  "+receiverPlayer.getId()+" name :" + receiverPlayer.getName());
+                    case Setting.SELECT_PLAYER_FROM_AVAILABLE_LIST:
 
-                            playersHashMap.put(senderPlayer.getId(), receiverPlayer.getId());
-                            for (GameHandler ch : clientsVector) {
-                                if(ch.user.getId() == receiverPlayer.getId())
-                                {
-                                    ch.user.setStatus(Setting.BUSY); /// update player status in vector
-                                    request.setType(Setting.ACCEPT_INVITATION);
-                                    ch.ous.writeObject(request);
-                                    ch.ous.flush();
-                                    ch.ous.reset();                            
-                                }else if(ch.user.getId() == senderPlayer.getId()){
-                                    ch.user.setStatus(Setting.BUSY); /// update player status in vector
-                                }       
+                        System.out.println("SELECT_PLAYER_FROM_AVAILABLE_LIST");
+
+                        objects = (Object[]) request.getObject();
+                        senderPlayer = (User) objects[0];
+                        receiverPlayer = (User) objects[1];
+
+                        request.setType(Setting.SEND_INVITATION_FOR_PLAYING);
+//                            User user = (User)request.getObject();
+
+                        for (GameHandler ch : clientsVector) {
+                            if (ch.user.getId() == receiverPlayer.getId()) {
+                                System.out.print("hi from  " + receiverPlayer.getName());
+                                ch.ous.writeObject(request);
                             }
-                            ((User) objects[1]).setStatus(Setting.BUSY);
-                            ((User) objects[0]).setStatus(Setting.BUSY);
-                            senderPlayer.setStatus(Setting.BUSY);
-                            receiverPlayer.setStatus(Setting.BUSY);
-                            ServerTicTacServer.updateServerList(senderPlayer);
-                            ServerTicTacServer.updateServerList(receiverPlayer);
-                            ///////////////// update server list /////////////////
+                        }
+                        break;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    case Setting.ACCEPT_INVITATION:
+
+                        System.out.println("ACCEPT_INVITATION");
+                        objects = (Object[]) request.getObject();
+                        senderPlayer = (User) objects[1];
+                        receiverPlayer = (User) objects[0];
+                        System.out.print("keyid  " + senderPlayer.getId() + " name :" + senderPlayer.getName());
+                        System.out.print("valueid  " + receiverPlayer.getId() + " name :" + receiverPlayer.getName());
+
+                        playersHashMap.put(senderPlayer.getId(), receiverPlayer.getId());
+                        for (GameHandler ch : clientsVector) {
+                            if (ch.user.getId() == receiverPlayer.getId()) {
+                                ch.user.setStatus(Setting.BUSY); /// update player status in vector
+                                request.setType(Setting.ACCEPT_INVITATION);
+                                ch.ous.writeObject(request);
+                                ch.ous.flush();
+                                ch.ous.reset();
+                            } else if (ch.user.getId() == senderPlayer.getId()) {
+                                ch.user.setStatus(Setting.BUSY); /// update player status in vector
+                            }
+                        }
+                        ((User) objects[1]).setStatus(Setting.BUSY);
+                        ((User) objects[0]).setStatus(Setting.BUSY);
+                        senderPlayer.setStatus(Setting.BUSY);
+                        receiverPlayer.setStatus(Setting.BUSY);
+                        ServerTicTacServer.updateServerList(senderPlayer);
+                        ServerTicTacServer.updateServerList(receiverPlayer);
+                        ///////////////// update server list /////////////////
 //                            for (User u : ServerTicTacServer.items){
 //                                if (senderPlayer.getId() == u.getId() || receiverPlayer.getId() == u.getId()){
 //                                    u.setStatus(Setting.BUSY);
 //                                }                                   
 //                            }
-                            
-                            //////////////////////////////////////////////////////
-                          //  System.out.println("Busy ::" +((User) objects[0]).getStatus());
-                           // System.out.println("Busy ::" +((User) objects[1]).getStatus());
-                            request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
-                            brodCastAll(request);       
-                            break;
-                            
+
+                        //////////////////////////////////////////////////////
+                        //  System.out.println("Busy ::" +((User) objects[0]).getStatus());
+                        // System.out.println("Busy ::" +((User) objects[1]).getStatus());
+                        request.setType(Setting.UPDATE_2PLAYER_IN_PLAYER_LIST);
+                        brodCastAll(request);
+                        break;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.REFUSE_INVITATION:
-                            
-                            System.out.println("REFUSE_INVITATION");
-                            objects = (Object[]) request.getObject();
-                            senderPlayer = (User) objects[1];
-                            receiverPlayer = (User) objects[0];
-                            
-                            for (GameHandler ch : clientsVector) {
-                                if(ch.user.getId() == receiverPlayer.getId())
-                                {
-                                    request.setType(Setting.REFUSE_INVITATION);
-                                    ch.ous.writeObject(request);
-                                }         
+                    case Setting.REFUSE_INVITATION:
+
+                        System.out.println("REFUSE_INVITATION");
+                        objects = (Object[]) request.getObject();
+                        senderPlayer = (User) objects[1];
+                        receiverPlayer = (User) objects[0];
+
+                        for (GameHandler ch : clientsVector) {
+                            if (ch.user.getId() == receiverPlayer.getId()) {
+                                request.setType(Setting.REFUSE_INVITATION);
+                                ch.ous.writeObject(request);
                             }
-                            break;
-                            
+                        }
+                        break;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            case Setting.UPDATEPLAYER:
-                            senderPlayer = (User) request.getObject();
-                            this.user.setStatus(senderPlayer.getStatus());
-                            ServerTicTacServer.updateServerList(senderPlayer);
-                            request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
-                            brodCast(request);
-                            break;
+                    case Setting.UPDATEPLAYER:
+                        senderPlayer = (User) request.getObject();
+                        this.user.setStatus(senderPlayer.getStatus());
+                        ServerTicTacServer.updateServerList(senderPlayer);
+                        request.setType(Setting.UPDATE_PLAYER_IN_PLAYER_LIST);
+                        brodCast(request);
+                        break;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                            case Setting.WIN_BY_WITHDRAWS:
@@ -377,7 +371,6 @@ class GameHandler extends Thread {
 //                                } 
 //                            }
 //                            break;
-                            
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
                     default:
@@ -407,7 +400,7 @@ class GameHandler extends Thread {
                     request1.setObject(this.user);
                     brodCast(request1);
                     System.out.println(" hash map :" + playersHashMap.size());
-                    System.out.println("deleted user : "+this.user.getName() +""+ this.user.getId());
+                    System.out.println("deleted user : " + this.user.getName() + "" + this.user.getId());
                     System.out.println("player user : " + playersHashMap.get(this.user.getId()));
                     int remotePlayer = 0;
                     try {
@@ -420,10 +413,10 @@ class GameHandler extends Thread {
                         Iterator i = set.iterator();
                         while (i.hasNext()) {
                             Map.Entry me = (Map.Entry) i.next();
-                            System.out.print( me.getKey() + ": ");
-                            System.out.println("" +  me.getValue());
-                            System.out.print( me.getKey().toString() + ": ");
-                            System.out.println("" +  me.getValue().toString());
+                            System.out.print(me.getKey() + ": ");
+                            System.out.println("" + me.getValue());
+                            System.out.print(me.getKey().toString() + ": ");
+                            System.out.println("" + me.getValue().toString());
                             if (Integer.parseInt(me.getValue().toString()) == this.user.getId()) {
                                 remotePlayer = Integer.parseInt(me.getKey().toString());
                                 playersHashMap.remove(Integer.parseInt(me.getKey().toString()));
@@ -431,7 +424,7 @@ class GameHandler extends Thread {
                         }
                         System.out.println(" hash map :" + playersHashMap.size());
                     }
-          
+
                     if (remotePlayer != 0) {
                         for (GameHandler ch : clientsVector) {
                             if (ch.user.getId() == remotePlayer) {
@@ -443,7 +436,7 @@ class GameHandler extends Thread {
                         }
 
                     }
-                   
+
                     System.out.println(" this :" + clientsVector.size());
                     break;
                     //ex.printStackTrace();
@@ -464,6 +457,7 @@ class GameHandler extends Thread {
             }
         }
     }
+
     void brodCastAll(Request request) throws IOException {
         for (GameHandler ch : clientsVector) {
             ch.ous.writeObject(request);
@@ -472,49 +466,45 @@ class GameHandler extends Thread {
         }
     }
 
-    private boolean checkWins(int [] x) {
-        
-        return (   (x[0] == x[1] && x[0] == x[2] && x[0] != -1)
+    private boolean checkWins(int[] x) {
+
+        return ((x[0] == x[1] && x[0] == x[2] && x[0] != -1)
                 || (x[0] == x[3] && x[0] == x[6] && x[0] != -1)
                 || (x[0] == x[4] && x[0] == x[8] && x[0] != -1)
                 || (x[6] == x[7] && x[6] == x[8] && x[6] != -1)
                 || (x[6] == x[4] && x[6] == x[2] && x[6] != -1)
                 || (x[2] == x[5] && x[2] == x[8] && x[2] != -1)
                 || (x[1] == x[4] && x[1] == x[7] && x[1] != -1)
-                || (x[3] == x[4] && x[3] == x[5] && x[3] != -1)
-                );
+                || (x[3] == x[4] && x[3] == x[5] && x[3] != -1));
     }
-    private boolean checkDraw(int []x){
-        boolean draw =true;
-        for (int i=0;i<x.length;i++)
-        {
-            if (x[i]==-1)
-                draw=false;
+
+    private boolean checkDraw(int[] x) {
+        boolean draw = true;
+        for (int i = 0; i < x.length; i++) {
+            if (x[i] == -1) {
+                draw = false;
+            }
         }
-    
+
         return draw;
     }
-    
-    
-    public static void saveToFile(Image image, String name) {
-    File outputFile = new File("/home/terminator/"+name);
-    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-    try {
-      ImageIO.write(bImage, "png", outputFile);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-    
-    
 
-    private boolean checkAlreadyLogin(User u){
+    public static void saveToFile(Image image, String name) {
+        File outputFile = new File("/home/terminator/" + name);
+        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+        try {
+            ImageIO.write(bImage, "png", outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean checkAlreadyLogin(User u) {
         for (GameHandler gameHandler : clientsVector) {
-            if (gameHandler.user.getId() == u.getId()){
+            if (gameHandler.user.getId() == u.getId()) {
                 return true;
             }
         }
         return false;
     }
 }
-
